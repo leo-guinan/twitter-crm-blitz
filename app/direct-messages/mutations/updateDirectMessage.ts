@@ -4,7 +4,8 @@ import { z } from "zod"
 
 const UpdateDirectMessage = z.object({
   id: z.number(),
-  name: z.string(),
+  message: z.string(),
+  to: z.string(),
 })
 
 export default resolver.pipe(
