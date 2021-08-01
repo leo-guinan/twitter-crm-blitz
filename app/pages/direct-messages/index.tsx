@@ -23,7 +23,7 @@ export const DirectMessagesList = () => {
         {directMessages.map((directMessage) => (
           <li key={directMessage.id}>
             <Link href={Routes.ShowDirectMessagePage({ directMessageId: directMessage.id })}>
-              <a>{directMessage.name}</a>
+              <a>{directMessage.message}</a>
             </Link>
           </li>
         ))}

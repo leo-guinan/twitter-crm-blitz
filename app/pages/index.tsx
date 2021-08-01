@@ -29,7 +29,7 @@ const UserInfo = () => {
           <br />
           User role: <code>{currentUser.role}</code>
           <br />
-          User Twitter Info: <span>{currentUser.twitterUserName}</span>
+          User Twitter Info: <span>{currentUser.twitterUsername}</span>
         </div>
       </>
     )
