@@ -3,7 +3,8 @@ import db from "db"
 import { z } from "zod"
 
 const CreateDirectMessage = z.object({
-  name: z.string(),
+  message: z.string(),
+  to: z.string(),
 })
 
 export default resolver.pipe(
