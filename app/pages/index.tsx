@@ -29,7 +29,12 @@ const UserInfo = () => {
           <br />
           User role: <code>{currentUser.role}</code>
           <br />
-          User Twitter Info: <span>{currentUser.twitterUsername}</span>
+          {!currentUser.twitterUsername && <a href="/api/auth/twitter">Log In With Twitter</a>}
+          {currentUser.twitterUsername && (
+            <section>
+              User Twitter Info: <span>{currentUser.twitterUsername}</span>
+            </section>
+          )}
         </div>
       </>
     )
@@ -41,6 +46,7 @@ const UserInfo = () => {
             <strong>Sign Up</strong>
           </a>
         </Link>
+        <div></div>
         <Link href={Routes.LoginPage()}>
           <a className="button small">
             <strong>Login</strong>
@@ -52,17 +58,12 @@ const UserInfo = () => {
 }
 
 const Home: BlitzPage = () => {
-  const handleLoginWithTwitter = () => {
-    console.log("Logging in via Twitter...")
-  }
-
   return (
     <div>
-      <h1>Hello, world!</h1>
+      <h1>Twitter CRM</h1>
 
       <Suspense fallback="Loading...">
         <UserInfo />
-        <a href="/api/auth/twitter">Log In With Twitter</a>
       </Suspense>
     </div>
   )
