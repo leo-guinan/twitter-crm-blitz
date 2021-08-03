@@ -3,6 +3,8 @@ import { Link, BlitzPage, useMutation, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
+import { getAntiCSRFToken } from "blitz"
+import Button from "app/core/components/Button"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -12,6 +14,27 @@ import logout from "app/auth/mutations/logout"
 const UserInfo = () => {
   const currentUser = useCurrentUser()
   const [logoutMutation] = useMutation(logout)
+
+  const handlePopulateFollowers = async () => {
+    const antiCSRFToken = getAntiCSRFToken()
+    const response = await window.fetch("/api/twitter/followers", {
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+    console.log(response)
+  }
+  const handlePopulateDirectMessages = async () => {
+    const antiCSRFToken = getAntiCSRFToken()
+    const response = await window.fetch("/api/twitter/direct-messages", {
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+    console.log(response)
+  }
 
   if (currentUser) {
     return (
@@ -33,6 +56,26 @@ const UserInfo = () => {
           {currentUser.twitterUsername && (
             <section>
               User Twitter Info: <span>{currentUser.twitterUsername}</span>
+              <div>
+                <a className="button small">
+                  <strong>Followers</strong>
+                </a>
+              </div>
+              <div>
+                <a className="button small">
+                  <strong>Direct Messages</strong>
+                </a>
+              </div>
+              <div>
+                <Button onClick={handlePopulateFollowers} color="blue" label="Populate Followers" />
+              </div>
+              <div>
+                <Button
+                  onClick={handlePopulateDirectMessages}
+                  color="blue"
+                  label="Populate Direct Messages"
+                />
+              </div>
             </section>
           )}
         </div>

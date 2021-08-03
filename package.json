@@ -25,12 +25,16 @@
   },
   "dependencies": {
     "@prisma/client": "2.28.0",
+    "autoprefixer": "10",
     "blitz": "0.38.6",
     "final-form": "4.20.2",
     "passport-twitter": "1.0.4",
+    "postcss": "8",
     "react": "alpha",
     "react-dom": "alpha",
     "react-final-form": "6.5.3",
+    "tailwindcss": "2.1.2",
+    "twitter-lite": "1.1.0",
     "zod": "3.6.1"
   },
   "devDependencies": {

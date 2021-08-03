@@ -6,6 +6,7 @@ const CreateFollower = z.object({
   name: z.string(),
   username: z.string(),
   bio: z.string(),
+  userId: z.number(),
 })
 
 export default resolver.pipe(resolver.zod(CreateFollower), resolver.authorize(), async (input) => {

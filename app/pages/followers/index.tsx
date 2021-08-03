@@ -17,17 +17,46 @@ export const FollowersList = () => {
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
+  const handleSelectFollower = (e) => {
+    console.log(e.target)
+  }
+
   return (
     <div>
-      <ul>
-        {followers.map((follower) => (
-          <li key={follower.id}>
-            <Link href={Routes.ShowFollowerPage({ followerId: follower.id })}>
-              <a>{follower.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <table className="table-auto border">
+        <thead>
+          <tr>
+            <th>Selected</th>
+            <th className="border">Name</th>
+            <th className="border">Bio</th>
+            <th className="border">Status</th>
+            <th className="border">Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          {followers.map((follower) => (
+            <tr key={follower.id} className="border">
+              <td>
+                <input
+                  type="checkbox"
+                  id={"select_follower_" + follower.id}
+                  onClick={handleSelectFollower}
+                />
+              </td>
+              <td className="border">
+                <Link href={Routes.ShowFollowerPage({ followerId: follower.id })}>
+                  <a>{follower.name}</a>
+                </Link>
+              </td>
+              <td className="border">{follower.bio}</td>
+              <td className="border">{follower.status}</td>
+              <td className="border">
+                {follower.tags && follower.tags.map((tag) => <span key={tag.id}>{tag.value}</span>)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous
@@ -47,12 +76,6 @@ const FollowersPage: BlitzPage = () => {
       </Head>
 
       <div>
-        <p>
-          <Link href={Routes.NewFollowerPage()}>
-            <a>Create Follower</a>
-          </Link>
-        </p>
-
         <Suspense fallback={<div>Loading...</div>}>
           <FollowersList />
         </Suspense>

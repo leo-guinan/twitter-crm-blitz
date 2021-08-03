@@ -1,5 +1,6 @@
-import { ReactNode } from "react"
+import React, { ReactNode, Suspense } from "react"
 import { Head } from "blitz"
+import Header from "../components/Header"
 
 type LayoutProps = {
   title?: string
@@ -14,7 +15,10 @@ const Layout = ({ title, children }: LayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {children}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Header />
+        <section className="container mx-auto px-20">{children}</section>
+      </Suspense>
     </>
   )
 }
