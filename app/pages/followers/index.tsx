@@ -51,7 +51,7 @@ export const FollowersList = () => {
               <td className="border">{follower.bio}</td>
               <td className="border">{follower.status}</td>
               <td className="border">
-                {follower.tags && follower.tags.map((tag) => <span key={tag.id}>{tag.value}</span>)}
+                {/* {follower.tags && follower.tags.map((tag) => <span key={tag.id}>{tag.value}</span>)} */}
               </td>
             </tr>
           ))}

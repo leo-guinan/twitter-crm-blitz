@@ -9,7 +9,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   res.setHeader("Content-Type", "application/json")
   const session = await getSession(req, res)
   const user = await db.user.findFirst({
-    where: { id: session.userId },
+    where: { id: session?.userId ? session.userId : -1 },
     select: {
       id: true,
       name: true,
