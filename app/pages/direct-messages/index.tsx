@@ -19,15 +19,31 @@ export const DirectMessagesList = () => {
 
   return (
     <div>
-      <ul>
-        {directMessages.map((directMessage) => (
-          <li key={directMessage.id}>
-            <Link href={Routes.ShowDirectMessagePage({ directMessageId: directMessage.id })}>
-              <a>{directMessage.message}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <table className="table-auto border">
+        <thead>
+          <tr>
+            <th>Selected</th>
+            <th className="border">From</th>
+            <th className="border">To</th>
+            <th className="border">Message</th>
+            <th className="border">Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          {directMessages.map((directMessage) => (
+            <tr key={directMessage.id}>
+              <td>
+                <Link href={Routes.ShowDirectMessagePage({ directMessageId: directMessage.id })}>
+                  <a>{directMessage.id}</a>
+                </Link>
+              </td>
+              <td>{directMessage.from}</td>
+              <td>{directMessage.to}</td>
+              <td>{directMessage.message}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous

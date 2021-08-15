@@ -5,6 +5,8 @@ import { z } from "zod"
 const CreateDirectMessage = z.object({
   message: z.string(),
   to: z.string(),
+  from: z.string(),
+  userId: z.number(),
 })
 
 export default resolver.pipe(

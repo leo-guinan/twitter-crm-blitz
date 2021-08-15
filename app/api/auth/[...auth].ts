@@ -2,6 +2,7 @@
 import { passportAuth } from "blitz"
 import TwitterStrategy from "passport-twitter"
 import db from "db"
+import initialTwitter from "../queues/twitter-following"
 
 export default passportAuth({
   successRedirectUrl: "/",
@@ -24,7 +25,6 @@ export default passportAuth({
             // This can happen if you haven't enabled email access in your twitter app permissions
             return done(new Error("Twitter OAuth response doesn't have email."))
           }
-
           const user = await db.user.upsert({
             where: { email },
             create: {
@@ -33,6 +33,7 @@ export default passportAuth({
               twitterToken: token,
               twitterSecretToken: tokenSecret,
               twitterUsername: profile.username,
+              twitterId: profile.id,
             },
             update: {
               email,
@@ -40,8 +41,11 @@ export default passportAuth({
               twitterToken: token,
               twitterSecretToken: tokenSecret,
               twitterUsername: profile.username,
+              twitterId: profile.id,
             },
           })
+
+          await initialTwitter.enqueue({ userId: user.id, paginationToken: "" })
 
           const publicData = {
             userId: user.id,

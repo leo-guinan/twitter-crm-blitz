@@ -25,12 +25,14 @@ const Header = () => {
         </button>
       </div>
       <div className="navbar-menu hidden lg:order-1 lg:block w-full lg:w-2/5">
-        <a
-          className="block lg:inline-block mt-4 lg:mt-0 mr-10 text-blue-900 hover:text-indigo-600"
-          href="#"
-        >
-          Home
-        </a>
+        <Link href={Routes.Home()}>
+          <a
+            className="block lg:inline-block mt-4 lg:mt-0 mr-10 text-blue-900 hover:text-indigo-600"
+            href="#"
+          >
+            Home
+          </a>
+        </Link>
         {currentUser?.twitterUsername && (
           <Fragment>
             <Link href={Routes.FollowersPage()}>

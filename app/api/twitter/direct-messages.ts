@@ -40,12 +40,13 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
         console.log(Object.getOwnPropertyNames(results))
         results.events.map(async (directMessage) => {
           console.log(directMessage)
-          // const directMessageToAdd = {
-          //   message: "to",
-          //   to: "",
-          //   userId: user.id
-          // }
-          // await createDirectMessage(directMessageToAdd, { session })
+          const directMessageToAdd = {
+            message: directMessage.message_create.message_data.text,
+            to: directMessage.message_create.target.recipient_id,
+            from: directMessage.message_create.sender_id,
+            userId: user.id,
+          }
+          await createDirectMessage(directMessageToAdd, { session })
         })
       })
       .catch(console.error)

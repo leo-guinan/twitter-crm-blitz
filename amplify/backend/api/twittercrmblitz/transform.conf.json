@@ -1,0 +1,5 @@
+{
+  "Version": 5,
+  "ElasticsearchWarning": true,
+  "transformers": ["graphql-default-value-transformer"]
+}

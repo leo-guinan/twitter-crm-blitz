@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getFollowers from "app/followers/queries/getFollowers"
+import Button from "app/core/components/Button"
 
 const ITEMS_PER_PAGE = 100
 
@@ -23,6 +24,7 @@ export const FollowersList = () => {
 
   return (
     <div>
+      <Button label="Send DM to Selected Followers" color="blue" />
       <table className="table-auto border">
         <thead>
           <tr>
@@ -51,6 +53,7 @@ export const FollowersList = () => {
               <td className="border">{follower.bio}</td>
               <td className="border">{follower.status}</td>
               <td className="border">
+                <Button label="Add Tag" color="blue" />
                 {/* {follower.tags && follower.tags.map((tag) => <span key={tag.id}>{tag.value}</span>)} */}
               </td>
             </tr>

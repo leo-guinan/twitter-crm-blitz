@@ -2,7 +2,7 @@
   "name": "twitter-crm-blitz",
   "version": "1.0.0",
   "scripts": {
-    "dev": "blitz dev",
+    "dev": "concurrently --raw \"blitz dev\" 'quirrel'",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
@@ -25,14 +25,19 @@
   },
   "dependencies": {
     "@prisma/client": "2.28.0",
+    "@stripe/stripe-js": "1.17.0",
     "autoprefixer": "10",
     "blitz": "0.38.6",
+    "concurrently": "6.2.0",
+    "envsafe": "2.0.3",
     "final-form": "4.20.2",
     "passport-twitter": "1.0.4",
     "postcss": "8",
+    "quirrel": "1.6.4",
     "react": "alpha",
     "react-dom": "alpha",
     "react-final-form": "6.5.3",
+    "stripe": "8.169.0",
     "tailwindcss": "2.1.2",
     "twitter-lite": "1.1.0",
     "zod": "3.6.1"
