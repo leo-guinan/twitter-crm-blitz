@@ -43,7 +43,7 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
         where: { stripeCustomerId: subscription.customer as string },
         data: {
           subscriptionStatus: subscription.status,
-          price: subscription.items.data[0].price.id,
+          price: subscription?.items?.data[0]?.price.id,
         },
       })
       break

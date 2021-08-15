@@ -12,7 +12,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const relationship = await db.relationship.findFirst({ where: { id } })
+    const relationship = await db.relationship.findFirst({ where: { userId: id } })
 
     if (!relationship) throw new NotFoundError()
 

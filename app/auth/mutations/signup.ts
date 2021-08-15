@@ -7,8 +7,6 @@ import { CreateUserInput } from "src/API"
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim())
   try {
-    const createInput: CreateUserInput = {}
-
     // const request = (await API.graphql({
     //   authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
     //   query: createTodo,
@@ -16,7 +14,6 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
     //     input: createInput,
     //   },
     // })) as { data: CreateTodoMutation; errors: any[] };
-
     // router.push(`/todo/${request.data.createTodo.id}`)
   } catch ({ errors }) {
     console.error(...errors)

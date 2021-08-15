@@ -6,7 +6,7 @@ export default async function checkoutSession(req: BlitzApiRequest, res: BlitzAp
   const { sessionId } = req.query
 
   try {
-    if (Array.isArray(sessionId)) {
+    if (Array.isArray(sessionId) || !sessionId) {
       throw new Error("only one sessionId parameter allowed")
     }
     const session = await stripe.checkout.sessions.retrieve(sessionId)
