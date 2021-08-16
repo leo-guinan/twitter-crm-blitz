@@ -64,7 +64,7 @@ const Layout = ({ title, children }: LayoutProps) => {
                         </div>
                       </div>
                     </div>
-                    <div className="relative p-1 flex items-center justify-end w-1/4 ml-5 mr-4 sm:mr-0 sm:right-auto">
+                    {/* <div className="relative p-1 flex items-center justify-end w-1/4 ml-5 mr-4 sm:mr-0 sm:right-auto">
                       <a href="#" className="block relative">
                         <img
                           alt="profil"
@@ -72,7 +72,7 @@ const Layout = ({ title, children }: LayoutProps) => {
                           className="mx-auto object-cover rounded-full h-10 w-10 "
                         />
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </header>

@@ -11,7 +11,7 @@ const Header = () => {
     <nav className="flex bg-white flex-wrap items-center justify-between p-4">
       <div className="lg:order-2 w-auto lg:w-1/5 lg:text-center">
         <a className="text-xl text-gray-800 font-semibold font-heading" href="#">
-          Twitter CRM
+          Feather
         </a>
       </div>
       <div className="block lg:hidden">
