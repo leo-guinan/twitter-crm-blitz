@@ -1,9 +1,11 @@
 import React, { Fragment } from "react"
-import { Link, Routes } from "blitz"
+import { Link, Routes, useMutation } from "blitz"
 import { useCurrentUser } from "../hooks/useCurrentUser"
+import logout from "app/auth/mutations/logout"
 
 const Header = () => {
   const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
 
   return (
     <nav className="flex bg-white flex-wrap items-center justify-between p-4">
@@ -33,24 +35,16 @@ const Header = () => {
             Home
           </a>
         </Link>
-        {currentUser?.twitterUsername && (
+        {currentUser && (
           <Fragment>
-            <Link href={Routes.FollowersPage()}>
-              <a
-                className="block lg:inline-block mt-4 lg:mt-0 mr-10 text-blue-900 hover:text-indigo-600"
-                href="#"
-              >
-                Followers
-              </a>
-            </Link>
-            <Link href={Routes.DirectMessagesPage()}>
-              <a
-                className="block lg:inline-block mt-4 lg:mt-0 text-blue-900 hover:text-indigo-600"
-                href="#"
-              >
-                Direct Messages
-              </a>
-            </Link>
+            <button
+              className="button small"
+              onClick={async () => {
+                await logoutMutation()
+              }}
+            >
+              Logout
+            </button>
           </Fragment>
         )}
       </div>

@@ -2,7 +2,8 @@
 import { passportAuth } from "blitz"
 import TwitterStrategy from "passport-twitter"
 import db from "db"
-import initialTwitter from "../queues/twitter-following"
+import twitterFollowing from "app/api/queues/twitter-following"
+import twitterFollowers from "app/api/queues/twitter-followers"
 
 export default passportAuth({
   successRedirectUrl: "/",
@@ -45,8 +46,8 @@ export default passportAuth({
             },
           })
 
-          await initialTwitter.enqueue({ userId: user.id, paginationToken: "" })
-
+          await twitterFollowing.enqueue({ userId: user.id, paginationToken: "" })
+          await twitterFollowers.enqueue({ userId: user.id, paginationToken: "" })
           const publicData = {
             userId: user.id,
             roles: [user.role],
