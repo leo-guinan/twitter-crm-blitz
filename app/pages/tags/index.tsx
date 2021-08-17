@@ -23,7 +23,7 @@ export const TagsList = () => {
         {tags.map((tag) => (
           <li key={tag.id}>
             <Link href={Routes.ShowTagPage({ tagId: tag.id })}>
-              <a>{tag.name}</a>
+              <a>{tag.value}</a>
             </Link>
           </li>
         ))}

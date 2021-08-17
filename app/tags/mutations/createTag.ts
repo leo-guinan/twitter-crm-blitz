@@ -3,7 +3,8 @@ import db from "db"
 import { z } from "zod"
 
 const CreateTag = z.object({
-  name: z.string(),
+  twitterUserId: z.string(),
+  value: z.string(),
 })
 
 export default resolver.pipe(resolver.zod(CreateTag), resolver.authorize(), async (input) => {

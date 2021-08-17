@@ -4,7 +4,8 @@ import { z } from "zod"
 
 const UpdateTag = z.object({
   id: z.number(),
-  name: z.string(),
+  twitterUserId: z.string(),
+  value: z.string(),
 })
 
 export default resolver.pipe(
