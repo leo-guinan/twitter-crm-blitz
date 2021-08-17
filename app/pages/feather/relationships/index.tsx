@@ -15,6 +15,10 @@ export const RelationshipsList = () => {
     take: ITEMS_PER_PAGE,
   })
 
+  const handleAddTag = () => {
+    console.log("adding tag")
+  }
+
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
@@ -83,13 +87,21 @@ export const RelationshipsList = () => {
                         <p className="text-gray-900 whitespace-no-wrap">No status set</p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                        {relationship.twitterUser.tags.map((tag) => (
                           <span
-                            aria-hidden="true"
-                            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                          ></span>
-                          <span className="relative">No tags</span>
-                        </span>
+                            key={
+                              relationship.userId + "_" + relationship.twitterUserId + "_" + tag.id
+                            }
+                            className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                            ></span>
+                            <span className="relative">{tag.value}</span>
+                            <a onClick={handleAddTag}>Add Tag</a>
+                          </span>
+                        ))}
                       </td>
                     </tr>
                   ))}

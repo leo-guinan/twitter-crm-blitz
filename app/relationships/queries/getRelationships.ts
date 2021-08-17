@@ -23,7 +23,11 @@ export default resolver.pipe(
           where,
           orderBy,
           include: {
-            twitterUser: true,
+            twitterUser: {
+              include: {
+                tags: true,
+              },
+            },
           },
         }),
     })
