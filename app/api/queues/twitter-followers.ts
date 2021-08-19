@@ -67,9 +67,10 @@ export default Queue(
               })
               await db.relationship.upsert({
                 where: {
-                  userId_twitterUserId: {
+                  userId_twitterUserId_type: {
                     userId: job.userId,
                     twitterUserId: follower.id,
+                    type: "follower",
                   },
                 },
                 update: {},

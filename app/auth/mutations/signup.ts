@@ -2,7 +2,6 @@ import { resolver, SecurePassword } from "blitz"
 import db from "db"
 import { Signup } from "app/auth/validations"
 import { Role } from "types"
-import { CreateUserInput } from "src/API"
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim())

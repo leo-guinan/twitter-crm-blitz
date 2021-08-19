@@ -28,7 +28,11 @@ export const Tag = () => {
           type="button"
           onClick={async () => {
             if (window.confirm("This will be deleted")) {
-              await deleteTagMutation({ id: tag.id })
+              await deleteTagMutation({
+                userId: tag.userId,
+                twitterUserId: tag.twitterUserId,
+                value: tag.value,
+              })
               router.push(Routes.TagsPage())
             }
           }}
