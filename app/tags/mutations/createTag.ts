@@ -3,6 +3,7 @@ import db from "db"
 import { z } from "zod"
 
 const CreateTag = z.object({
+  userId: z.number(),
   twitterUserId: z.string(),
   value: z.string(),
 })

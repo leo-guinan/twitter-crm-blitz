@@ -33,6 +33,7 @@ model User {
   sessions           Session[]
   relationships      Relationship[]
   directMessages     DirectMessage[]
+  tags               Tag[]
 
 }
 
@@ -96,6 +97,8 @@ model Tag {
   value         String
   twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
+  userId        Int
+  user          User        @relation(fields: [userId], references: [id])
 }
 
 model TwitterUser {
@@ -120,5 +123,5 @@ model Relationship {
   twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
 
-  @@id([userId, twitterUserId])
+  @@id([userId, twitterUserId, type])
 }

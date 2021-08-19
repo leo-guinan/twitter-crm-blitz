@@ -1,22 +1,59 @@
-import React, { Suspense } from "react"
-import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes } from "blitz"
+import React, { Suspense, useState } from "react"
+import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getRelationships from "app/relationships/queries/getRelationships"
 import Button from "app/core/components/Button"
-
+import { Tag } from "app/pages/tags/[tagId]"
+import getRelationshipsForUser from "app/relationships/queries/getRelationshipsForUser"
+import createTag from "app/tags/mutations/createTag"
+import { faMinus } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import deleteTag from "app/tags/mutations/deleteTag"
 const ITEMS_PER_PAGE = 100
 
 export const RelationshipsList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
+  const [tags, setTags] = useState({})
+  const [createTagMutation] = useMutation(createTag)
+  const [deleteTagMutation] = useMutation(deleteTag)
   const [{ relationships, hasMore }] = usePaginatedQuery(getRelationships, {
     orderBy: { twitterUserId: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
 
-  const handleAddTag = () => {
-    console.log("adding tag")
+  const handleAddTag = async (event) => {
+    console.log("adding tag for user: " + event.target.dataset.userId)
+    console.log("adding tag " + tags[event.target.dataset.twitterId])
+    //actually add the tag here...
+    await createTagMutation({
+      userId: parseInt(event.target.dataset.userId),
+      twitterUserId: event.target.dataset.twitterId,
+      value: tags[event.target.dataset.twitterId],
+    })
+    //remove tag from object
+    let updatedTags = tags
+    delete updatedTags[event.target.dataset.twitterId]
+    setTags({ ...updatedTags })
+    console.log(tags)
+    //clear input
+  }
+
+  const handleRemoveTag = async (event) => {
+    event.preventDefault()
+    console.log("event target dataset: " + event.target.dataset.userId)
+    await deleteTagMutation({
+      userId: parseInt(event.target.dataset.userId),
+      twitterUserId: event.target.dataset.twitterId,
+      value: event.target.dataset.value,
+    })
+  }
+
+  const handleChange = (event) => {
+    let updatedTags = tags
+    updatedTags[event.target.dataset.twitterId] = event.target.value
+    setTags({ ...updatedTags })
   }
 
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
@@ -98,10 +135,41 @@ export const RelationshipsList = () => {
                               aria-hidden="true"
                               className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
                             ></span>
-                            <span className="relative">{tag.value}</span>
-                            <a onClick={handleAddTag}>Add Tag</a>
+                            <span className="relative">
+                              {tag.value}{" "}
+                              {/* <FontAwesomeIcon
+                                icon={faMinus}
+                                data-user-id={relationship.userId}
+                                data-twitter-id={relationship.twitterUserId}
+                                data-value={tag.value}
+                                onClick={handleRemoveTag}
+                              /> */}
+                              <button
+                                data-user-id={relationship.userId}
+                                data-twitter-id={relationship.twitterUserId}
+                                data-value={tag.value}
+                                onClick={handleRemoveTag}
+                              >
+                                x
+                              </button>
+                            </span>
                           </span>
                         ))}
+                        <input
+                          type="text"
+                          placeholder="tag name"
+                          data-twitter-id={relationship.twitterUserId}
+                          onChange={handleChange}
+                          value={tags[relationship.twitterUserId] || ""}
+                          className="border"
+                        />
+                        <a
+                          onClick={handleAddTag}
+                          data-user-id={relationship.userId}
+                          data-twitter-id={relationship.twitterUserId}
+                        >
+                          Add Tag
+                        </a>
                       </td>
                     </tr>
                   ))}
