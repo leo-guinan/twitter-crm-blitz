@@ -1,13 +1,21 @@
 import createTag from "app/tags/mutations/createTag"
 import deleteTag from "app/tags/mutations/deleteTag"
 import { useMutation, useRouter } from "blitz"
-import { Relationship } from "db"
+import { Relationship, Tag, TwitterUser } from "db"
 import { useState } from "react"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import LabeledTextField from "app/core/components/LabeledTextField"
 
+interface TwitterUserWithTags extends TwitterUser {
+  tags: Tag[]
+}
+
+interface RelationshipWithTwitterUser extends Relationship {
+  twitterUser: TwitterUserWithTags
+}
+
 interface RelationshipsListProps {
-  relationships: Relationship[]
+  relationships: RelationshipWithTwitterUser[]
   hasMore: boolean
 }
 
