@@ -2,7 +2,7 @@ import createTag from "app/tags/mutations/createTag"
 import deleteTag from "app/tags/mutations/deleteTag"
 import { useMutation, useRouter } from "blitz"
 import { Relationship, Tag, TwitterUser } from "db"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import LabeledTextField from "app/core/components/LabeledTextField"
 
@@ -27,16 +27,16 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
   const [deleteTagMutation] = useMutation(deleteTag)
   const relationships = props.relationships
   const hasMore = props.hasMore
-  const debounce = (func, delay) => {
+  const debounce = (func: (event) => void, delay) => {
     let debounceTimer
-    return function () {
+    return function (event) {
       const context = this
       const args = arguments
       clearTimeout(debounceTimer)
       debounceTimer = setTimeout(() => func.apply(context, args), delay)
     }
   }
-  const handleSearch = debounce(async function (event) {
+  const handleSearch = debounce(async (event) => {
     console.log("search values: " + event?.target.value)
     try {
       router.push({
@@ -122,9 +122,9 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                       type="text"
                       className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
                       placeholder="Search"
-                      onChange={(event) => {
-                        event.persist()
-                        handleSearch(event)
+                      onChange={(e) => {
+                        e.persist()
+                        handleSearch(e)
                       }}
                       name="query"
                     />
