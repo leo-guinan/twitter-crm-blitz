@@ -19,7 +19,19 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.relationship.count({ where }),
-      query: (paginateArgs) => db.relationship.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.relationship.findMany({
+          ...paginateArgs,
+          where,
+          orderBy,
+          include: {
+            twitterUser: {
+              include: {
+                tags: true,
+              },
+            },
+          },
+        }),
     })
 
     return {
