@@ -19,14 +19,22 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
   const [deleteTagMutation] = useMutation(deleteTag)
   const relationships = props.relationships
   const hasMore = props.hasMore
-
-  const handleSearch = async (values) => {
-    console.log("search values: " + values.query)
+  const debounce = (func, delay) => {
+    let debounceTimer
+    return function () {
+      const context = this
+      const args = arguments
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(() => func.apply(context, args), delay)
+    }
+  }
+  const handleSearch = debounce(async (event) => {
+    console.log("search values: " + event?.target.value)
     try {
       router.push({
         pathname: "/feather/relationships/search",
         query: {
-          query: values.query,
+          query: event?.target.value,
         },
       })
     } catch (error) {
@@ -35,7 +43,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
         [FORM_ERROR]: error.toString(),
       }
     }
-  }
+  }, 1000)
 
   const handleAddTag = async (event) => {
     console.log("adding tag for user: " + event.target.dataset.userId)
@@ -102,21 +110,22 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                     >
                       <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
                     </svg>
-                    <Form onSubmit={handleSearch}>
-                      <LabeledTextField
-                        label="search"
-                        type="text"
-                        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
-                        placeholder="Search"
-                        name="query"
-                      />
-                      <button
-                        className="absolute right-0 hidden h-auto px-2 py-1 mr-2 text-xs text-gray-400 border border-gray-300 rounded-2xl md:block"
-                        type="submit"
-                      >
-                        +
-                      </button>
-                    </Form>
+                    <input
+                      type="text"
+                      className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
+                      placeholder="Search"
+                      onChange={(e) => {
+                        e.persist()
+                        handleSearch(e)
+                      }}
+                      name="query"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-0 hidden h-auto px-2 py-1 mr-2 text-xs text-gray-400 border border-gray-300 rounded-2xl md:block"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
                 {/* <div className="relative p-1 flex items-center justify-end w-1/4 ml-5 mr-4 sm:mr-0 sm:right-auto">

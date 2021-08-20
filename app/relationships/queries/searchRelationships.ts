@@ -2,7 +2,9 @@ import { paginate, resolver } from "blitz"
 import db, { Prisma } from "db"
 
 interface SearchRelationshipsInput
-  extends Pick<Prisma.RelationshipFindManyArgs, "where" | "orderBy" | "skip" | "take" | "query"> {}
+  extends Pick<Prisma.RelationshipFindManyArgs, "where" | "orderBy" | "skip" | "take"> {
+  query: string
+}
 
 export default resolver.pipe(
   resolver.authorize(),
