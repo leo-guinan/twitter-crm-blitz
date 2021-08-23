@@ -8,7 +8,6 @@ import { add } from "date-fns"
 export default Queue(
   "api/queues/twitter-followers", // 👈 the route it's reachable on
   async (job: { userId; paginationToken }) => {
-    console.log("in the queue...populating twitter following data for user: " + job.userId)
     try {
       const user = await db.user.findFirst({
         where: { id: job.userId },
@@ -19,8 +18,6 @@ export default Queue(
           twitterId: true,
         },
       })
-
-      console.log(user)
 
       const client = new Twitter({
         subdomain: "api", // "api" is the default (change for other subdomains)
@@ -33,8 +30,7 @@ export default Queue(
       })
 
       if (user) {
-        console.log("fetching following...")
-        console.log("Pagination Token: " + job.paginationToken)
+        console.log("fetching followers...")
         const params = job.paginationToken
           ? {
               max_results: 1000,
@@ -48,8 +44,6 @@ export default Queue(
         client
           .get("users/" + user.twitterId + "/followers", params)
           .then(async (results) => {
-            console.log(results.meta)
-            console.log(Object.getOwnPropertyNames(results))
             results.data.map(async (follower) => {
               // console.log(following)
               await db.twitterUser.upsert({
