@@ -1,9 +1,9 @@
 import { resolver } from "blitz"
-import db from "db"
+import db, { RelationshipType } from "db"
 import { z } from "zod"
 
 const CreateRelationship = z.object({
-  type: z.string(),
+  type: z.enum([RelationshipType.FOLLOWER, RelationshipType.FOLLOWING, RelationshipType.MUTUAL]),
   twitterUserId: z.string(),
   userId: z.number(),
 })

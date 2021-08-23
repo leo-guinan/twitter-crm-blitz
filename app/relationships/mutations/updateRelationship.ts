@@ -1,11 +1,11 @@
 import { resolver } from "blitz"
-import db from "db"
+import db, { RelationshipType } from "db"
 import { z } from "zod"
 
 const UpdateRelationship = z.object({
   userId: z.number(),
   twitterUserId: z.string(),
-  type: z.string(),
+  type: z.enum([RelationshipType.FOLLOWER, RelationshipType.FOLLOWING, RelationshipType.MUTUAL]),
 })
 
 export default resolver.pipe(
