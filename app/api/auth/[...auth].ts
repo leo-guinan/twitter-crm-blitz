@@ -8,6 +8,7 @@ import twitterFollowers from "app/api/queues/twitter-followers"
 export default passportAuth({
   successRedirectUrl: "/",
   errorRedirectUrl: "/",
+  secureProxy: true,
   strategies: [
     {
       strategy: new TwitterStrategy(
