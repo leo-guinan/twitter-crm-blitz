@@ -3,7 +3,6 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 
 import twitterSendDMs from "app/api/queues/twitter-send-dm"
-import twitterFollowing from "app/api/queues/twitter-following"
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   res.statusCode = 200
   res.setHeader("Content-Type", "application/json")
@@ -11,10 +10,14 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)
   const userId = session?.userId ? session.userId : -1
 
+  const { message, twitterUserIds } = JSON.parse(req.body)
+
+  console.log("send to " + twitterUserIds)
+  console.log("message: " + message)
   await twitterSendDMs.enqueue({
     fromUserId: userId,
-    toTwitterUserIds: ["1338107290256367616"],
-    message: "testing send DMs",
+    toTwitterUserIds: twitterUserIds,
+    message: message,
   })
   res.statusCode = 200
   res.setHeader("Content-Type", "application/json")

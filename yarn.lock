@@ -797,6 +797,16 @@
   "resolved" "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.0.tgz"
   "version" "9.2.0"
 
+"@headlessui/react@1.4.0":
+  "integrity" "sha512-C+FmBVF6YGvqcEI5fa2dfVbEaXr2RGR6Kw1E5HXIISIZEfsrH/yuCgsjWw5nlRF9vbCxmQ/EKs64GAdKeb8gCw=="
+  "resolved" "https://registry.npmjs.org/@headlessui/react/-/react-1.4.0.tgz"
+  "version" "1.4.0"
+
+"@heroicons/react@1.0.4":
+  "integrity" "sha512-3kOrTmo8+Z8o6AL0rzN82MOf8J5CuxhRLFhpI8mrn+3OqekA6d5eb1GYO3EYYo1Vn6mYQSMNTzCWbEwUInb0cQ=="
+  "resolved" "https://registry.npmjs.org/@heroicons/react/-/react-1.0.4.tgz"
+  "version" "1.0.4"
+
 "@humanwhocodes/config-array@^0.5.0":
   "integrity" "sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg=="
   "resolved" "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz"
@@ -4491,7 +4501,7 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
-"date-fns@^2.16.1":
+"date-fns@^2.16.1", "date-fns@2.23.0":
   "integrity" "sha512-5ycpauovVyAk0kXNZz6ZoB9AYMZB4DObse7P3BPWmyEjXNORTI8EJ6X0uaSAq4sCHzM1uajzrkr6HnsLQpxGXA=="
   "resolved" "https://registry.yarnpkg.com/date-fns/-/date-fns-2.23.0.tgz"
   "version" "2.23.0"

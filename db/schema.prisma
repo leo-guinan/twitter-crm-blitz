@@ -20,7 +20,7 @@ model User {
   name               String?
   email              String          @unique
   hashedPassword     String?
-  role               String          @default("USER")
+  role               UserRole        @default(USER)
   twitterToken       String?
   twitterSecretToken String?
   twitterBio         String?
@@ -77,6 +77,17 @@ enum TokenType {
   RESET_PASSWORD
 }
 
+enum RelationshipType {
+  FOLLOWER
+  FOLLOWING
+  MUTUAL
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model DirectMessage {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -115,13 +126,14 @@ model TwitterUser {
 }
 
 model Relationship {
-  type          String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  User          User        @relation(fields: [userId], references: [id])
+  type          RelationshipType
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  User          User             @relation(fields: [userId], references: [id])
   userId        Int
-  twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
+  twitterUser   TwitterUser      @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
+  status        String           @default("")
 
   @@id([userId, twitterUserId, type])
 }

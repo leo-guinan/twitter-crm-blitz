@@ -18,7 +18,7 @@ const Layout = ({ title, children }: LayoutProps) => {
       </Head>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <main className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-screen relative">
+        <main className="bg-gray-100 dark:bg-gray-800 rounded-2xl relative">
           <div className="flex items-start justify-between">
             <div className="h-screen hidden lg:block my-4 ml-4 shadow-lg relative w-80">
               <div className="bg-white h-full rounded-2xl dark:bg-gray-700">

@@ -1,14 +1,36 @@
-import { Link, Routes, useMutation } from "blitz"
+import { getAntiCSRFToken, Link, Routes, useMutation } from "blitz"
 import React, { Fragment } from "react"
 import { useCurrentUser } from "../hooks/useCurrentUser"
 import createCheckoutSession from "app/users/mutations/createCheckoutSession"
 import customerPortal from "app/users/mutations/customerPortal"
 import { loadStripe } from "@stripe/stripe-js"
+import Button from "./Button"
 
 const Sidebar = () => {
   const currentUser = useCurrentUser()
   const [createCheckoutSessionMutation] = useMutation(createCheckoutSession)
   const [customerPortalMutation] = useMutation(customerPortal)
+  const antiCSRFToken = getAntiCSRFToken()
+
+  const handleRefreshRelationships = async () => {
+    await window.fetch("/api/twitter/populate", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+  const handleProcessMutuals = async () => {
+    await window.fetch("/api/twitter/populate", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
   return (
     <div className="relative bg-white dark:bg-gray-800">
       <div className="flex flex-col sm:flex-row sm:justify-around">
@@ -68,6 +90,16 @@ const Sidebar = () => {
                     <span className="flex-grow text-right"></span>
                   </a>
                 </Link>
+                {currentUser.id === 1 && (
+                  <section>
+                    <Button
+                      label="Refresh Relationships"
+                      onClick={handleRefreshRelationships}
+                      color="blue"
+                    />
+                    <Button label="Process Mutuals" onClick={handleProcessMutuals} color="blue" />
+                  </section>
+                )}
               </Fragment>
             )}
             {/* {!currentUser?.price && (

@@ -1,8 +1,9 @@
 //inital load of twitter account data for new user
 import { Queue } from "quirrel/next"
-import db from "db"
+import db, { RelationshipType } from "db"
 import Twitter from "twitter-lite"
 import twitterFollowing from "./twitter-following"
+import { add } from "date-fns"
 
 export default Queue(
   "api/queues/twitter-following", // 👈 the route it's reachable on
@@ -70,14 +71,14 @@ export default Queue(
                   userId_twitterUserId_type: {
                     userId: job.userId,
                     twitterUserId: following.id,
-                    type: "following",
+                    type: RelationshipType.FOLLOWING,
                   },
                 },
                 update: {},
                 create: {
                   userId: job.userId,
                   twitterUserId: following.id,
-                  type: "following",
+                  type: RelationshipType.FOLLOWING,
                 },
               })
             })
@@ -89,7 +90,19 @@ export default Queue(
               })
             }
           })
-          .catch(console.error)
+          .catch(async (error) => {
+            console.error(error)
+            await twitterFollowing.enqueue(
+              {
+                userId: job.userId,
+                paginationToken: job.paginationToken,
+              },
+              {
+                runAt: add(new Date(), { minutes: 30 }),
+                id: job.userId + "_" + job.paginationToken,
+              }
+            )
+          })
       }
       // //get the users following the logged in user
       // while (!done) {

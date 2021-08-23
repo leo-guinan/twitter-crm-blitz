@@ -1,8 +1,9 @@
 //inital load of twitter account data for new user
 import { Queue } from "quirrel/next"
-import db from "db"
+import db, { RelationshipType } from "db"
 import Twitter from "twitter-lite"
 import twitterFollowers from "./twitter-followers"
+import { add } from "date-fns"
 
 export default Queue(
   "api/queues/twitter-followers", // 👈 the route it's reachable on
@@ -70,14 +71,14 @@ export default Queue(
                   userId_twitterUserId_type: {
                     userId: job.userId,
                     twitterUserId: follower.id,
-                    type: "follower",
+                    type: RelationshipType.FOLLOWER,
                   },
                 },
                 update: {},
                 create: {
                   userId: job.userId,
                   twitterUserId: follower.id,
-                  type: "follower",
+                  type: RelationshipType.FOLLOWER,
                 },
               })
             })
@@ -89,7 +90,20 @@ export default Queue(
               })
             }
           })
-          .catch(console.error)
+          .catch(async (error) => {
+            //try again in 30 minutes. Likely hit rate error.
+            console.error(error)
+            await twitterFollowers.enqueue(
+              {
+                userId: job.userId,
+                paginationToken: job.paginationToken,
+              },
+              {
+                runAt: add(new Date(), { minutes: 30 }),
+                id: job.userId + "_" + job.paginationToken,
+              }
+            )
+          })
       }
     } catch (e) {
       console.log("exception processing: " + e)

@@ -46,7 +46,21 @@ export default Queue(
           .then(async (results) => {
             console.log(results)
           })
-          .catch(console.error)
+          .catch(async (error) => {
+            console.error(error)
+            if (error.code === 349) {
+              console.error("Unable to send messages to user: " + twitterUserId)
+              await db.relationship.updateMany({
+                where: {
+                  userId: job.fromUserId,
+                  twitterUserId,
+                },
+                data: {
+                  status: "Unable to receive DM",
+                },
+              })
+            }
+          })
       })
     }
   }
