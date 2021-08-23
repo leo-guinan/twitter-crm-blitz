@@ -3,7 +3,7 @@ import db, { RelationshipType } from "db"
 
 export default CronJob(
   "api/queues/twitter-process-mutuals", // 👈 the route that it's reachable on
-  "0-59/5 * * * *", // every 5 minutes
+  "0-59/30 * * * *", // every 30 minutes
   async () => {
     const relationships = await db.relationship.groupBy({
       by: ["userId", "twitterUserId"],
