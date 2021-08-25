@@ -1,11 +1,11 @@
 // app/api/auth/[...auth].ts
-import { passportAuth, Ctx, BlitzApiRequest, BlitzApiResponse } from "blitz"
+import { passportAuth } from "blitz"
 import TwitterStrategy from "passport-twitter"
 import db from "db"
 import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
 
-export default passportAuth(({ ctx: Ctx, req: BlitzApiRequest, res: BlitzApiResponse }) => ({
+export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/",
   errorRedirectUrl: "/",
   secureProxy: true,
@@ -22,7 +22,7 @@ export default passportAuth(({ ctx: Ctx, req: BlitzApiRequest, res: BlitzApiResp
         async function (token, tokenSecret, profile, done) {
           console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
           const user = await db.user.update({
-            where: { id: ctx.session.userId },
+            where: { id: ctx.session.userId as number },
 
             data: {
               name: profile.displayName,
