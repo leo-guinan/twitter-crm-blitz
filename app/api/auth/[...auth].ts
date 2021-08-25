@@ -24,9 +24,11 @@ export default passportAuth({
           const email = profile.emails && profile.emails[0]?.value
 
           if (!email) {
+            console.log("error with OAuth response. Email Not found...")
             // This can happen if you haven't enabled email access in your twitter app permissions
             return done(new Error("Twitter OAuth response doesn't have email."))
           }
+          console.log("Successfully retrieved data for user. User email: " + email)
           const user = await db.user.upsert({
             where: { email },
             create: {
