@@ -327,8 +327,8 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                         >
                           <option value="">Select an option</option>
                           {tags.map((tag) => (
-                            <option value={tag.value} key={tag.id}>
-                              {tag.value}
+                            <option value={tag.value} key={tag.value}>
+                              {tag.value} ({tag._count["twitterUserId"]})
                             </option>
                           ))}
                         </select>
