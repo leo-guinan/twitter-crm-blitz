@@ -33,12 +33,12 @@ export default Queue(
         console.log("fetching followers...")
         const params = job.paginationToken
           ? {
-              max_results: 1000,
+              max_results: 250,
               "user.fields": "description,id,name,username,profile_image_url",
               pagination_token: job.paginationToken,
             }
           : {
-              max_results: 1000,
+              max_results: 250,
               "user.fields": "description,id,name,username,profile_image_url",
             }
         console.log("connecting with url: users/" + user.twitterId + "/followers")
