@@ -41,6 +41,8 @@ export default Queue(
               max_results: 1000,
               "user.fields": "description,id,name,username,profile_image_url",
             }
+        console.log("connecting with url: users/" + user.twitterId + "/followers")
+        console.log("parameters: " + params)
         client
           .get("users/" + user.twitterId + "/followers", params)
           .then(async (results) => {
