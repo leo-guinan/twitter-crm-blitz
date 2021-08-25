@@ -1,6 +1,6 @@
 import React, { ReactNode, Suspense } from "react"
 import { Head, Image } from "blitz"
-import logo from "../../../public/logo.png"
+import logo from "/public/logo.png"
 import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
 
