@@ -1,11 +1,11 @@
 // app/api/auth/[...auth].ts
-import { passportAuth } from "blitz"
+import { passportAuth, Ctx, BlitzApiRequest, BlitzApiResponse } from "blitz"
 import TwitterStrategy from "passport-twitter"
 import db from "db"
 import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
 
-export default passportAuth(({ ctx: Ctx, req, res }) => ({
+export default passportAuth(({ ctx: Ctx, req: BlitzApiRequest, res: BlitzApiResponse }) => ({
   successRedirectUrl: "/",
   errorRedirectUrl: "/",
   secureProxy: true,

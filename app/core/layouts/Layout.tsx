@@ -1,6 +1,5 @@
 import React, { ReactNode, Suspense } from "react"
-import { Head, Image } from "blitz"
-import logo from "/public/logo.png"
+import { Head } from "blitz"
 import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
 
@@ -23,7 +22,7 @@ const Layout = ({ title, children }: LayoutProps) => {
             <div className="h-screen hidden lg:block my-4 ml-4 shadow-lg relative w-80">
               <div className="bg-white h-full rounded-2xl dark:bg-gray-700">
                 <div className="flex items-center justify-center pt-6">
-                  <Image src={logo} />
+                  <img src="/logo.png" />
                 </div>
                 <Sidebar />
               </div>
