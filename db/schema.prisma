@@ -14,26 +14,27 @@ generator client {
 // --------------------------------------
 
 model User {
-  id                 Int             @id @default(autoincrement())
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  id                 Int               @id @default(autoincrement())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
   name               String?
-  email              String          @unique
+  email              String            @unique
   hashedPassword     String?
-  role               UserRole        @default(USER)
+  role               UserRole          @default(USER)
   twitterToken       String?
   twitterSecretToken String?
   twitterBio         String?
   twitterUsername    String?
   twitterId          String?
-  stripeCustomerId   String?         @unique
+  stripeCustomerId   String?           @unique
   price              String?
-  subscriptionStatus String?         @default("incomplete")
+  subscriptionStatus String?           @default("incomplete")
   tokens             Token[]
   sessions           Session[]
   relationships      Relationship[]
   directMessages     DirectMessage[]
   tags               Tag[]
+  twitterDataPulls   TwitterDataPull[]
 
 }
 
@@ -129,11 +130,21 @@ model Relationship {
   type          RelationshipType
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
-  User          User             @relation(fields: [userId], references: [id])
+  user          User             @relation(fields: [userId], references: [id])
   userId        Int
   twitterUser   TwitterUser      @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
   status        String           @default("")
 
   @@id([userId, twitterUserId, type])
+}
+
+model TwitterDataPull {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  user             User             @relation(fields: [userId], references: [id])
+  userId           Int
+  relationshipType RelationshipType
+  paginationToken  String?
 }

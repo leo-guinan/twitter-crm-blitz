@@ -10,8 +10,8 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const userId = session?.userId ? session.userId : -1
 
   //populate twitter data
-  await twitterFollowing.enqueue({ userId, paginationToken: "" })
-  await twitterFollowers.enqueue({ userId, paginationToken: "" })
+  await twitterFollowing.enqueue({ userId })
+  await twitterFollowers.enqueue({ userId })
   res.statusCode = 200
   res.setHeader("Content-Type", "application/json")
   res.end(JSON.stringify({ userId: session.userId }))

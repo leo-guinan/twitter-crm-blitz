@@ -47,8 +47,8 @@ export default passportAuth({
             },
           })
 
-          await twitterFollowing.enqueue({ userId: user.id, paginationToken: "" })
-          await twitterFollowers.enqueue({ userId: user.id, paginationToken: "" })
+          await twitterFollowing.enqueue({ userId: user.id })
+          await twitterFollowers.enqueue({ userId: user.id })
 
           const publicData = {
             userId: user.id,
