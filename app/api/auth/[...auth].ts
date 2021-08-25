@@ -5,7 +5,7 @@ import db from "db"
 import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
 
-export default passportAuth({
+export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/",
   errorRedirectUrl: "/",
   secureProxy: true,
@@ -17,30 +17,14 @@ export default passportAuth({
           consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
           callbackURL: process.env.TWITTER_CALLBACK_URL,
 
-          includeEmail: true,
           /*...*/
         },
         async function (token, tokenSecret, profile, done) {
-          const email = profile.emails && profile.emails[0]?.value
+          console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
+          const user = await db.user.update({
+            where: { id: ctx.session.userId },
 
-          if (!email) {
-            console.log("error with OAuth response. Email Not found...")
-            // This can happen if you haven't enabled email access in your twitter app permissions
-            return done(new Error("Twitter OAuth response doesn't have email."))
-          }
-          console.log("Successfully retrieved data for user. User email: " + email)
-          const user = await db.user.upsert({
-            where: { email },
-            create: {
-              email,
-              name: profile.displayName,
-              twitterToken: token,
-              twitterSecretToken: tokenSecret,
-              twitterUsername: profile.username,
-              twitterId: profile.id,
-            },
-            update: {
-              email,
+            data: {
               name: profile.displayName,
               twitterToken: token,
               twitterSecretToken: tokenSecret,
@@ -62,4 +46,4 @@ export default passportAuth({
       ),
     },
   ],
-})
+}))

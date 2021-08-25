@@ -1,7 +1,7 @@
 import { Link, BlitzPage } from "blitz"
 import Layout from "app/core/layouts/Layout"
 
-const Success: BlitzPage = () => {
+const Cancelled: BlitzPage = () => {
   return (
     <div className="container">
       <main>
@@ -14,7 +14,7 @@ const Success: BlitzPage = () => {
   )
 }
 
-Success.suppressFirstRenderFlicker = true
-Success.getLayout = (page) => <Layout title="Success">{page}</Layout>
+Cancelled.suppressFirstRenderFlicker = true
+Cancelled.getLayout = (page) => <Layout title="Cancelled">{page}</Layout>
 
-export default Success
+export default Cancelled
