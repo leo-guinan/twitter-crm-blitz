@@ -21,6 +21,7 @@ test.skip("renders blitz documentation link", () => {
     twitterUsername: "username",
     subscriptionStatus: "incomplete",
     price: "0.00",
+    trial: null,
   })
 
   const { getByText } = render(<Home />)

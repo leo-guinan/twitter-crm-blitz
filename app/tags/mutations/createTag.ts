@@ -1,11 +1,16 @@
 import { resolver } from "blitz"
-import db from "db"
+import db, { RelationshipType } from "db"
 import { z } from "zod"
 
 const CreateTag = z.object({
   userId: z.number(),
   twitterUserId: z.string(),
   value: z.string(),
+  relationshipType: z.enum([
+    RelationshipType.FOLLOWER,
+    RelationshipType.FOLLOWING,
+    RelationshipType.MUTUAL,
+  ]),
 })
 
 export default resolver.pipe(resolver.zod(CreateTag), resolver.authorize(), async (input) => {

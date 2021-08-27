@@ -10,12 +10,9 @@ import { Dialog, Transition } from "@headlessui/react"
 import { AnnotationIcon } from "@heroicons/react/outline"
 import getTagsForUser from "app/tags/queries/getTagsForUser"
 
-interface TwitterUserWithTags extends TwitterUser {
+interface RelationshipWithTwitterUserAndTags extends Relationship {
   tags: Tag[]
-}
-
-interface RelationshipWithTwitterUser extends Relationship {
-  twitterUser: TwitterUserWithTags
+  twitterUser: TwitterUser
 }
 
 interface RelationshipsListProps {
@@ -80,6 +77,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
       userId: parseInt(event.target.dataset.userId),
       twitterUserId: event.target.dataset.twitterId,
       value: newTags[event.target.dataset.twitterId],
+      relationshipType: event.target.dataset.relationshipType,
     })
     //remove tag from object
     let updatedTags = newTags
@@ -96,6 +94,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
       userId: parseInt(event.target.dataset.userId),
       twitterUserId: event.target.dataset.twitterId,
       value: event.target.dataset.value,
+      relationshipType: event.target.dataset.relationshipType,
     })
   }
 
@@ -479,6 +478,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                                 data-user-id={relationship.userId}
                                 data-twitter-id={relationship.twitterUserId}
                                 data-value={tag.value}
+                                data-relationship-type={tag.relationshipType}
                                 onClick={handleRemoveTag}
                               >
                                 x
@@ -498,6 +498,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                           onClick={handleAddTag}
                           data-user-id={relationship.userId}
                           data-twitter-id={relationship.twitterUserId}
+                          data-relationship-type={tag.relationshipType}
                         >
                           Add Tag
                         </a>
