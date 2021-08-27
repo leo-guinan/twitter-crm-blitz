@@ -16,7 +16,7 @@ interface RelationshipWithTwitterUserAndTags extends Relationship {
 }
 
 interface RelationshipsListProps {
-  relationships: RelationshipWithTwitterUser[]
+  relationships: RelationshipWithTwitterUserAndTags[]
   hasMore: boolean
 }
 

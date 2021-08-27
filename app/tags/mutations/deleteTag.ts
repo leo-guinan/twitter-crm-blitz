@@ -6,6 +6,11 @@ const DeleteTag = z.object({
   userId: z.number(),
   twitterUserId: z.string(),
   value: z.string(),
+  relationshipType: z.enum([
+    RelationshipType.FOLLOWER,
+    RelationshipType.FOLLOWING,
+    RelationshipType.MUTUAL,
+  ]),
 })
 
 export default resolver.pipe(
