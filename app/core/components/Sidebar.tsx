@@ -12,30 +12,34 @@ const Sidebar = () => {
   const currentUser = useCurrentUser()
 
   const [logoutMutation] = useMutation(logout)
+  const [createCheckoutSessionMutation] = useMutation(createCheckoutSession)
+  const [customerPortalMutation] = useMutation(customerPortal)
+  const prices = {
+    basic: process.env.STRIPE_PRICE_ID_BASIC,
+  }
 
-  // const prices = {}
-
-  // const handleClick = async (event) => {
-  //   if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-  //     throw new Error("Stripe publishable key missing")
-  //   }
-  //   if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
-  //     throw new Error("Stripe publishable key missing")
-  //   }
-  //   const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-  //   const { sessionId } = await createCheckoutSessionMutation({
-  //     priceId: prices[event.target.dataset.plan],
-  //   })
-  //   if (!stripe) {
-  //     throw new Error("Stripe could not be loaded")
-  //   }
-  //   const result = await stripe.redirectToCheckout({
-  //     sessionId,
-  //   })
-  //   if (result.error) {
-  //     console.error(result.error.message)
-  //   }
-  // }
+  const handleClick = async (event) => {
+    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+      throw new Error("Stripe publishable key missing")
+    }
+    if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
+      throw new Error("Stripe publishable key missing")
+    }
+    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+    console.log("plan: " + process.env.STRIPE_PRICE_ID_BASIC)
+    const { sessionId } = await createCheckoutSessionMutation({
+      priceId: "price_1JTCKbDZsCqGNMsUTgXgaYyP",
+    })
+    if (!stripe) {
+      throw new Error("Stripe could not be loaded")
+    }
+    const result = await stripe.redirectToCheckout({
+      sessionId,
+    })
+    if (result.error) {
+      console.error(result.error.message)
+    }
+  }
 
   return (
     <div className="relative bg-white dark:bg-gray-800">
@@ -83,6 +87,17 @@ const Sidebar = () => {
                     DMs Used: {currentUser.trial.usedDMs} / {currentUser.trial.totalDMs}
                   </span>
                 )}
+                {currentUser?.subscriptionStatus === "incomplete" && (
+                  <Link href={Routes.SubscribePage()}>
+                    <a
+                      className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                      href="#"
+                    >
+                      <span className="mx-4 text-lg font-normal">Subscribe</span>
+                      <span className="flex-grow text-right"></span>
+                    </a>
+                  </Link>
+                )}
                 <Link href={Routes.RelationshipPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -114,6 +129,13 @@ const Sidebar = () => {
                 </a>
                 {currentUser.role === UserRole.ADMIN && (
                   <section>
+                    <Button
+                      label="subscribe to basic"
+                      data-plan="basic"
+                      color="blue"
+                      onClick={handleClick}
+                    />
+
                     <Link href={Routes.AdminHome()}>
                       <a
                         className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "

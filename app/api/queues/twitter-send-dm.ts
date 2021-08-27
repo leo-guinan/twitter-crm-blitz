@@ -1,6 +1,9 @@
 import { Queue } from "quirrel/next"
 import db from "db"
 import Twitter from "twitter-lite"
+import createCheckoutSession from "app/users/mutations/createCheckoutSession"
+import customerPortal from "app/users/mutations/customerPortal"
+import { loadStripe } from "@stripe/stripe-js"
 
 export default Queue(
   "api/queues/twitter-send-dm", // 👈 the route it's reachable on
@@ -12,6 +15,8 @@ export default Queue(
         twitterToken: true,
         twitterSecretToken: true,
         twitterId: true,
+        trial: true,
+        subscriptionStatus: true,
       },
     })
 
@@ -27,6 +32,18 @@ export default Queue(
     })
 
     if (user) {
+      if (!user.trial && user.subscriptionStatus === "incomplete") {
+        console.error("User not authorized to send DM. Please check subscription status")
+        //figure out how to send user to subscribe link
+        return
+      } else if (
+        user.trial &&
+        user.trial.totalDMs - user.trial.usedDMs < job.toTwitterUserIds.length
+      ) {
+        console.log("not enough trial DMs remaining to send all DMs. Please check status")
+        return
+      }
+
       job.toTwitterUserIds.forEach((twitterUserId) => {
         const params = {
           event: {
@@ -45,6 +62,16 @@ export default Queue(
           .post("direct_messages/events/new", params)
           .then(async (results) => {
             console.log(results)
+            if (user.trial) {
+              await db.trial.update({
+                where: {
+                  id: user.trial.id,
+                },
+                data: {
+                  usedDMs: user.trial.usedDMs + 1,
+                },
+              })
+            }
           })
           .catch(async (error) => {
             console.error(error)

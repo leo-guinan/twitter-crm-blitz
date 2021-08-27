@@ -5,6 +5,11 @@ interface PricingOptionProps {
   optionFeatures: string[]
   optionPrice: string
   optionUnit: string
+  optionLink?: {
+    label?: string
+    onClick?: any
+    data?: string
+  }
 }
 
 const PricingOption = (props: PricingOptionProps) => {
@@ -40,13 +45,25 @@ const PricingOption = (props: PricingOptionProps) => {
           </li>
         ))}
       </ul>
-      <button
-        type="button"
-        className="w-full px-3 py-3 text-sm shadow rounded-lg text-indigo-500 bg-white hover:bg-gray-100 "
-        onClick={handleSignup}
-      >
-        Sign up for free
-      </button>
+      {props.optionLink && (
+        <button
+          type="button"
+          className="w-full px-3 py-3 text-sm shadow rounded-lg text-indigo-500 bg-white hover:bg-gray-100 "
+          onClick={props.optionLink.onClick}
+          data-plan={props.optionLink.data}
+        >
+          {props.optionLink.label}
+        </button>
+      )}
+      {!props.optionLink && (
+        <button
+          type="button"
+          className="w-full px-3 py-3 text-sm shadow rounded-lg text-indigo-500 bg-white hover:bg-gray-100 "
+          onClick={handleSignup}
+        >
+          Sign up for free
+        </button>
+      )}
     </div>
   )
 }
