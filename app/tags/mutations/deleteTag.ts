@@ -1,5 +1,5 @@
 import { resolver } from "blitz"
-import db from "db"
+import db, { RelationshipType } from "db"
 import { z } from "zod"
 
 const DeleteTag = z.object({
