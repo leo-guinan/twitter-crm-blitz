@@ -498,7 +498,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                           onClick={handleAddTag}
                           data-user-id={relationship.userId}
                           data-twitter-id={relationship.twitterUserId}
-                          data-relationship-type={tag.relationshipType}
+                          data-relationship-type={relationship.type}
                         >
                           Add Tag
                         </a>

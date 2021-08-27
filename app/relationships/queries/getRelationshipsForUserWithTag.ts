@@ -11,21 +11,17 @@ export default resolver.pipe(resolver.authorize(), async ({ tag }: GetRelationsh
   const relationships = await db.relationship.findMany({
     where: {
       userId: ctx.session.userId,
-      twitterUser: {
-        tags: {
-          some: {
-            value: tag,
-          },
+
+      tags: {
+        some: {
+          value: tag,
         },
       },
     },
 
     include: {
-      twitterUser: {
-        include: {
-          tags: true,
-        },
-      },
+      twitterUser: true,
+      tags: true,
     },
   })
 

@@ -51,11 +51,8 @@ export default resolver.pipe(
           },
           orderBy,
           include: {
-            twitterUser: {
-              include: {
-                tags: true,
-              },
-            },
+            twitterUser: true,
+            tags: true,
           },
         }),
     })
