@@ -317,15 +317,17 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                       </span>
                     )}
                     {tags.length > 0 && (
-                      <label className="flex-auto text-gray-700 w-64" htmlFor="tags">
-                        Filter By Tag
+                      <label
+                        className="flex flex-auto justify-center text-gray-700 w-64"
+                        htmlFor="tags"
+                      >
                         <select
                           id="tags"
                           className="block w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500  flex-initial"
                           name="tags"
                           onChange={handleFilterByTag}
                         >
-                          <option value="">Select an option</option>
+                          <option value=""> Filter By Tag</option>
                           {tags.map((tag) => (
                             <option value={tag.value} key={tag.value}>
                               {tag.value} ({tag._count["twitterUserId"]})
@@ -335,15 +337,17 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                       </label>
                     )}
 
-                    <label className="text-gray-700 w-64" htmlFor="relationshipType">
-                      Relationship Type
+                    <label
+                      className="flex flex-auto justify-center text-gray-700 w-64"
+                      htmlFor="relationshipType"
+                    >
                       <select
                         id="relationshipType"
                         className="block w-52 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                         name="relationshipType"
                         onChange={handleSelectRelationshipType}
                       >
-                        <option value="">Select an option</option>
+                        <option value="">Relationship Type</option>
                         <option value="follower">Follower</option>
                         <option value="following">Following</option>
                         <option value="mutual">Mutual</option>
@@ -451,7 +455,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                         </p>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        {relationship.twitterUser.tags.map((tag) => (
+                        {relationship.tags.map((tag) => (
                           <span
                             key={
                               relationship.userId + "_" + relationship.twitterUserId + "_" + tag.id

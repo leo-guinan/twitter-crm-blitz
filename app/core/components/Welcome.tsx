@@ -1,5 +1,11 @@
+import Pricing from "./Pricing"
+
 const Welcome = () => {
-  return <section>Welcome to Feather!</section>
+  return (
+    <section>
+      <h1>Welcome to Feather!</h1>
+    </section>
+  )
 }
 
 export default Welcome

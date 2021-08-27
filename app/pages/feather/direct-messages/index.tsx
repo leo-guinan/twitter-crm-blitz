@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes } from "blitz"
-import Layout from "app/core/layouts/Layout"
+import Layout from "../layouts/Layout"
 import getRelationships from "app/relationships/queries/getRelationships"
 import Button from "app/core/components/Button"
 

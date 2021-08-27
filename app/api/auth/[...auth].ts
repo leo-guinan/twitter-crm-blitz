@@ -6,7 +6,7 @@ import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
 
 export default passportAuth(({ ctx, req, res }) => ({
-  successRedirectUrl: "/",
+  successRedirectUrl: "/feather",
   errorRedirectUrl: "/",
   secureProxy: true,
   strategies: [

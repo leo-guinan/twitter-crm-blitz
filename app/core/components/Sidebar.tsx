@@ -5,31 +5,37 @@ import createCheckoutSession from "app/users/mutations/createCheckoutSession"
 import customerPortal from "app/users/mutations/customerPortal"
 import { loadStripe } from "@stripe/stripe-js"
 import Button from "./Button"
+import { UserRole } from "db"
+import logout from "app/auth/mutations/logout"
 
 const Sidebar = () => {
   const currentUser = useCurrentUser()
-  const [createCheckoutSessionMutation] = useMutation(createCheckoutSession)
-  const [customerPortalMutation] = useMutation(customerPortal)
-  const antiCSRFToken = getAntiCSRFToken()
 
-  const handleRefreshRelationships = async () => {
-    await window.fetch("/api/twitter/populate", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
-  }
-  const handleProcessMutuals = async () => {
-    await window.fetch("/api/twitter/populate", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
-  }
+  const [logoutMutation] = useMutation(logout)
+
+  // const prices = {}
+
+  // const handleClick = async (event) => {
+  //   if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+  //     throw new Error("Stripe publishable key missing")
+  //   }
+  //   if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
+  //     throw new Error("Stripe publishable key missing")
+  //   }
+  //   const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  //   const { sessionId } = await createCheckoutSessionMutation({
+  //     priceId: prices[event.target.dataset.plan],
+  //   })
+  //   if (!stripe) {
+  //     throw new Error("Stripe could not be loaded")
+  //   }
+  //   const result = await stripe.redirectToCheckout({
+  //     sessionId,
+  //   })
+  //   if (result.error) {
+  //     console.error(result.error.message)
+  //   }
+  // }
 
   return (
     <div className="relative bg-white dark:bg-gray-800">
@@ -72,6 +78,11 @@ const Sidebar = () => {
             )}
             {currentUser?.twitterUsername && (
               <Fragment>
+                {currentUser.trial && (
+                  <span>
+                    DMs Used: {currentUser.trial.usedDMs} / {currentUser.trial.totalDMs}
+                  </span>
+                )}
                 <Link href={Routes.RelationshipPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -90,57 +101,32 @@ const Sidebar = () => {
                     <span className="flex-grow text-right"></span>
                   </a>
                 </Link>
-                {currentUser.id === 1 && (
+
+                <a
+                  className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                  href="#"
+                  onClick={async () => {
+                    await logoutMutation()
+                  }}
+                >
+                  <span className="mx-4 text-lg font-normal">Logout</span>
+                  <span className="flex-grow text-right"></span>
+                </a>
+                {currentUser.role === UserRole.ADMIN && (
                   <section>
-                    <Button
-                      label="Refresh Relationships"
-                      onClick={handleRefreshRelationships}
-                      color="blue"
-                    />
-                    <Button label="Process Mutuals" onClick={handleProcessMutuals} color="blue" />
+                    <Link href={Routes.AdminHome()}>
+                      <a
+                        className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                        href="#"
+                      >
+                        <span className="mx-4 text-lg font-normal">Admin</span>
+                        <span className="flex-grow text-right"></span>
+                      </a>
+                    </Link>
                   </section>
                 )}
               </Fragment>
             )}
-            {/* {!currentUser?.price && (
-              <button
-                className="button small"
-                onClick={async () => {
-                  if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-                    throw new Error("Stripe publishable key missing")
-                  }
-                  if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
-                    throw new Error("Stripe publishable key missing")
-                  }
-                  const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-                  const { sessionId } = await createCheckoutSessionMutation({
-                    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID,
-                  })
-                  if (!stripe) {
-                    throw new Error("Stripe could not be loaded")
-                  }
-                  const result = await stripe.redirectToCheckout({
-                    sessionId,
-                  })
-                  if (result.error) {
-                    console.error(result.error.message)
-                  }
-                }}
-              >
-                Subscribe
-              </button>
-            )}
-            {currentUser?.price ? (
-              <button
-                className="button small"
-                onClick={async () => {
-                  const { url } = await customerPortalMutation()
-                  window.location.href = url
-                }}
-              >
-                Manage billing
-              </button>
-            ) : null} */}
           </nav>
         </div>
       </div>

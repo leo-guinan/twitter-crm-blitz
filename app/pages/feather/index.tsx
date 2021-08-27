@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { Link, BlitzPage, useMutation, Routes } from "blitz"
 import { loadStripe } from "@stripe/stripe-js"
-import Layout from "app/core/layouts/Layout"
+import Layout from "app/pages/feather/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import createCheckoutSession from "app/users/mutations/createCheckoutSession"
@@ -20,14 +20,24 @@ import LandingPage from "app/core/components/LandingPage"
 const UserInfo = () => {
   const currentUser = useCurrentUser()
 
-  return (
-    <>
-      <LandingPage />
-    </>
-  )
+  if (currentUser) {
+    return (
+      <>
+        <div>
+          <Welcome />
+        </div>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <LandingPage />
+      </>
+    )
+  }
 }
 
-const Home: BlitzPage = () => {
+const UserHome: BlitzPage = () => {
   return (
     <div>
       <Suspense fallback="Loading...">
@@ -37,7 +47,7 @@ const Home: BlitzPage = () => {
   )
 }
 
-Home.suppressFirstRenderFlicker = true
-Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
+UserHome.suppressFirstRenderFlicker = true
+UserHome.getLayout = (page) => <Layout title="Home">{page}</Layout>
 
-export default Home
+export default UserHome

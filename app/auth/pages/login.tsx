@@ -6,18 +6,18 @@ const LoginPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <div>
+    <section className="flex flex-col	 items-center justify-center">
       <LoginForm
         onSuccess={() => {
           const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"
           router.push(next)
         }}
       />
-    </div>
+    </section>
   )
 }
 
-LoginPage.redirectAuthenticatedTo = "/"
+LoginPage.redirectAuthenticatedTo = "/feather/"
 LoginPage.getLayout = (page) => <Layout title="Log In">{page}</Layout>
 
 export default LoginPage

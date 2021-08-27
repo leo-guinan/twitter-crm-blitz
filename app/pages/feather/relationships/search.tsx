@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import { Head, usePaginatedQuery, useRouter, BlitzPage, useRouterQuery, useQuery } from "blitz"
-import Layout from "app/core/layouts/Layout"
+import Layout from "../layouts/Layout"
 import searchRelationships from "app/relationships/queries/searchRelationships"
 import { RelationshipsList } from "app/relationships/components/RelationshipList"
 const ITEMS_PER_PAGE = 100

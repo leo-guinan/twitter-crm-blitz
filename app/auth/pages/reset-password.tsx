@@ -10,7 +10,7 @@ const ResetPasswordPage: BlitzPage = () => {
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
 
   return (
-    <div>
+    <section className="flex flex-col	 items-center justify-center">
       <h1>Set a New Password</h1>
 
       {isSuccess ? (
@@ -49,7 +49,7 @@ const ResetPasswordPage: BlitzPage = () => {
           />
         </Form>
       )}
-    </div>
+    </section>
   )
 }
 

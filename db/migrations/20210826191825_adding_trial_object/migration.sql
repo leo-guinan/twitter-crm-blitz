@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "freeDMsAvailable" INTEGER NOT NULL DEFAULT 100;

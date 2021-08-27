@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation } from "blitz"
-import Layout from "app/core/layouts/Layout"
+import Layout from "../layouts/Layout"
 import getRelationships from "app/relationships/queries/getRelationships"
 import Button from "app/core/components/Button"
 import { Tag } from "app/pages/tags/[tagId]"

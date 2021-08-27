@@ -14,6 +14,7 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
       twitterUsername: true,
       price: true,
       subscriptionStatus: true,
+      trial: true,
     },
   })
 

@@ -8,47 +8,115 @@ const Header = () => {
   const [logoutMutation] = useMutation(logout)
 
   return (
-    <nav className="flex bg-white flex-wrap items-center justify-between p-4">
-      <div className="lg:order-2 w-auto lg:w-1/5 lg:text-center">
-        <a className="text-xl text-gray-800 font-semibold font-heading" href="#">
-          Feather
-        </a>
-      </div>
-      <div className="block lg:hidden">
-        <button className="navbar-burger flex items-center py-2 px-3 text-indigo-500 rounded border border-indigo-500">
-          <svg
-            className="fill-current h-3 w-3"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>Menu</title>
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-          </svg>
-        </button>
-      </div>
-      <div className="navbar-menu hidden lg:order-1 lg:block w-full lg:w-2/5">
-        <Link href={Routes.Home()}>
-          <a
-            className="block lg:inline-block mt-4 lg:mt-0 mr-10 text-blue-900 hover:text-indigo-600"
-            href="#"
-          >
-            Home
-          </a>
-        </Link>
-        {currentUser && (
-          <Fragment>
-            <button
-              className="button small"
-              onClick={async () => {
-                await logoutMutation()
-              }}
+    <div>
+      <nav className="bg-white dark:bg-gray-800  ">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className=" flex items-center">
+              <a className="flex-shrink-0" href="/">
+                <img src="/icon.png" alt="FeatherCRM" />
+              </a>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  <a
+                    className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href="/#"
+                  >
+                    Home
+                  </a>
+                  <a
+                    className="text-gray-300 dark:text-white  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href="/#features"
+                  >
+                    Features
+                  </a>
+                  <a
+                    className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href="/#pricing"
+                  >
+                    Pricing
+                  </a>
+                  <a
+                    className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href="/#contact"
+                  >
+                    Contact
+                  </a>
+                  <span className="lg:flex-grow ml-auto">
+                    {currentUser && (
+                      <Link href={Routes.RelationshipPage()}>
+                        <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                          Dashboard
+                        </a>
+                      </Link>
+                    )}
+                    {!currentUser && (
+                      <span>
+                        <Link href={Routes.SignupPage()}>
+                          <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Signup
+                          </a>
+                        </Link>
+                        <Link href={Routes.LoginPage()}>
+                          <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            Login
+                          </a>
+                        </Link>
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="block">
+              <div className="ml-4 flex items-center md:ml-6"></div>
+            </div>
+            <div className="-mr-2 flex md:hidden lg:hidden">
+              <button className="text-gray-800 dark:text-white hover:text-gray-300 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
+                <svg
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="h-8 w-8"
+                  viewBox="0 0 1792 1792"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M1664 1344v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="md:hidden lg:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a
+              className="text-gray-300 hover:text-gray-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              href="/#"
             >
-              Logout
-            </button>
-          </Fragment>
-        )}
-      </div>
-    </nav>
+              Home
+            </a>
+            <a
+              className="text-gray-300 dark:text-white block px-3 py-2 rounded-md text-base font-medium"
+              href="/#features"
+            >
+              Features
+            </a>
+            <a
+              className="text-gray-300 hover:text-gray-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              href="/#pricing"
+            >
+              Pricing
+            </a>
+            <a
+              className="text-gray-300 hover:text-gray-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              href="/#contact"
+            >
+              Contact
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
   )
 }
 export default Header
