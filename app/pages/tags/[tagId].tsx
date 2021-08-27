@@ -32,6 +32,7 @@ export const Tag = () => {
                 userId: tag.userId,
                 twitterUserId: tag.twitterUserId,
                 value: tag.value,
+                relationshipType: tag.relationshipType,
               })
               router.push(Routes.TagsPage())
             }
