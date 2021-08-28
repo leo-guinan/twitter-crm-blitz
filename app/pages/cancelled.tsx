@@ -1,5 +1,5 @@
 import { Link, BlitzPage } from "blitz"
-import Layout from "app/core/layouts/Layout"
+import Layout from "app/pages/feather/layouts/Layout"
 
 const Cancelled: BlitzPage = () => {
   return (

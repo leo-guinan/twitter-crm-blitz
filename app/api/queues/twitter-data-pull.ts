@@ -191,7 +191,7 @@ export default CronJob(
     })
 
     const relationships = await db.relationship.groupBy({
-      by: ["userId", "twitterUserId"],
+      by: ["userId", "twitterUserId", "type"],
       _count: {
         type: true,
       },

@@ -1,13 +1,13 @@
-import { Link, BlitzPage } from "blitz"
-import Layout from "app/core/layouts/Layout"
+import { Link, BlitzPage, Routes } from "blitz"
+import Layout from "app/pages/feather/layouts/Layout"
 
 const Success: BlitzPage = () => {
   return (
     <div className="container">
       <main>
         <p>Success!</p>
-        <Link href="/">
-          <a>Back to home</a>
+        <Link href={Routes.RelationshipPage()}>
+          <a>Back to Relationships</a>
         </Link>
       </main>
     </div>

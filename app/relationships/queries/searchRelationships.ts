@@ -22,33 +22,42 @@ export default resolver.pipe(
         db.relationship.findMany({
           ...paginateArgs,
           where: {
-            OR: [
+            AND: [
               {
-                twitterUser: {
-                  username: {
-                    contains: query,
-                    mode: "insensitive",
-                  },
-                },
+                userId: ctx.session.userId,
               },
+
               {
-                twitterUser: {
-                  name: {
-                    contains: query,
-                    mode: "insensitive",
+                OR: [
+                  {
+                    twitterUser: {
+                      username: {
+                        contains: query,
+                        mode: "insensitive",
+                      },
+                    },
                   },
-                },
-              },
-              {
-                twitterUser: {
-                  bio: {
-                    contains: query,
-                    mode: "insensitive",
+                  {
+                    twitterUser: {
+                      name: {
+                        contains: query,
+                        mode: "insensitive",
+                      },
+                    },
                   },
-                },
+                  {
+                    twitterUser: {
+                      bio: {
+                        contains: query,
+                        mode: "insensitive",
+                      },
+                    },
+                  },
+                ],
               },
             ],
           },
+
           orderBy,
           include: {
             twitterUser: true,
