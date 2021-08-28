@@ -34,12 +34,17 @@ export default async function createCheckoutSession(
       stripeCustomerId: customer.id,
     },
   })
-  let lineItem = {
-    price: priceId,
-  }
+  let lineItem = {}
 
   if (quantity) {
-    lineItem.quantity = quantity
+    lineItem = {
+      price: priceId,
+      quantity: quantity,
+    }
+  } else {
+    lineItem = {
+      price: priceId,
+    }
   }
 
   const session = await stripe.checkout.sessions.create({
