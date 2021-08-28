@@ -84,7 +84,7 @@ const Sidebar = () => {
               <Fragment>
                 {currentUser.trial && (
                   <span>
-                    DMs Used: {currentUser.trial.usedDMs} / {currentUser.trial.totalDMs}
+                    Free DMs Used: {currentUser.trial.usedDMs} / {currentUser.trial.totalDMs}
                   </span>
                 )}
                 {currentUser?.subscriptionStatus !== "active" && (

@@ -10,7 +10,9 @@ const Subscribe = () => {
   const prices = {
     basic: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_BASIC,
     premium: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PREMIUM,
+    premium_annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PREMIUM_ANNUAL,
     pro: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO,
+    pro_annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_ANNUAL,
   }
 
   const handleClick = async (event) => {
@@ -42,41 +44,79 @@ const Subscribe = () => {
   }
 
   return (
-    <section className="flex flex-auto space-x-8 my-20">
-      <PricingOption
-        optionName="Basic"
-        optionFeatures={["100 DMs for free", "Pay per DM"]}
-        optionPrice="$0.01"
-        optionUnit="DM sent"
-        optionLink={{
-          label: "Subscibe to Basic",
-          data: "basic",
-          onClick: (event) => handleClick(event),
-        }}
-      />
-      <PricingOption
-        optionName="Premium"
-        optionFeatures={["1250 DMs included", "billed at $0.01/DM after"]}
-        optionPrice="$10"
-        optionUnit="Month"
-        optionLink={{
-          label: "Subscibe to Premium",
-          data: "premium",
-          onClick: (event) => handleClick(event),
-        }}
-      />
-      <PricingOption
-        optionName="Pro"
-        optionFeatures={["Send Unlimited DMs", "DM Search functionality (coming soon)"]}
-        optionPrice="$25"
-        optionUnit="Month"
-        optionLink={{
-          label: "Subscibe to Pro",
-          data: "pro",
-          onClick: (event) => handleClick(event),
-        }}
-      />
-      {/* <PricingOption
+    <>
+      <section className="flex flex-auto gap-8 my-20 flex-wrap	justify-center">
+        <PricingOption
+          optionName="Basic"
+          optionFeatures={["100 DMs for free", "Pay per DM"]}
+          optionPrice="$0.01"
+          optionUnit="DM sent"
+          optionLink={{
+            label: "Subscibe to Basic",
+            data: "basic",
+            onClick: (event) => handleClick(event),
+          }}
+        />
+        <PricingOption
+          optionName="Premium"
+          optionFeatures={["1250 DMs included", "billed at $0.01/DM after"]}
+          optionPrice="$10"
+          optionUnit="Month"
+          optionLink={{
+            label: "Subscibe to Premium",
+            data: "premium",
+            onClick: (event) => handleClick(event),
+          }}
+        />
+        <PricingOption
+          optionName="Premium"
+          optionFeatures={[
+            "Annual Subscription",
+            "Save 17%",
+            "Billed at $100/year",
+            "Includes unlimited DMs",
+          ]}
+          optionPrice="$8.33"
+          optionUnit="Month"
+          optionLink={{
+            label: "Subscibe to Premium",
+            data: "premium_annual",
+            onClick: (event) => handleClick(event),
+          }}
+        />
+      </section>
+      <section className="flex flex-auto gap-8 my-20 flex-wrap	justify-center">
+        <PricingOption
+          optionName="Pro"
+          optionFeatures={["Send Unlimited DMs", "DM Search functionality (coming soon)"]}
+          optionPrice="$25"
+          optionUnit="Month"
+          optionLink={{
+            label: "Subscibe to Pro",
+            data: "pro",
+            onClick: (event) => handleClick(event),
+          }}
+        />
+
+        <PricingOption
+          optionName="Pro"
+          optionFeatures={[
+            "Annual Subscription",
+            "Save 17%",
+            "Billed at $250/year",
+            "Send Unlimited DMs",
+            "DM Search functionality (coming soon)",
+          ]}
+          optionPrice="$20.83"
+          optionUnit="Month"
+          optionLink={{
+            label: "Subscibe to Pro (Annual)",
+            data: "pro_annual",
+            onClick: (event) => handleClick(event),
+          }}
+        />
+
+        {/* <PricingOption
         optionName="Enterprise"
         optionFeatures={[
           "All the features of Pro",
@@ -87,7 +127,8 @@ const Subscribe = () => {
         optionPrice=""
         optionUnit=""
       /> */}
-    </section>
+      </section>
+    </>
   )
 }
 

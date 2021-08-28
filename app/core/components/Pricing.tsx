@@ -35,26 +35,54 @@ const Pricing = () => {
   }
 
   return (
-    <section className="flex-col flex flex-auto space-y-8 lg:space-x-8 my-20 lg:flex-row ">
-      <PricingOption
-        optionName="Basic"
-        optionFeatures={["100 DMs for free", "Pay per DM"]}
-        optionPrice="$0.01"
-        optionUnit="DM sent"
-      />
-      <PricingOption
-        optionName="Premium"
-        optionFeatures={["1250 DMs included", "billed at $0.01/DM after"]}
-        optionPrice="$10"
-        optionUnit="Month"
-      />
-      <PricingOption
-        optionName="Pro"
-        optionFeatures={["Send Unlimited DMs", "DM Search functionality (coming soon)"]}
-        optionPrice="$25"
-        optionUnit="Month"
-      />
-      <PricingOption
+    <>
+      <section className="flex-col flex flex-auto gap-8 my-20 lg:flex-row flex-wrap justify-center	 ">
+        <PricingOption
+          optionName="Basic"
+          optionFeatures={["100 DMs for free", "Pay per DM"]}
+          optionPrice="$0.01"
+          optionUnit="DM sent"
+        />
+        <PricingOption
+          optionName="Premium"
+          optionFeatures={["1250 DMs included", "billed at $0.01/DM after"]}
+          optionPrice="$10"
+          optionUnit="Month"
+        />
+        <PricingOption
+          optionName="Premium"
+          optionFeatures={[
+            "Annual Subscription",
+            "Save 17%",
+            "Billed at $100/year",
+            "Includes unlimited DMs",
+          ]}
+          optionPrice="$8.33"
+          optionUnit="Month"
+        />
+      </section>
+      <section className="flex-col flex flex-auto gap-8 my-20 lg:flex-row flex-wrap justify-center	 ">
+        <PricingOption
+          optionName="Pro"
+          optionFeatures={["Send Unlimited DMs", "DM Search functionality (coming soon)"]}
+          optionPrice="$25"
+          optionUnit="Month"
+        />
+
+        <PricingOption
+          optionName="Pro"
+          optionFeatures={[
+            "Annual Subscription",
+            "Save 17%",
+            "Billed at $250/year",
+            "Send Unlimited DMs",
+            "DM Search functionality (coming soon)",
+          ]}
+          optionPrice="$20.83"
+          optionUnit="Month"
+        />
+
+        {/* <PricingOption
         optionName="Enterprise"
         optionFeatures={[
           "All the features of Pro",
@@ -64,8 +92,9 @@ const Pricing = () => {
         ]}
         optionPrice=""
         optionUnit=""
-      />
-    </section>
+      /> */}
+      </section>
+    </>
   )
 }
 

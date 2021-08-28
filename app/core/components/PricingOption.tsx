@@ -18,7 +18,7 @@ const PricingOption = (props: PricingOptionProps) => {
   const handleSignup = () => router.push(Routes.SignupPage())
 
   return (
-    <div className="md:w-32 shadow-lg rounded-2xl w-64 bg-indigo-500 dark:bg-gray-800 p-4">
+    <div className="shadow-lg rounded-2xl w-64 bg-indigo-500 dark:bg-gray-800 p-4">
       <div className="flex text-white  items-center justify-between">
         <p className="text-3xl font-medium mb-4">{props.optionName}</p>
         <p className="text-2xl font-bold flex flex-col">
@@ -26,7 +26,7 @@ const PricingOption = (props: PricingOptionProps) => {
           <span className="font-thin text-right text-sm">{props.optionUnit}</span>
         </p>
       </div>
-      <p className="text-white text-md mt-4">Plan include :</p>
+      <p className="text-white text-md mt-4">Plan includes :</p>
       <ul className="text-sm text-white w-full mt-6 mb-6">
         {props.optionFeatures.map((feature, i) => (
           <li className="mb-3 flex items-center " key={i}>
