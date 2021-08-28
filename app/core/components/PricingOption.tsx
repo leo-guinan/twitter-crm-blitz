@@ -18,7 +18,7 @@ const PricingOption = (props: PricingOptionProps) => {
   const handleSignup = () => router.push(Routes.SignupPage())
 
   return (
-    <div className="shadow-lg rounded-2xl w-64 bg-indigo-500 dark:bg-gray-800 p-4">
+    <div className="md:w-32 shadow-lg rounded-2xl w-64 bg-indigo-500 dark:bg-gray-800 p-4">
       <div className="flex text-white  items-center justify-between">
         <p className="text-3xl font-medium mb-4">{props.optionName}</p>
         <p className="text-2xl font-bold flex flex-col">

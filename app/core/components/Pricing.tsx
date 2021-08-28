@@ -35,7 +35,7 @@ const Pricing = () => {
   }
 
   return (
-    <section className="flex flex-auto space-x-8 my-20">
+    <section className="flex-col flex flex-auto space-y-8 lg:space-x-8 my-20 lg:flex-row ">
       <PricingOption
         optionName="Basic"
         optionFeatures={["100 DMs for free", "Pay per DM"]}
