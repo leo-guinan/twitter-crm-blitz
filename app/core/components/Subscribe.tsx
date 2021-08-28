@@ -24,7 +24,7 @@ const Subscribe = () => {
     console.log("plan: " + prices[event.target.dataset.plan])
     let lineItem = {
       priceId: prices[event.target.dataset.plan],
-      quantity: null,
+      quantity: 0,
     }
     if (event.target.dataset.plan === "pro") {
       lineItem.quantity = 1
