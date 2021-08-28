@@ -29,6 +29,7 @@ model User {
   stripeCustomerId   String?           @unique
   price              String?
   subscriptionStatus String?           @default("incomplete")
+  subscriptionId     String?
   tokens             Token[]
   sessions           Session[]
   relationships      Relationship[]

@@ -40,12 +40,13 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
     case "customer.subscription.updated":
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription
-      console.log(subscription)
+
       await db.user.update({
         where: { stripeCustomerId: subscription.customer as string },
         data: {
           subscriptionStatus: subscription.status,
           price: subscription?.items?.data[0]?.price.id,
+          subscriptionId: subscription?.items?.data[0]?.id,
         },
       })
       break
