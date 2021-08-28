@@ -9,7 +9,7 @@ interface Props {
   isFat?: boolean
   label?: string
   className?: string
-  onClick?: () => void
+  onClick?: any
 }
 
 const colors = {
