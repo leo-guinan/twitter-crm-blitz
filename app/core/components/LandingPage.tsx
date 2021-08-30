@@ -10,13 +10,11 @@ const LandingPage = () => {
         <div className="flex items-center justify-center  border-t-2">
           <CTA />
         </div>
-        <div className="flex items-center justify-center  border-t-2">
+        <div className="flex items-center justify-center  border-t-2" id="features">
           <Features />
         </div>
-        <div className="flex items-center justify-center  border-t-2">
-          <a href="#pricing">
-            <Pricing />
-          </a>
+        <div className="items-center justify-center  border-t-2" id="pricing">
+          <Pricing />
         </div>
       </section>
     </>
