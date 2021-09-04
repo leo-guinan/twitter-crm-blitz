@@ -13,7 +13,7 @@ import Layout from "../layouts/Layout"
 import getRelationships from "app/relationships/queries/getRelationships"
 import Button from "app/core/components/Button"
 import { Tag } from "app/pages/tags/[tagId]"
-import getRelationshipsForUser from "app/relationships/queries/getRelationshipsForUser"
+import getRelationshipsByType from "app/relationships/queries/getRelationshipsByType"
 import createTag from "app/tags/mutations/createTag"
 import { faMinus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -31,14 +31,13 @@ const RelationshipByTypePage: BlitzPage = () => {
   const router = useRouter()
   const type = useParam("type", "string")
   const page = Number(router.query.page) || 0
-  const [{ relationships, hasMore }] = usePaginatedQuery(getRelationshipsForUser, {
-    where: {
-      type: typesToEnum[type || ""],
-    },
+  const [{ relationships, hasMore }] = usePaginatedQuery(getRelationshipsByType, {
     orderBy: { twitterUserId: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
+    type,
   })
+
   return (
     <>
       <Head>

@@ -52,6 +52,8 @@ lib-cov
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+#app/api/queues/twitter-data-pull.ts
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -71,5 +73,4 @@ amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
-#amplify-do-not-edit-end
-app/api/queues/twitter-data-pull.ts
+amplify-do-not-edit-end

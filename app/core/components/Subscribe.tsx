@@ -52,7 +52,7 @@ const Subscribe = () => {
           optionPrice="$0.01"
           optionUnit="DM sent"
           optionLink={{
-            label: "Subscibe to Basic",
+            label: "Subscribe to Basic",
             data: "basic",
             onClick: (event) => handleClick(event),
           }}
@@ -63,7 +63,7 @@ const Subscribe = () => {
           optionPrice="$10"
           optionUnit="Month"
           optionLink={{
-            label: "Subscibe to Premium",
+            label: "Subscribe to Premium",
             data: "premium",
             onClick: (event) => handleClick(event),
           }}
@@ -79,7 +79,7 @@ const Subscribe = () => {
           optionPrice="$8.33"
           optionUnit="Month"
           optionLink={{
-            label: "Subscibe to Premium",
+            label: "Subscribe to Premium",
             data: "premium_annual",
             onClick: (event) => handleClick(event),
           }}
@@ -92,7 +92,7 @@ const Subscribe = () => {
           optionPrice="$25"
           optionUnit="Month"
           optionLink={{
-            label: "Subscibe to Pro",
+            label: "Subscribe to Pro",
             data: "pro",
             onClick: (event) => handleClick(event),
           }}
@@ -110,7 +110,7 @@ const Subscribe = () => {
           optionPrice="$20.83"
           optionUnit="Month"
           optionLink={{
-            label: "Subscibe to Pro (Annual)",
+            label: "Subscribe to Pro (Annual)",
             data: "pro_annual",
             onClick: (event) => handleClick(event),
           }}

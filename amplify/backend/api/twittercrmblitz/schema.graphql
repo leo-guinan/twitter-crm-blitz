@@ -1,54 +1,58 @@
-type User @model {
+type TwitterAccount @model {
   id: ID!
-  username: String!
-  twitterToken: String!
-  twitterSecretToken: String!
-  twitterId: String!
-
-  name: String
-  email: String
-  hashedPassword: String
-  role: String
-  tokens: [Token] @connection(keyName: "byUser", fields: ["id"])
-  sessions: [Session] @connection(keyName: "byUser", fields: ["id"])
-}
-
-type Session @model @key(name: "byUser", fields: ["userId", "publicData"]) {
-  id: ID!
-  expiresAt: AWSDateTime!
-  handle: String!
-  hashedSessionToken: String
-  antiCSRFToken: String
-  publicData: String
-  privateData: String
-  userId: ID
-
-  user: User @connection(fields: ["userId"])
-}
-
-type Token @model @key(name: "byUser", fields: ["userId", "hashedToken"]) {
-  id: ID!
-  hashedToken: String!
-  type: String!
-  expiresAt: AWSDateTime!
-  sentTo: String!
-  userId: ID!
-
-  user: User! @connection(fields: ["userId"])
+  userId: String!
+  twitterToken: String
+  twitterSecretToken: String
+  twitterUser: TwitterUser @connection(fields: ["twitterUserId"])
+  twitterUserId: String!
 }
 
 type TwitterUser @model @key(fields: ["twitterId"]) {
-  username: String!
-  name: String!
-  bio: String!
-  profilePictureUrl: String!
   twitterId: String!
+  twitterBio: String
+  twitterUsername: String
 }
 
-type Relationship @model @key(fields: ["user1TwitterId", "user2TwitterId"]) {
-  user1: TwitterUser @connection(fields: ["user1TwitterId"])
-  user1TwitterId: String!
-  user2: TwitterUser @connection(fields: ["user2TwitterId"])
-  user2TwitterId: String!
-  type: String!
+type Relationship @model {
+  id: ID!
+  twitterAccountId: ID!
+  twitterAccount: TwitterAccount @connection(fields: ["twitterAccountId"])
+  twitterUser: TwitterUser @connection(fields: ["twitterUserId"])
+  twitterUserId: String!
+  relationshipType: RelationshipType!
 }
+
+enum RelationshipType {
+  follower
+  following
+  mutual
+}
+
+type TwitterDataPull @model {
+  id: ID!
+  twitterAccount: TwitterAccount @connection(fields: ["twitterAccountId"])
+  twitterAccountId: ID!
+  relationshipType: RelationshipType
+  paginationToken: String
+}
+
+# type Blog @model {
+#   id: ID!
+#   name: String!
+#   posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
+# }
+
+# type Post @model @key(name: "byBlog", fields: ["blogID"]) {
+#   id: ID!
+#   title: String!
+#   blogID: ID!
+#   blog: Blog @connection(fields: ["blogID"])
+#   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+# }
+
+# type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
+#   id: ID!
+#   postID: ID!
+#   post: Post @connection(fields: ["postID"])
+#   content: String!
+# }
