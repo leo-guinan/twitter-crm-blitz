@@ -25,7 +25,7 @@ export default Queue(
         },
       })
       const twitterDataPull = {
-        twitterAccountId: user.twitterId,
+        twitterAccountId: user?.twitterId,
         relationshipType: "follower",
       }
 

@@ -10,7 +10,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ where, orderBy, skip = 0, take = 100, type }: GetRelationshipsInput, ctx) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    let typeToSearch = RelationshipType.FOLLOWING //setting default so it doesn't break.
+    let typeToSearch
     switch (type) {
       case "follower":
         typeToSearch = RelationshipType.FOLLOWER

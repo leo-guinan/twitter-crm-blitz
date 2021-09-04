@@ -25,9 +25,9 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   })
   const twitterAccount = {
     userId: userId,
-    twitterToken: user.twitterToken,
-    twitterSecretToken: user.twitterSecretToken,
-    twitterUserId: user.twitterId,
+    twitterToken: user?.twitterToken,
+    twitterSecretToken: user?.twitterSecretToken,
+    twitterUserId: user?.twitterId,
   }
   const result = await API.graphql(
     graphqlOperation(createTwitterAccount, { input: twitterAccount })
