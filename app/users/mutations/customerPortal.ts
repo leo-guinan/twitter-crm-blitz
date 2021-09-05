@@ -10,7 +10,17 @@ export default async function customerPortalInput(_input: CustomerPortalInput, c
 
   const user = await db.user.findFirst({
     where: { id: ctx.session.userId },
-    select: { stripeCustomerId: true },
+    select: {
+      memberships: {
+        select: {
+          organization: {
+            select: {
+              stripeCustomerId: true,
+            },
+          },
+        },
+      },
+    },
   })
 
   if (!user) {
@@ -20,7 +30,7 @@ export default async function customerPortalInput(_input: CustomerPortalInput, c
   // This is the url to which the customer will be redirected when they are done
   // managing their billing with the portal.
   const portalsession = await stripe.billingPortal.sessions.create({
-    customer: user.stripeCustomerId as string,
+    customer: user.memberships[0].organization.stripeCustomerId as string,
     return_url: env.DOMAIN,
   })
 

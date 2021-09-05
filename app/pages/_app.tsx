@@ -10,9 +10,6 @@ import {
 import LoginForm from "app/auth/components/LoginForm"
 import "@stripe/stripe-js"
 import "app/core/styles/index.css"
-import Amplify from "aws-amplify"
-import config from "src/aws-exports"
-Amplify.configure(config)
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)

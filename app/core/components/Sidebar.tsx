@@ -5,7 +5,7 @@ import createCheckoutSession from "app/users/mutations/createCheckoutSession"
 import customerPortal from "app/users/mutations/customerPortal"
 import { loadStripe } from "@stripe/stripe-js"
 import Button from "./Button"
-import { UserRole } from "db"
+import { GlobalRole } from "db"
 import logout from "app/auth/mutations/logout"
 
 const Sidebar = () => {
@@ -69,7 +69,7 @@ const Sidebar = () => {
                 </Link>
               </Fragment>
             )}
-            {currentUser && !currentUser.twitterUsername && (
+            {currentUser && !currentUser.memberships[0].organization.twitterAccounts[0].twitterId && (
               <Fragment>
                 <a
                   className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -80,14 +80,15 @@ const Sidebar = () => {
                 </a>
               </Fragment>
             )}
-            {currentUser?.twitterUsername && (
+            {currentUser?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId && (
               <Fragment>
-                {currentUser.trial && (
+                {currentUser.memberships[0]?.organization?.trial && (
                   <span>
-                    Free DMs Used: {currentUser.trial.usedDMs} / {currentUser.trial.totalDMs}
+                    Free DMs Used: {currentUser.memberships[0]?.organization?.trial.usedDMs} /{" "}
+                    {currentUser.memberships[0]?.organization?.trial.totalDMs}
                   </span>
                 )}
-                {currentUser?.subscriptionStatus !== "active" && (
+                {currentUser?.memberships[0]?.organization?.subscriptionStatus !== "active" && (
                   <Link href={Routes.SubscribePage()}>
                     <a
                       className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -127,7 +128,7 @@ const Sidebar = () => {
                   <span className="mx-4 text-lg font-normal">Logout</span>
                   <span className="flex-grow text-right"></span>
                 </a>
-                {currentUser.role === UserRole.ADMIN && (
+                {currentUser.role === GlobalRole.SUPERADMIN && (
                   <section>
                     <Button
                       label="subscribe to basic"

@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [userToAddTrial, setUserToAddTrial] = useState(0)
   const [users] = useQuery(getAllUsers, {})
   const [userToMigrate, setUserToMigrate] = useState(0)
+  const [userToMigrateOrg, setUserToMigrateOrg] = useState(0)
   const handleRefreshRelationships = async () => {
     await window.fetch("/api/twitter/populate", {
       method: "POST",
@@ -41,6 +42,19 @@ const AdminDashboard = () => {
     })
   }
 
+  const migrateUserToOrg = async () => {
+    await window.fetch("/api/admin/migrate-twitter-account", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        userId: 13,
+      }),
+    })
+  }
+
   const addTrialToUser = async () => {
     await db.trial.create({
       data: {
@@ -54,8 +68,11 @@ const AdminDashboard = () => {
   }
 
   const handleSelectMigrateUser = (event) => {
-    console.log("setting user to migrate to id: " + event.target.value)
     setUserToMigrate(event.target.value)
+  }
+
+  const handleSelectMigrateUserOrg = (event) => {
+    setUserToMigrateOrg(event.target.value)
   }
 
   return (
@@ -103,6 +120,25 @@ const AdminDashboard = () => {
           <Button
             label="Migrate User to AWS"
             onClick={migrateUserToAWS}
+            color="blue"
+            className="my-4"
+          />
+        </div>
+        <div>
+          <select name="userToMigrateToOrg">
+            {users.map((user) => (
+              <option
+                value={user.id}
+                key={"migrate_user_org_" + user.id}
+                onChange={handleSelectMigrateUserOrg}
+              >
+                {user.id}
+              </option>
+            ))}
+          </select>
+          <Button
+            label="Migrate User to Org"
+            onClick={migrateUserToOrg}
             color="blue"
             className="my-4"
           />

@@ -26,13 +26,31 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
       trial: {
         create: {},
       },
+      memberships: {
+        create: {
+          role: "OWNER",
+          organization: {
+            create: {
+              name: organizationName,
+            },
+          },
+        },
+      },
     },
-    select: { id: true, name: true, email: true, role: true, subscriptionStatus: true },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      subscriptionStatus: true,
+      memberships: true,
+    },
   })
 
   await ctx.session.$create({
     userId: user.id,
-    role: user.role as Role,
+    roles: [user.role, user.memberships[0].role],
+    orgId: user.memberships[0].organizationId,
     subscriptionStatus: user.subscriptionStatus,
   })
   return user

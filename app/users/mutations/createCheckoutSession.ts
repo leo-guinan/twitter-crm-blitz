@@ -17,7 +17,18 @@ export default async function createCheckoutSession(
 
   const user = await db.user.findFirst({
     where: { id: ctx.session.userId },
-    select: { email: true, stripeCustomerId: true },
+    select: {
+      email: true,
+      memberships: {
+        select: {
+          organization: {
+            select: {
+              stripeCustomerId: true,
+            },
+          },
+        },
+      },
+    },
   })
 
   if (!user) {
@@ -28,8 +39,8 @@ export default async function createCheckoutSession(
     email: user.email,
   })
 
-  await db.user.update({
-    where: { id: ctx.session.userId },
+  await db.organization.update({
+    where: { id: ctx.session.orgId },
     data: {
       stripeCustomerId: customer.id,
     },

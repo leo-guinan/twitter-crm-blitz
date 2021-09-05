@@ -11,10 +11,20 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
       name: true,
       email: true,
       role: true,
-      twitterUsername: true,
-      price: true,
-      subscriptionStatus: true,
-      trial: true,
+      memberships: {
+        select: {
+          organization: {
+            select: {
+              trial: true,
+              twitterAccounts: {
+                select: {
+                  twitterId: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   })
 

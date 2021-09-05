@@ -28,7 +28,7 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session
-      await db.user.update({
+      await db.organization.update({
         where: { stripeCustomerId: session.customer as string },
         data: {
           subscriptionStatus: "active",
@@ -41,7 +41,7 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription
 
-      await db.user.update({
+      await db.organization.update({
         where: { stripeCustomerId: subscription.customer as string },
         data: {
           subscriptionStatus: subscription.status,

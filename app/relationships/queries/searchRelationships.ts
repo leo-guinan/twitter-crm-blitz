@@ -25,6 +25,7 @@ export default resolver.pipe(
             AND: [
               {
                 userId: ctx.session.userId,
+                organizationId: ctx.session.orgId,
               },
 
               {

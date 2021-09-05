@@ -39,6 +39,7 @@ export default resolver.pipe(
           ...paginateArgs,
           where: {
             userId: ctx.session.userId,
+            organizationId: ctx.session.orgId,
             type: typeToSearch,
           },
           orderBy,

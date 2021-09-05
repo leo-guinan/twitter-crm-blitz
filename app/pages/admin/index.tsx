@@ -11,7 +11,7 @@ import Button from "app/core/components/Button"
 import CTA from "app/core/components/CTA"
 import Welcome from "app/core/components/Welcome"
 import AdminDashboard from "app/core/components/AdminDashboard"
-import { UserRole } from "db"
+import { GlobalRole } from "db"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -21,7 +21,7 @@ import { UserRole } from "db"
 const Admin = () => {
   const currentUser = useCurrentUser()
 
-  if (currentUser?.role === UserRole.ADMIN) {
+  if (currentUser?.role === GlobalRole.SUPERADMIN) {
     return (
       <>
         <div>

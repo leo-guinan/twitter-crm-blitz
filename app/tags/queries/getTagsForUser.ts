@@ -13,6 +13,7 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
     },
     where: {
       userId: ctx.session.userId,
+      organizationId: ctx.session.orgId,
     },
   })
   tags.forEach((tag) => console.log(tag))

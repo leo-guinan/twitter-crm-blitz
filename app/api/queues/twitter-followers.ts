@@ -4,8 +4,6 @@ import db, { RelationshipType } from "db"
 import Twitter from "twitter-lite"
 import twitterFollowers from "./twitter-followers"
 import { add } from "date-fns"
-import Amplify, { API, graphqlOperation } from "aws-amplify"
-import { createTwitterDataPull } from "src/graphql/mutations"
 
 export default Queue(
   "api/queues/twitter-followers", // 👈 the route it's reachable on
@@ -20,18 +18,10 @@ export default Queue(
       })
       await db.twitterDataPull.create({
         data: {
-          userId: job.userId,
+          twitterAccountId: user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId,
           relationshipType: RelationshipType.FOLLOWER,
         },
       })
-      const twitterDataPull = {
-        twitterAccountId: user?.twitterId,
-        relationshipType: "follower",
-      }
-
-      const result = await API.graphql(
-        graphqlOperation(createTwitterDataPull, { input: twitterDataPull })
-      )
     } catch (e) {
       console.log("exception processing: " + e)
     }

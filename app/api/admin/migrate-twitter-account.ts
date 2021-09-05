@@ -23,12 +23,33 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
       subscriptionId: true,
     },
   })
-  const twitterAccount = {
-    userId: userId,
-    twitterToken: user?.twitterToken,
-    twitterSecretToken: user?.twitterSecretToken,
-    twitterUserId: user?.twitterId,
-  }
+
+  //step 1: create new organization
+  const organization = await db.organization.create({
+    data: {
+      stripeCustomerId: user.stripeCustomerId,
+      price: user.price,
+      subscriptionStatus: user.subscriptionStatus,
+      subscriptionId: user.subscriptionId,
+    },
+  })
+  //step 2: create new Membership belonging to organization
+  const membership = await db.membership.create({
+    data: {
+      organizationId: organization.id,
+      userId: user.id,
+    },
+  })
+  //step 3: create new TwitterAccount belonging to Organization
+  const twitterAccount = await db.twitterAccount.create({
+    data: {
+      twitterToken: user.twitterToken,
+      twitterSecretToken: user.twitterSecretToken,
+      twitterId: user.twitterId,
+      organizationId: organization.id,
+    },
+  })
+
   // const result = await API.graphql(
   //   graphqlOperation(createTwitterAccount, { input: twitterAccount })
   // )

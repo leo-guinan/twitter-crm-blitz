@@ -12,13 +12,26 @@ export default Queue(
       where: { id: job.fromUserId },
       select: {
         id: true,
-        twitterToken: true,
-        twitterSecretToken: true,
-        twitterId: true,
-        trial: true,
-        subscriptionStatus: true,
-        price: true,
-        subscriptionId: true,
+
+        memberships: {
+          select: {
+            organization: {
+              select: {
+                subscriptionStatus: true,
+                price: true,
+                subscriptionId: true,
+                trial: true,
+                twitterAccounts: {
+                  select: {
+                    twitterToken: true,
+                    twitterSecretToken: true,
+                    twitterId: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     })
 
@@ -29,19 +42,26 @@ export default Queue(
       version: "1.1", // version "1.1" is the default (change for other subdomains)
       consumer_key: process.env.TWITTER_CONSUMER_KEY as string, // from Twitter.
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET as string, // from Twitter.
-      access_token_key: user?.twitterToken as string, // from your User (oauth_token)
-      access_token_secret: user?.twitterSecretToken as string, // from your User (oauth_token_secret)
+      access_token_key: user?.memberships[0].organization.twitterAccounts[0].twitterToken as string, // from your User (oauth_token)
+      access_token_secret: user?.memberships[0].organization.twitterAccounts[0]
+        .twitterSecretToken as string, // from your User (oauth_token_secret)
     })
 
     if (user) {
-      if (!user.trial && user.subscriptionStatus !== "active") {
+      console.log(JSON.stringify(user.memberships[0]))
+      if (
+        !user.memberships[0].organization.trial &&
+        user.memberships[0].organization.subscriptionStatus !== "active"
+      ) {
         console.error("User not authorized to send DM. Please check subscription status")
         //figure out how to send user to subscribe link
         return
       } else if (
-        user.subscriptionStatus !== "active" &&
-        user.trial &&
-        user.trial.totalDMs - user.trial.usedDMs < job.toTwitterUserIds.length
+        user.memberships[0].organization.subscriptionStatus !== "active" &&
+        user.memberships[0].organization.trial &&
+        user.memberships[0].organization.trial.totalDMs -
+          user.memberships[0].organization.trial.usedDMs <
+          job.toTwitterUserIds.length
       ) {
         console.log("not enough trial DMs remaining to send all DMs. Please check status")
         return
@@ -65,10 +85,10 @@ export default Queue(
           .post("direct_messages/events/new", params)
           .then(async (results) => {
             console.log(results)
-            if (user.trial) {
+            if (user.memberships[0].organization.trial) {
               const trial = await db.trial.update({
                 where: {
-                  id: user.trial.id,
+                  id: user.memberships[0].organization.trial.id,
                 },
                 data: {
                   usedDMs: {
@@ -79,7 +99,7 @@ export default Queue(
               if (trial.usedDMs >= trial.totalDMs) {
                 await db.trial.delete({
                   where: {
-                    id: user.trial.id,
+                    id: user.memberships[0].organization.trial.id,
                   },
                 })
               }
@@ -91,7 +111,7 @@ export default Queue(
               ) {
                 console.log("Sending usage record to stripe for user: " + user.id)
                 const usageRecord = await stripe.subscriptionItems.createUsageRecord(
-                  user.subscriptionId,
+                  user.memberships[0].organization.subscriptionId,
                   { quantity: 1, timestamp: Math.ceil(Date.now() / 1000) }
                 )
               }
