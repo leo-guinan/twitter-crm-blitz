@@ -18,7 +18,24 @@ test.skip("renders blitz documentation link", () => {
     name: "User",
     email: "user@email.com",
     role: GlobalRole.CUSTOMER,
-    memberships: null,
+    memberships: [
+      {
+        id: 1,
+        organization: {
+          id: 1,
+          twitterAccounts: [
+            {
+              id: 1,
+              twitterId: "twitterId",
+            },
+          ],
+          trial: {
+            id: 1,
+          },
+          subscriptionStatus: "incomplete",
+        },
+      },
+    ],
     subscriptionStatus: "incomplete",
     price: "0.00",
     trial: null,
