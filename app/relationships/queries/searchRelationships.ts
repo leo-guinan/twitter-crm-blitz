@@ -9,6 +9,18 @@ interface SearchRelationshipsInput
 export default resolver.pipe(
   resolver.authorize(),
   async ({ where, orderBy, skip = 0, take = 100, query }: SearchRelationshipsInput, ctx) => {
+    const currentOrganization = await db.organization.findFirst({
+      where: {
+        id: ctx.session.orgId,
+      },
+      select: {
+        twitterAccounts: {
+          select: {
+            twitterAccountId: true,
+          },
+        },
+      },
+    })
     const {
       items: relationships,
       hasMore,
@@ -25,7 +37,6 @@ export default resolver.pipe(
             AND: [
               {
                 userId: ctx.session.userId,
-                organizationId: ctx.session.orgId,
               },
 
               {

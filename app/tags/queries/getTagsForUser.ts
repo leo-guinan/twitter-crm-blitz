@@ -6,6 +6,19 @@ interface GetTagsInput extends Pick<Prisma.TagFindManyArgs, "where"> {}
 export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInput, ctx) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
 
+  const currentOrganization = await db.organization.findFirst({
+    where: {
+      id: ctx.session.orgId,
+    },
+    select: {
+      twitterAccounts: {
+        select: {
+          twitterAccountId: true,
+        },
+      },
+    },
+  })
+
   const tags = await db.tag.groupBy({
     by: ["userId", "value"],
     _count: {
@@ -13,7 +26,7 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
     },
     where: {
       userId: ctx.session.userId,
-      organizationId: ctx.session.orgId,
+      twitterUserId: currentOrganization.twitterAccounts[0].twitterId,
     },
   })
   tags.forEach((tag) => console.log(tag))

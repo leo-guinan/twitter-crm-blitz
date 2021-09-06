@@ -30,7 +30,7 @@ export default async function customerPortalInput(_input: CustomerPortalInput, c
   // This is the url to which the customer will be redirected when they are done
   // managing their billing with the portal.
   const portalsession = await stripe.billingPortal.sessions.create({
-    customer: user.memberships[0].organization.stripeCustomerId as string,
+    customer: user?.memberships[0]?.organization?.stripeCustomerId as string,
     return_url: env.DOMAIN,
   })
 
