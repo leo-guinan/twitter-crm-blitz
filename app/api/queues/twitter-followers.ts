@@ -19,6 +19,7 @@ export default Queue(
                 select: {
                   twitterAccounts: {
                     select: {
+                      id: true,
                       twitterId: true,
                     },
                   },

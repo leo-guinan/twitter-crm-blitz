@@ -21,26 +21,27 @@ export default passportAuth(({ ctx, req, res }) => ({
         },
         async function (token, tokenSecret, profile, done) {
           console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
-          const twitterAccount = await db.twitterAccount.create({
-            data: {
-              twitterToken: token,
-              twitterSecretToken: tokenSecret,
-              twitterUsername: profile.username,
-              twitterId: profile.id,
-              organizationId: ctx.session.orgId,
-            },
-          })
-          const user = await db.user.update({
-            where: { id: ctx.session.userId as number },
+          if (ctx.session.orgId) {
+            const twitterAccount = await db.twitterAccount.create({
+              data: {
+                twitterToken: token,
+                twitterSecretToken: tokenSecret,
+                twitterUsername: profile.username,
+                twitterId: profile.id,
+                organizationId: ctx.session.orgId,
+              },
+            })
+            const user = await db.user.update({
+              where: { id: ctx.session.userId as number },
 
-            data: {
-              name: profile.displayName,
-            },
-          })
+              data: {
+                name: profile.displayName,
+              },
+            })
 
-          await twitterFollowing.enqueue({ userId: user.id })
-          await twitterFollowers.enqueue({ userId: user.id })
-
+            await twitterFollowing.enqueue({ userId: user.id })
+            await twitterFollowers.enqueue({ userId: user.id })
+          }
           const publicData = {
             userId: user.id,
             roles: [user.role],
