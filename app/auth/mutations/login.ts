@@ -10,11 +10,17 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
     where: { email },
     select: {
       id: true,
+      role: true,
       hashedPassword: true,
       memberships: {
         select: {
           organizationId: true,
           role: true,
+          organization: {
+            select: {
+              subscriptionStatus: true,
+            },
+          },
         },
       },
     },

@@ -13,7 +13,19 @@ export default Queue(
         where: { id: job.userId },
         select: {
           id: true,
-          twitterId: true,
+          memberships: {
+            select: {
+              organization: {
+                select: {
+                  twitterAccounts: {
+                    select: {
+                      twitterId: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       })
       await db.twitterDataPull.create({
