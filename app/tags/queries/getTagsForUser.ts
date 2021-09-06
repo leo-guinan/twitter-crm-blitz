@@ -18,17 +18,18 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
       },
     },
   })
+  if (currentOrganization?.twitterAccounts[0]?.twitterId) {
+    return await db.tag.groupBy({
+      by: ["userId", "value"],
+      _count: {
+        twitterUserId: true,
+      },
+      where: {
+        userId: ctx.session.userId,
+        twitterUserId: currentOrganization?.twitterAccounts[0]?.twitterId,
+      },
+    })
+  }
 
-  const tags = await db.tag.groupBy({
-    by: ["userId", "value"],
-    _count: {
-      twitterUserId: true,
-    },
-    where: {
-      userId: ctx.session.userId,
-      twitterUserId: currentOrganization?.twitterAccounts[0]?.twitterId,
-    },
-  })
-  tags.forEach((tag) => console.log(tag))
-  return tags
+  return []
 })

@@ -329,7 +329,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                           <option value=""> Filter By Tag</option>
                           {tags.map((tag) => (
                             <option value={tag.value} key={tag.value}>
-                              {tag.value} ({tag._count["twitterUserId"]})
+                              {tag.value} ({tag._count["twitterUserId"] || "0"})
                             </option>
                           ))}
                         </select>

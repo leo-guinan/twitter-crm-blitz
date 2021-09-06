@@ -23,9 +23,6 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
       email: email.toLowerCase().trim(),
       hashedPassword,
       role: "CUSTOMER",
-      trial: {
-        create: {},
-      },
       memberships: {
         create: {
           role: "OWNER",

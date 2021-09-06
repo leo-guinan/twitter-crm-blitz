@@ -9,9 +9,12 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   const user = await db.user.findFirst({
     where: { email },
     select: {
+      id: true,
+      hashedPassword: true,
       memberships: {
         select: {
-          organizationId,
+          organizationId: true,
+          role: true,
         },
       },
     },
@@ -36,9 +39,9 @@ export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ct
 
   await ctx.session.$create({
     userId: user.id,
-    roles: [user.role, user.memberships[0].role],
-    orgId: user.memberships[0].organizationId,
-    subscriptionStatus: user.subscriptionStatus,
+    roles: [user?.role, user?.memberships[0]?.role],
+    orgId: user?.memberships[0]?.organizationId,
+    subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus,
   })
 
   return user
