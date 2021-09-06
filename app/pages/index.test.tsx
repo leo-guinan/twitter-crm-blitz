@@ -25,7 +25,6 @@ test.skip("renders blitz documentation link", () => {
           id: 1,
           twitterAccounts: [
             {
-              id: 1,
               twitterId: "twitterId",
             },
           ],
