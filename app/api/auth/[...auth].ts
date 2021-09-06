@@ -43,8 +43,8 @@ export default passportAuth(({ ctx, req, res }) => ({
             await twitterFollowers.enqueue({ userId: user.id })
           }
           const publicData = {
-            userId: user.id,
-            roles: [user.role],
+            userId: ctx.session.userId,
+            roles: ctx.session.roles,
             source: "twitter",
           }
           done(undefined, { publicData })
