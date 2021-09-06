@@ -16,7 +16,7 @@ export default resolver.pipe(
       select: {
         twitterAccounts: {
           select: {
-            twitterAccountId: true,
+            twitterId: true,
           },
         },
       },

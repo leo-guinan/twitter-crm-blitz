@@ -55,14 +55,6 @@ const AdminDashboard = () => {
     })
   }
 
-  const addTrialToUser = async () => {
-    await db.trial.create({
-      data: {
-        userId: userToAddTrial,
-      },
-    })
-  }
-
   const handleSelectUser = (event) => {
     setUserToAddTrial(event.target.value)
   }
@@ -90,21 +82,7 @@ const AdminDashboard = () => {
           color="blue"
           className="my-4"
         />
-        <div>
-          <select name="userToAddTrialTo">
-            {users.map((user) => (
-              <option value={user.id} key={"user_" + user.id} onChange={handleSelectUser}>
-                {user.id}
-              </option>
-            ))}
-          </select>
-          <Button
-            label="Add Trial To User"
-            onClick={addTrialToUser}
-            color="blue"
-            className="my-4"
-          />
-        </div>
+
         <div>
           <select name="userToMigrate">
             {users.map((user) => (

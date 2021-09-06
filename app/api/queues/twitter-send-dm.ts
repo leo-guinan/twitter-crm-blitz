@@ -48,19 +48,18 @@ export default Queue(
     })
 
     if (user) {
-      console.log(JSON.stringify(user.memberships[0]))
       if (
-        !user.memberships[0].organization.trial &&
-        user.memberships[0].organization.subscriptionStatus !== "active"
+        !user?.memberships[0]?.organization?.trial &&
+        user?.memberships[0]?.organization?.subscriptionStatus !== "active"
       ) {
         console.error("User not authorized to send DM. Please check subscription status")
         //figure out how to send user to subscribe link
         return
       } else if (
-        user.memberships[0].organization.subscriptionStatus !== "active" &&
-        user.memberships[0].organization.trial &&
-        user.memberships[0].organization.trial.totalDMs -
-          user.memberships[0].organization.trial.usedDMs <
+        user?.memberships[0]?.organization?.subscriptionStatus !== "active" &&
+        user?.memberships[0]?.organization?.trial &&
+        user?.memberships[0]?.organization?.trial?.totalDMs -
+          user?.memberships[0]?.organization?.trial?.usedDMs <
           job.toTwitterUserIds.length
       ) {
         console.log("not enough trial DMs remaining to send all DMs. Please check status")
@@ -85,10 +84,10 @@ export default Queue(
           .post("direct_messages/events/new", params)
           .then(async (results) => {
             console.log(results)
-            if (user.memberships[0].organization.trial) {
+            if (user?.memberships[0]?.organization?.trial) {
               const trial = await db.trial.update({
                 where: {
-                  id: user.memberships[0].organization.trial.id,
+                  id: user?.memberships[0]?.organization?.trial?.id,
                 },
                 data: {
                   usedDMs: {
@@ -105,13 +104,15 @@ export default Queue(
               }
             } else {
               if (
-                user.subscriptionId &&
-                (user.price === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_BASIC ||
-                  user.price === process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PREMIUM)
+                user?.memberships[0]?.organization?.subscriptionId &&
+                (user?.memberships[0]?.organization?.price ===
+                  process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_BASIC ||
+                  user?.memberships[0]?.organization?.price ===
+                    process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PREMIUM)
               ) {
                 console.log("Sending usage record to stripe for user: " + user.id)
                 const usageRecord = await stripe.subscriptionItems.createUsageRecord(
-                  user.memberships[0].organization.subscriptionId,
+                  user?.memberships[0]?.organization?.subscriptionId,
                   { quantity: 1, timestamp: Math.ceil(Date.now() / 1000) }
                 )
               }

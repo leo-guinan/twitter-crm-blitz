@@ -16,6 +16,7 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
           organization: {
             select: {
               trial: true,
+              subscriptionStatus: true,
               twitterAccounts: {
                 select: {
                   twitterId: true,

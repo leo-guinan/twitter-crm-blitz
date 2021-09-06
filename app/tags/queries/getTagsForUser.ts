@@ -13,7 +13,7 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
     select: {
       twitterAccounts: {
         select: {
-          twitterAccountId: true,
+          twitterId: true,
         },
       },
     },
@@ -26,7 +26,7 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
     },
     where: {
       userId: ctx.session.userId,
-      twitterUserId: currentOrganization.twitterAccounts[0].twitterId,
+      twitterUserId: currentOrganization?.twitterAccounts[0]?.twitterId,
     },
   })
   tags.forEach((tag) => console.log(tag))
