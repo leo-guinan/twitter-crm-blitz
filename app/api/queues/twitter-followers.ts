@@ -31,7 +31,7 @@ export default Queue(
       if (user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId) {
         await db.twitterDataPull.create({
           data: {
-            twitterAccountId: user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId,
+            twitterAccountId: user?.memberships[0]?.organization?.twitterAccounts[0]?.id,
             relationshipType: RelationshipType.FOLLOWER,
           },
         })
