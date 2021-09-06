@@ -29,9 +29,7 @@ test.skip("renders blitz documentation link", () => {
               twitterId: "twitterId",
             },
           ],
-          trial: {
-            id: 1,
-          },
+          trial: null,
           subscriptionStatus: "incomplete",
         },
       },
