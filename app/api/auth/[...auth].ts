@@ -4,8 +4,6 @@ import TwitterStrategy from "passport-twitter"
 import db from "db"
 import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
-import Amplify, { API, graphqlOperation } from "aws-amplify"
-import { createTwitterAccount } from "src/graphql/mutations"
 
 export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/feather",
@@ -23,27 +21,22 @@ export default passportAuth(({ ctx, req, res }) => ({
         },
         async function (token, tokenSecret, profile, done) {
           console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
+          const twitterAccount = await db.twitterAccount.create({
+            data: {
+              twitterToken: token,
+              twitterSecretToken: tokenSecret,
+              twitterUsername: profile.username,
+              twitterId: profile.id,
+              organizationId: ctx.session.orgId,
+            },
+          })
           const user = await db.user.update({
             where: { id: ctx.session.userId as number },
 
             data: {
               name: profile.displayName,
-              twitterToken: token,
-              twitterSecretToken: tokenSecret,
-              twitterUsername: profile.username,
-              twitterId: profile.id,
             },
           })
-
-          const twitterAccount = {
-            userId: ctx.session.userId,
-            twitterToken: token,
-            twitterSecretToken: tokenSecret,
-            twitterUser: {
-              twitterId: profile.id,
-            },
-          }
-          await API.graphql(graphqlOperation(createTwitterAccount, { input: twitterAccount }))
 
           await twitterFollowing.enqueue({ userId: user.id })
           await twitterFollowers.enqueue({ userId: user.id })

@@ -29,12 +29,14 @@ export default Queue(
           },
         },
       })
-      await db.twitterDataPull.create({
-        data: {
-          twitterAccountId: user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId,
-          relationshipType: RelationshipType.FOLLOWING,
-        },
-      })
+      if (user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId) {
+        await db.twitterDataPull.create({
+          data: {
+            twitterAccountId: user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterId,
+            relationshipType: RelationshipType.FOLLOWING,
+          },
+        })
+      }
     } catch (e) {
       console.log("exception processing: " + e)
     }

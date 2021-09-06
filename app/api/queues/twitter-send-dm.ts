@@ -35,16 +35,22 @@ export default Queue(
       },
     })
 
-    console.log(user)
-
+    if (
+      !user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterToken ||
+      !user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterSecretToken
+    ) {
+      console.log("authentication error")
+      return
+    }
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
       version: "1.1", // version "1.1" is the default (change for other subdomains)
       consumer_key: process.env.TWITTER_CONSUMER_KEY as string, // from Twitter.
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET as string, // from Twitter.
-      access_token_key: user?.memberships[0].organization.twitterAccounts[0].twitterToken as string, // from your User (oauth_token)
-      access_token_secret: user?.memberships[0].organization.twitterAccounts[0]
-        .twitterSecretToken as string, // from your User (oauth_token_secret)
+      access_token_key: user?.memberships[0]?.organization?.twitterAccounts[0]
+        ?.twitterToken as string, // from your User (oauth_token)
+      access_token_secret: user?.memberships[0]?.organization?.twitterAccounts[0]
+        ?.twitterSecretToken as string, // from your User (oauth_token_secret)
     })
 
     if (user) {

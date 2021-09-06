@@ -1,5 +1,5 @@
 import { resolver, SecurePassword } from "blitz"
-import db from "db"
+import db, { MembershipRole } from "db"
 import { Signup } from "app/auth/validations"
 import { Role } from "types"
 
@@ -56,9 +56,9 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
 
   await ctx.session.$create({
     userId: user.id,
-    roles: [user?.role, user?.memberships[0]?.role],
+    roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
     orgId: user?.memberships[0]?.organizationId,
-    subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus,
+    subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
   })
   return user
 })

@@ -29,32 +29,6 @@ const AdminDashboard = () => {
     })
   }
 
-  const migrateUserToAWS = async () => {
-    await window.fetch("/api/admin/migrate-user", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        userId: 1,
-      }),
-    })
-  }
-
-  const migrateUserToOrg = async () => {
-    await window.fetch("/api/admin/migrate-twitter-account", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        userId: 13,
-      }),
-    })
-  }
-
   const handleSelectUser = (event) => {
     setUserToAddTrial(event.target.value)
   }
@@ -82,45 +56,6 @@ const AdminDashboard = () => {
           color="blue"
           className="my-4"
         />
-
-        <div>
-          <select name="userToMigrate">
-            {users.map((user) => (
-              <option
-                value={user.id}
-                key={"migrate_user_" + user.id}
-                onChange={handleSelectMigrateUser}
-              >
-                {user.id}
-              </option>
-            ))}
-          </select>
-          <Button
-            label="Migrate User to AWS"
-            onClick={migrateUserToAWS}
-            color="blue"
-            className="my-4"
-          />
-        </div>
-        <div>
-          <select name="userToMigrateToOrg">
-            {users.map((user) => (
-              <option
-                value={user.id}
-                key={"migrate_user_org_" + user.id}
-                onChange={handleSelectMigrateUserOrg}
-              >
-                {user.id}
-              </option>
-            ))}
-          </select>
-          <Button
-            label="Migrate User to Org"
-            onClick={migrateUserToOrg}
-            color="blue"
-            className="my-4"
-          />
-        </div>
       </section>
     </>
   )

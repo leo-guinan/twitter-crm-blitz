@@ -1,5 +1,5 @@
 import { resolver, SecurePassword, AuthenticationError } from "blitz"
-import db from "db"
+import db, { MembershipRole } from "db"
 import { Login } from "../validations"
 import { Role } from "types"
 
@@ -45,9 +45,9 @@ export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ct
 
   await ctx.session.$create({
     userId: user.id,
-    roles: [user?.role, user?.memberships[0]?.role],
+    roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
     orgId: user?.memberships[0]?.organizationId,
-    subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus,
+    subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
   })
 
   return user
