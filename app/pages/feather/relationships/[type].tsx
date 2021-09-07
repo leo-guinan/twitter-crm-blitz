@@ -12,7 +12,6 @@ import {
 import Layout from "../layouts/Layout"
 import getRelationships from "app/relationships/queries/getRelationships"
 import Button from "app/core/components/Button"
-import { Tag } from "app/pages/tags/[tagId]"
 import getRelationshipsByType from "app/relationships/queries/getRelationshipsByType"
 import createTag from "app/tags/mutations/createTag"
 import { faMinus } from "@fortawesome/free-solid-svg-icons"
