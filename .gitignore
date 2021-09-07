@@ -52,7 +52,13 @@ lib-cov
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-#app/api/queues/twitter-data-pull.ts
+app/api/queues/twitter-data-pull.ts
+app/api/queues/twitter-followers.ts
+app/api/queues/twitter-following.ts
+app/api/queues/twitter-process-staging.ts
+app/api/queues/staging.ts
+
+
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
