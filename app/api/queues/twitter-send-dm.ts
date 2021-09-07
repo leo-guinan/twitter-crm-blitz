@@ -72,7 +72,7 @@ export default Queue(
         return
       }
 
-      job.toTwitterUserIds.forEach((twitterUserId) => {
+      for (const twitterUserId of job.twitterUserIds) {
         const params = {
           event: {
             type: "message_create",
@@ -139,7 +139,7 @@ export default Queue(
               })
             }
           })
-      })
+      }
     }
   }
 )

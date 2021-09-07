@@ -1,6 +1,6 @@
 //inital load of twitter account data for new user
 import { Queue } from "quirrel/next"
-import db, { RelationshipType } from "db"
+import db, { RelationshipType, ProcessingStatus } from "db"
 import Twitter from "twitter-lite"
 import twitterFollowing from "./twitter-following"
 import { add } from "date-fns"

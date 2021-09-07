@@ -13,20 +13,19 @@ export default resolver.pipe(resolver.authorize(), async ({ where }: GetTagsInpu
     select: {
       twitterAccounts: {
         select: {
-          twitterId: true,
+          id: true,
         },
       },
     },
   })
-  if (currentOrganization?.twitterAccounts[0]?.twitterId) {
+  if (currentOrganization?.twitterAccounts[0]?.id) {
     return await db.tag.groupBy({
-      by: ["userId", "value"],
+      by: ["twitterAccountId", "value"],
       _count: {
         twitterUserId: true,
       },
       where: {
-        userId: ctx.session.userId,
-        twitterUserId: currentOrganization?.twitterAccounts[0]?.twitterId,
+        twitterAccountId: currentOrganization?.twitterAccounts[0]?.id,
       },
     })
   }

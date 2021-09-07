@@ -14,48 +14,45 @@ generator client {
 // --------------------------------------
 
 model User {
-  id                  Int                   @id @default(autoincrement())
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  name                String?
-  email               String                @unique
-  hashedPassword      String?
-  role                GlobalRole            @default(CUSTOMER)
-  twitterToken        String?
-  twitterSecretToken  String?
-  twitterBio          String?
-  twitterUsername     String?
-  twitterId           String?
-  stripeCustomerId    String?               @unique
-  price               String?
-  subscriptionStatus  String?               @default("incomplete")
-  subscriptionId      String?
-  tokens              Token[]
-  memberships         Membership[]
-  sessions            Session[]
-  relationships       Relationship[]
-  stagedRelationships RelationshipStaging[]
-  directMessages      DirectMessage[]
-  tags                Tag[]
-  userStatuses        UserStatus[]
+  id                 Int          @id @default(autoincrement())
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  name               String?
+  email              String       @unique
+  hashedPassword     String?
+  role               GlobalRole   @default(CUSTOMER)
+  twitterToken       String?
+  twitterSecretToken String?
+  twitterBio         String?
+  twitterUsername    String?
+  twitterId          String?
+  stripeCustomerId   String?      @unique
+  price              String?
+  subscriptionStatus String?      @default("incomplete")
+  subscriptionId     String?
+  tokens             Token[]
+  memberships        Membership[]
+  sessions           Session[]
 }
 
 model TwitterAccount {
-  id                  Int                   @id @default(autoincrement())
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  twitterToken        String?
-  twitterSecretToken  String?
-  twitterBio          String?
-  twitterUsername     String?
-  twitterId           String?
-  organization        Organization          @relation(fields: [organizationId], references: [id])
-  organizationId      Int
-  relationships       Relationship[]
-  stagedRelationships RelationshipStaging[]
-  directMessages      DirectMessage[]
-  tags                Tag[]
-  twitterDataPulls    TwitterDataPull[]
+  id                               Int                              @id @default(autoincrement())
+  createdAt                        DateTime                         @default(now())
+  updatedAt                        DateTime                         @updatedAt
+  twitterToken                     String?
+  twitterSecretToken               String?
+  twitterBio                       String?
+  twitterUsername                  String?
+  twitterId                        String?
+  organization                     Organization                     @relation(fields: [organizationId], references: [id])
+  organizationId                   Int
+  relationships                    Relationship[]
+  stagedRelationships              RelationshipStaging[]
+  directMessages                   DirectMessage[]
+  tags                             Tag[]
+  twitterDataPulls                 TwitterDataPull[]
+  twitterAccountStatuses           TwitterAccountStatus[]
+  twitterAccountHistoricalStatuses TwitterAccountStatusHistorical[]
 }
 
 model Organization {
@@ -156,28 +153,22 @@ model DirectMessage {
   from      String
   status    String?
 
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int
-
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int
 }
 
 model Tag {
-  id                   Int              @id @default(autoincrement())
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt
+  id                   Int          @id @default(autoincrement())
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
   value                String
-  realtionship         Relationship     @relation(fields: [userId, twitterUserId, relationshipType], references: [userId, twitterUserId, type])
+  realtionship         Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
   twitterUserId        String
-  relationshipType     RelationshipType
-  userId               Int
-  user                 User             @relation(fields: [userId], references: [id])
-  TwitterUser          TwitterUser?     @relation(fields: [twitterUserTwitterId], references: [twitterId])
-  twitterUserTwitterId String?
+  TwitterUser          TwitterUser? @relation(fields: [twitterUserTwitterId], references: [twitterId])
+  twitterUserTwitterId String
 
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int?
+  twitterAccountId Int
 }
 
 model TwitterUser {
@@ -198,31 +189,28 @@ model Relationship {
   type          RelationshipType
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
-  user          User             @relation(fields: [userId], references: [id])
-  userId        Int
   twitterUser   TwitterUser      @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
   status        String           @default("")
   tags          Tag[]
 
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int?
+  twitterAccountId Int
 
-  @@id([userId, twitterUserId, type])
+  @@id([twitterAccountId, twitterUserId])
 }
 
 model RelationshipStaging {
-  type          RelationshipType
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  user          User             @relation(fields: [userId], references: [id])
-  userId        Int
-  twitterUser   TwitterUser      @relation(fields: [twitterUserId], references: [twitterId])
+  type      RelationshipType
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
 
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int
-  @@id([userId, twitterUserId, type])
+  @@id([twitterAccountId, twitterUserId, type])
 }
 
 model TwitterDataPull {
@@ -246,17 +234,31 @@ model Trial {
   usedDMs        Int           @default(0)
 }
 
-model UserStatus {
+model TwitterAccountStatus {
   id               Int              @id @default(autoincrement())
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
-  user             User             @relation(fields: [userId], references: [id])
-  userId           Int
+  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
   relationshipType RelationshipType
   status           ProcessingStatus
   before           Int?
   after            Int?
+  paginationToken  String?
 
+  @@unique([twitterAccountId, relationshipType])
+}
+
+model TwitterAccountStatusHistorical {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+  relationshipType RelationshipType
+  status           ProcessingStatus
+  before           Int?
+  after            Int?
 }
 
 enum ProcessingStatus {

@@ -457,7 +457,11 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                         {relationship.tags.map((tag) => (
                           <span
                             key={
-                              relationship.userId + "_" + relationship.twitterUserId + "_" + tag.id
+                              relationship.twitterAccountId +
+                              "_" +
+                              relationship.twitterUserId +
+                              "_" +
+                              tag.id
                             }
                             className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
                           >
@@ -475,7 +479,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                                 onClick={handleRemoveTag}
                               /> */}
                               <button
-                                data-user-id={relationship.userId}
+                                data-user-id={relationship.twitterAccountId}
                                 data-twitter-id={relationship.twitterUserId}
                                 data-value={tag.value}
                                 data-relationship-type={tag.relationshipType}
@@ -496,7 +500,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                         />
                         <a
                           onClick={handleAddTag}
-                          data-user-id={relationship.userId}
+                          data-user-id={relationship.twitterAccountId}
                           data-twitter-id={relationship.twitterUserId}
                           data-relationship-type={relationship.type}
                         >

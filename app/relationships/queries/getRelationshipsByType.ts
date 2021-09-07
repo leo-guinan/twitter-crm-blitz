@@ -10,6 +10,20 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ where, orderBy, skip = 0, take = 100, type }: GetRelationshipsInput, ctx) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+
+    const organization = await db.organization.findFirst({
+      where: {
+        id: ctx.session.orgId,
+      },
+
+      select: {
+        twitterAccounts: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    })
     let typeToSearch
     switch (type) {
       case "follower":
@@ -24,36 +38,45 @@ export default resolver.pipe(
       default:
         console.log("Shouldn't be here. Something went wrong.")
     }
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const {
-      items: relationships,
-      hasMore,
-      nextPage,
-      count,
-    } = await paginate({
-      skip,
-      take,
-      count: () => db.relationship.count({ where }),
-      query: (paginateArgs) =>
-        db.relationship.findMany({
-          ...paginateArgs,
-          where: {
-            userId: ctx.session.userId,
-            type: typeToSearch,
-          },
-          orderBy,
-          include: {
-            twitterUser: true,
-            tags: true,
-          },
-        }),
-    })
+    if (organization.twitterAccounts[0].id) {
+      // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+      const {
+        items: relationships,
+        hasMore,
+        nextPage,
+        count,
+      } = await paginate({
+        skip,
+        take,
+        count: () => db.relationship.count({ where }),
+        query: (paginateArgs) =>
+          db.relationship.findMany({
+            ...paginateArgs,
+            where: {
+              twitterAccountId: organization.twitterAccounts[0].id,
+              type: typeToSearch,
+            },
+            orderBy,
+            include: {
+              twitterUser: true,
+              tags: true,
+            },
+          }),
+      })
 
-    return {
-      relationships,
-      nextPage,
-      hasMore,
-      count,
+      return {
+        relationships,
+        nextPage,
+        hasMore,
+        count,
+      }
+    } else {
+      return {
+        relationships: [],
+        nextPage: 0,
+        hasMore: false,
+        count: 0,
+      }
     }
   }
 )

@@ -8,9 +8,21 @@ interface GetRelationshipsInput
 
 export default resolver.pipe(resolver.authorize(), async ({ tag }: GetRelationshipsInput, ctx) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  const currentOrganization = await db.organization.findFirst({
+    where: {
+      id: ctx.session.orgId,
+    },
+    select: {
+      twitterAccounts: {
+        select: {
+          twitterId: true,
+        },
+      },
+    },
+  })
   const relationships = await db.relationship.findMany({
     where: {
-      userId: ctx.session.userId,
+      twitterAccountId: currentOrganization.twitterAccounts.id,
 
       tags: {
         some: {

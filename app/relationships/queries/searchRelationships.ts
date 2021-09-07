@@ -16,6 +16,7 @@ export default resolver.pipe(
       select: {
         twitterAccounts: {
           select: {
+            id: true,
             twitterId: true,
           },
         },
@@ -36,7 +37,7 @@ export default resolver.pipe(
           where: {
             AND: [
               {
-                userId: ctx.session.userId,
+                twitterAccountId: currentOrganization.twitterAccounts[0].id,
               },
 
               {

@@ -8,6 +8,20 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ where, orderBy, skip = 0, take = 100 }: GetRelationshipsInput, ctx) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const currentOrganization = await db.organization.findFirst({
+      where: {
+        id: ctx.session.orgId,
+      },
+      select: {
+        twitterAccounts: {
+          select: {
+            id: true,
+            twitterId: true,
+          },
+        },
+      },
+    })
+    console.log(JSON.stringify(currentOrganization))
     const {
       items: relationships,
       hasMore,
@@ -21,7 +35,7 @@ export default resolver.pipe(
         db.relationship.findMany({
           ...paginateArgs,
           where: {
-            userId: ctx.session.userId,
+            twitterAccountId: currentOrganization.twitterAccounts[0].id,
           },
           orderBy,
           include: {
