@@ -158,14 +158,14 @@ model DirectMessage {
 }
 
 model Tag {
-  id                   Int          @id @default(autoincrement())
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  value                String
-  realtionship         Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
-  twitterUserId        String
-  TwitterUser          TwitterUser? @relation(fields: [twitterUserTwitterId], references: [twitterId])
-  twitterUserTwitterId String
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  value         String
+  realtionship  Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
+  twitterUserId String
+  TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
+
 
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int

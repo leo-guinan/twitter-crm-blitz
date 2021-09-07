@@ -23,6 +23,7 @@ export default Queue(
                 trial: true,
                 twitterAccounts: {
                   select: {
+                    id: true,
                     twitterToken: true,
                     twitterSecretToken: true,
                     twitterId: true,
@@ -128,7 +129,7 @@ export default Queue(
             console.error(error)
             if (error.code === 349) {
               console.error("Unable to send messages to user: " + twitterUserId)
-              const twitterAccountId = user.memberships[0].organization.twitterAccounts[0].id
+              const twitterAccountId = user!.memberships[0]!.organization!.twitterAccounts[0]!.id
               if (twitterAccountId) {
                 await db.relationship.updateMany({
                   where: {
