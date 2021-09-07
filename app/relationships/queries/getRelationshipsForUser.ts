@@ -21,7 +21,8 @@ export default resolver.pipe(
         },
       },
     })
-    if (currentOrganization.twitterAccounts[0].id) {
+    const twitterAccountId = currentOrganization?.twitterAccounts[0]?.id
+    if (twitterAccountId) {
       const {
         items: relationships,
         hasMore,
@@ -35,7 +36,7 @@ export default resolver.pipe(
           db.relationship.findMany({
             ...paginateArgs,
             where: {
-              twitterAccountId: currentOrganization.twitterAccounts[0].id,
+              twitterAccountId,
             },
             orderBy,
             include: {

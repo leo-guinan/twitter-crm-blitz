@@ -6,11 +6,6 @@ const CreateTag = z.object({
   twitterAccountId: z.number(),
   twitterUserId: z.string(),
   value: z.string(),
-  relationshipType: z.enum([
-    RelationshipType.FOLLOWER,
-    RelationshipType.FOLLOWING,
-    RelationshipType.MUTUAL,
-  ]),
 })
 
 export default resolver.pipe(resolver.zod(CreateTag), resolver.authorize(), async (input) => {

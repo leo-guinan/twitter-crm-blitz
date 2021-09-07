@@ -72,7 +72,7 @@ export default Queue(
         return
       }
 
-      for (const twitterUserId of job.twitterUserIds) {
+      for (const twitterUserId of job.toTwitterUserIds) {
         const params = {
           event: {
             type: "message_create",
@@ -130,7 +130,7 @@ export default Queue(
               console.error("Unable to send messages to user: " + twitterUserId)
               await db.relationship.updateMany({
                 where: {
-                  userId: job.fromUserId,
+                  twitterAccountId: user.memberships[0].organization.twitterAccounts[0].id,
                   twitterUserId,
                 },
                 data: {

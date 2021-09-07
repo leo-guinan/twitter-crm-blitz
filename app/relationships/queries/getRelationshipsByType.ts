@@ -38,7 +38,8 @@ export default resolver.pipe(
       default:
         console.log("Shouldn't be here. Something went wrong.")
     }
-    if (organization?.twitterAccounts[0]?.id) {
+    const twitterAccountId = organization?.twitterAccounts[0]?.id
+    if (twitterAccountId) {
       // TODO: in multi-tenant app, you must add validation to ensure correct tenant
       const {
         items: relationships,
@@ -53,7 +54,7 @@ export default resolver.pipe(
           db.relationship.findMany({
             ...paginateArgs,
             where: {
-              twitterAccountId: organization.twitterAccounts[0].id,
+              twitterAccountId,
               type: typeToSearch,
             },
             orderBy,
