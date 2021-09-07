@@ -18,7 +18,7 @@ export default CronJob(
       const stillProcessing = await db.twitterAccountStatus.findMany({
         where: {
           AND: [
-            { twitterAccountId: account.twitterAccoutId },
+            { twitterAccountId: account.twitterAccountId },
             { status: ProcessingStatus.PROCESSING },
           ],
         },

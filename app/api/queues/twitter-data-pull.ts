@@ -17,20 +17,20 @@ export default CronJob(
       switch (datapull.relationshipType) {
         case RelationshipType.FOLLOWING:
           twitterPullFollowing.enqueue({
-            access_token_key: datapull.twitterAccount.twitterToken,
-            access_token_secret: datapull.twitterAccount.twitterSecretToken,
-            twitterId: datapull.twitterAccount.twitterId,
-            twitterAccountId: datapull.twitterAccount.id,
-            paginationToken: datapull.paginationToken,
+            access_token_key: datapull!.twitterAccount!.twitterToken,
+            access_token_secret: datapull!.twitterAccount!.twitterSecretToken,
+            twitterId: datapull!.twitterAccount!.twitterId,
+            twitterAccountId: datapull!.twitterAccount!.id,
+            paginationToken: datapull!.paginationToken,
           })
           break
         case RelationshipType.FOLLOWER:
           twitterPullFollower.enqueue({
-            access_token_key: datapull.twitterAccount.twitterToken,
-            access_token_secret: datapull.twitterAccount.twitterSecretToken,
-            twitterId: datapull.twitterAccount.twitterId,
-            twitterAccountId: datapull.twitterAccount.id,
-            paginationToken: datapull.paginationToken,
+            access_token_key: datapull!.twitterAccount!.twitterToken,
+            access_token_secret: datapull!.twitterAccount!.twitterSecretToken,
+            twitterId: datapull!.twitterAccount!.twitterId,
+            twitterAccountId: datapull!.twitterAccount!.id,
+            paginationToken: datapull!.paginationToken,
           })
           break
         default:

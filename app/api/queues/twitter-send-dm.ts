@@ -128,15 +128,18 @@ export default Queue(
             console.error(error)
             if (error.code === 349) {
               console.error("Unable to send messages to user: " + twitterUserId)
-              await db.relationship.updateMany({
-                where: {
-                  twitterAccountId: user.memberships[0].organization.twitterAccounts[0].id,
-                  twitterUserId,
-                },
-                data: {
-                  status: "Unable to receive DM",
-                },
-              })
+              const twitterAccountId = user.memberships[0].organization.twitterAccounts[0].id
+              if (twitterAccountId) {
+                await db.relationship.updateMany({
+                  where: {
+                    twitterAccountId,
+                    twitterUserId,
+                  },
+                  data: {
+                    status: "Unable to receive DM",
+                  },
+                })
+              }
             }
           })
       }

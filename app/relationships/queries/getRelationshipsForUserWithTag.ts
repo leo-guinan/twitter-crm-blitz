@@ -21,7 +21,7 @@ export default resolver.pipe(resolver.authorize(), async ({ tag }: GetRelationsh
       },
     },
   })
-  const twitterAccountId = currentOrganization?.twitterAccounts?.id
+  const twitterAccountId = currentOrganization?.twitterAccounts[0]?.id
   if (twitterAccountId) {
     const relationships = await db.relationship.findMany({
       where: {
