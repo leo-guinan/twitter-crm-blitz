@@ -1,7 +1,7 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import db, { RelationshipType, ProcessingStatus } from "db"
-// import twitterFollowers from "app/api/queues/twitter-followers"
-// import twitterFollowing from "app/api/queues/twitter-following"
+import twitterFollowers from "app/api/queues/twitter-followers"
+import twitterFollowing from "app/api/queues/twitter-following"
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   res.statusCode = 200
   res.setHeader("Content-Type", "application/json")
@@ -54,9 +54,9 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
           status: ProcessingStatus.NOT_STARTED,
         },
       })
-      //not running this from deployed version
-      // await twitterFollowing.enqueue({ userId: user.id })
-      // await twitterFollowers.enqueue({ userId: user.id })
+
+      await twitterFollowing.enqueue({ userId: user.id })
+      await twitterFollowers.enqueue({ userId: user.id })
     }
   }
 
