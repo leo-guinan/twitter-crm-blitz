@@ -474,7 +474,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                                 onClick={handleRemoveTag}
                               /> */}
                               <button
-                                data-user-id={relationship.twitterAccountId}
+                                data-twitter-account-id={relationship.twitterAccountId}
                                 data-twitter-id={relationship.twitterUserId}
                                 data-value={tag.value}
                                 onClick={handleRemoveTag}
@@ -494,7 +494,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                         />
                         <a
                           onClick={handleAddTag}
-                          data-user-id={relationship.twitterAccountId}
+                          data-twitter-account-id={relationship.twitterAccountId}
                           data-twitter-id={relationship.twitterUserId}
                           data-relationship-type={relationship.type}
                         >
