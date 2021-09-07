@@ -38,7 +38,7 @@ export default resolver.pipe(
       default:
         console.log("Shouldn't be here. Something went wrong.")
     }
-    if (organization.twitterAccounts[0].id) {
+    if (organization?.twitterAccounts[0]?.id) {
       // TODO: in multi-tenant app, you must add validation to ensure correct tenant
       const {
         items: relationships,

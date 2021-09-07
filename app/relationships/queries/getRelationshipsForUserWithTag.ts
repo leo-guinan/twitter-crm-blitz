@@ -15,27 +15,32 @@ export default resolver.pipe(resolver.authorize(), async ({ tag }: GetRelationsh
     select: {
       twitterAccounts: {
         select: {
+          id: true,
           twitterId: true,
         },
       },
     },
   })
-  const relationships = await db.relationship.findMany({
-    where: {
-      twitterAccountId: currentOrganization.twitterAccounts.id,
+  if (currentOrganization.twitterAccounts.id) {
+    const relationships = await db.relationship.findMany({
+      where: {
+        twitterAccountId: currentOrganization.twitterAccounts.id,
 
-      tags: {
-        some: {
-          value: tag,
+        tags: {
+          some: {
+            value: tag,
+          },
         },
       },
-    },
 
-    include: {
-      twitterUser: true,
-      tags: true,
-    },
-  })
+      include: {
+        twitterUser: true,
+        tags: true,
+      },
+    })
 
-  return relationships
+    return relationships
+  } else {
+    return []
+  }
 })

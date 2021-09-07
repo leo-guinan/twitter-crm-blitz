@@ -70,14 +70,11 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
   }
 
   const handleAddTag = async (event) => {
-    console.log("adding tag for user: " + event.target.dataset.userId)
-    console.log("adding tag " + newTags[event.target.dataset.twitterId])
     //actually add the tag here...
     await createTagMutation({
-      userId: parseInt(event.target.dataset.userId),
+      twitterAccountId: parseInt(event.target.dataset.twitterAccountId),
       twitterUserId: event.target.dataset.twitterId,
       value: newTags[event.target.dataset.twitterId],
-      relationshipType: event.target.dataset.relationshipType,
     })
     //remove tag from object
     let updatedTags = newTags
@@ -89,12 +86,10 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
 
   const handleRemoveTag = async (event) => {
     event.preventDefault()
-    console.log("event target dataset: " + event.target.dataset.userId)
     await deleteTagMutation({
-      userId: parseInt(event.target.dataset.userId),
+      twitterAccountId: parseInt(event.target.dataset.twitterAccountId),
       twitterUserId: event.target.dataset.twitterId,
       value: event.target.dataset.value,
-      relationshipType: event.target.dataset.relationshipType,
     })
   }
 
@@ -411,7 +406,7 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                 </thead>
                 <tbody>
                   {relationships.map((relationship) => (
-                    <tr key={relationship.userId + "_" + relationship.twitterUserId}>
+                    <tr key={relationship.twitterAccountId + "_" + relationship.twitterUserId}>
                       <td>
                         <div className="flex flex-wrap content-center justify-center">
                           <input
@@ -482,7 +477,6 @@ export const RelationshipsList = (props: RelationshipsListProps) => {
                                 data-user-id={relationship.twitterAccountId}
                                 data-twitter-id={relationship.twitterUserId}
                                 data-value={tag.value}
-                                data-relationship-type={tag.relationshipType}
                                 onClick={handleRemoveTag}
                               >
                                 x

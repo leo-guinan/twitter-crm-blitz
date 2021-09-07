@@ -3,7 +3,7 @@ import db, { RelationshipType } from "db"
 import { z } from "zod"
 
 const CreateTag = z.object({
-  userId: z.number(),
+  twitterAccountId: z.number(),
   twitterUserId: z.string(),
   value: z.string(),
   relationshipType: z.enum([

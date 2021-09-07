@@ -21,35 +21,43 @@ export default resolver.pipe(
         },
       },
     })
-    console.log(JSON.stringify(currentOrganization))
-    const {
-      items: relationships,
-      hasMore,
-      nextPage,
-      count,
-    } = await paginate({
-      skip,
-      take,
-      count: () => db.relationship.count({ where }),
-      query: (paginateArgs) =>
-        db.relationship.findMany({
-          ...paginateArgs,
-          where: {
-            twitterAccountId: currentOrganization.twitterAccounts[0].id,
-          },
-          orderBy,
-          include: {
-            twitterUser: true,
-            tags: true,
-          },
-        }),
-    })
+    if (currentOrganization.twitterAccounts[0].id) {
+      const {
+        items: relationships,
+        hasMore,
+        nextPage,
+        count,
+      } = await paginate({
+        skip,
+        take,
+        count: () => db.relationship.count({ where }),
+        query: (paginateArgs) =>
+          db.relationship.findMany({
+            ...paginateArgs,
+            where: {
+              twitterAccountId: currentOrganization.twitterAccounts[0].id,
+            },
+            orderBy,
+            include: {
+              twitterUser: true,
+              tags: true,
+            },
+          }),
+      })
 
-    return {
-      relationships,
-      nextPage,
-      hasMore,
-      count,
+      return {
+        relationships,
+        nextPage,
+        hasMore,
+        count,
+      }
+    } else {
+      return {
+        relationships: [],
+        nextPage: 0,
+        hasMore: false,
+        count: 0,
+      }
     }
   }
 )
