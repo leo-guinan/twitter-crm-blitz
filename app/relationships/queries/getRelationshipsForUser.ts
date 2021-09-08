@@ -45,7 +45,7 @@ export default resolver.pipe(
             },
           }),
       })
-
+      console.log("relationship: " + JSON.stringify(relationships[0]))
       return {
         relationships,
         nextPage,
