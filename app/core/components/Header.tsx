@@ -90,11 +90,11 @@ const Header = () => {
                             Signup
                           </a>
                         </Link> */}
-                        {/* <Link href={Routes.LoginPage()}>
+                        <Link href={Routes.LoginPage()}>
                           <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                            Login
+                            Already have an account? Login
                           </a>
-                        </Link> */}
+                        </Link>
                       </span>
                     )}
                   </span>
