@@ -13,9 +13,9 @@ const LandingPage = () => {
         <div className="flex items-center justify-center  border-t-2" id="features">
           <Features />
         </div>
-        <div className="items-center justify-center  border-t-2" id="pricing">
+        {/* <div className="items-center justify-center  border-t-2" id="pricing">
           <Pricing />
-        </div>
+        </div> */}
       </section>
     </>
   )

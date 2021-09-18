@@ -53,6 +53,8 @@ model TwitterAccount {
   twitterDataPulls                 TwitterDataPull[]
   twitterAccountStatuses           TwitterAccountStatus[]
   twitterAccountHistoricalStatuses TwitterAccountStatusHistorical[]
+  events                           RelationshipEvent[]
+
 }
 
 model Organization {
@@ -162,7 +164,7 @@ model Tag {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   value         String
-  realtionship  Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
+  relationship  Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
   twitterUserId String
   TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
 
@@ -182,6 +184,8 @@ model TwitterUser {
   relationships       Relationship[]
   stagedRelationships RelationshipStaging[]
   tags                Tag[]
+  events              RelationshipEvent[]
+
 
 }
 
@@ -197,6 +201,7 @@ model Relationship {
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int
 
+  events RelationshipEvent[]
   @@id([twitterAccountId, twitterUserId])
 }
 
@@ -265,4 +270,38 @@ enum ProcessingStatus {
   NOT_STARTED
   PROCESSING
   COMPLETE
+}
+
+model RelationshipEvent {
+  id               Int             @id @default(autoincrement())
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  twitterUser      TwitterUser     @relation(fields: [twitterUserId], references: [twitterId])
+  twitterUserId    String
+  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+  relationship     Relationship    @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
+
+}
+
+enum RelationshipEventType {
+  DIRECT_MESSAGE_SENT
+  DIRECT_MESSAGE_RECEIVED
+  RELATIONSHIP_CREATED
+}
+
+model EmailWaitlist {
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  email        String      @id
+  inviteCode   InviteCode? @relation(fields: [inviteCodeId], references: [id])
+  inviteCodeId Int?
+}
+
+model InviteCode {
+  id        Int             @id @default(autoincrement())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  code      String
+  emails    EmailWaitlist[]
 }

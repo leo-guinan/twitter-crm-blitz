@@ -17,10 +17,10 @@ const Header = () => {
           label: "Features",
           link: "/#features",
         },
-        {
-          label: "Pricing",
-          link: "/#pricing",
-        },
+        // {
+        //   label: "Pricing",
+        //   link: "/#pricing",
+        // },
         {
           label: "Dashboard",
           link: "/feather/relationships",
@@ -35,10 +35,10 @@ const Header = () => {
           label: "Features",
           link: "/#features",
         },
-        {
-          label: "Pricing",
-          link: "/#pricing",
-        },
+        // {
+        //   label: "Pricing",
+        //   link: "/#pricing",
+        // },
       ]
   return (
     <div>
@@ -63,12 +63,12 @@ const Header = () => {
                   >
                     Features
                   </a>
-                  <a
+                  {/* <a
                     className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     href="/#pricing"
                   >
                     Pricing
-                  </a>
+                  </a> */}
                   {/* <a
                     className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     href="/#contact"
@@ -85,16 +85,16 @@ const Header = () => {
                     )}
                     {!currentUser && (
                       <span>
-                        <Link href={Routes.SignupPage()}>
+                        {/* <Link href={Routes.SignupPage()}>
                           <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Signup
                           </a>
-                        </Link>
-                        <Link href={Routes.LoginPage()}>
+                        </Link> */}
+                        {/* <Link href={Routes.LoginPage()}>
                           <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Login
                           </a>
-                        </Link>
+                        </Link> */}
                       </span>
                     )}
                   </span>

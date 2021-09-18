@@ -48,7 +48,7 @@ const Sidebar = () => {
           <nav className="mt-10 px-6 ">
             {!currentUser && (
               <Fragment>
-                <Link href={Routes.SignupPage()}>
+                {/* <Link href={Routes.SignupPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
                     href="#"
@@ -56,9 +56,9 @@ const Sidebar = () => {
                     <span className="mx-4 text-lg font-normal">Sign Up</span>
                     <span className="flex-grow text-right"></span>
                   </a>
-                </Link>
+                </Link> */}
                 <div></div>
-                <Link href={Routes.LoginPage()}>
+                {/* <Link href={Routes.LoginPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
                     href="#"
@@ -66,7 +66,7 @@ const Sidebar = () => {
                     <span className="mx-4 text-lg font-normal">Login</span>
                     <span className="flex-grow text-right"></span>
                   </a>
-                </Link>
+                </Link> */}
               </Fragment>
             )}
             {currentUser &&
