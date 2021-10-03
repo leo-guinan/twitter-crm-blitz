@@ -18,7 +18,7 @@ model User {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
   name               String?
-  email              String       @unique
+  email              String?      @unique
   hashedPassword     String?
   role               GlobalRole   @default(CUSTOMER)
   twitterToken       String?

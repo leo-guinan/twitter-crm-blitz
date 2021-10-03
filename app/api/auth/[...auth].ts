@@ -1,7 +1,7 @@
 // app/api/auth/[...auth].ts
 import { passportAuth } from "blitz"
 import TwitterStrategy from "passport-twitter"
-import db from "db"
+import db, { MembershipRole } from "db"
 import twitterFollowing from "app/api/queues/twitter-following"
 import twitterFollowers from "app/api/queues/twitter-followers"
 
@@ -20,17 +20,59 @@ export default passportAuth(({ ctx, req, res }) => ({
           /*...*/
         },
         async function (token, tokenSecret, profile, done) {
+
           console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
-          if (ctx.session.orgId) {
-            const twitterAccount = await db.twitterAccount.create({
-              data: {
-                twitterToken: token,
-                twitterSecretToken: tokenSecret,
-                twitterUsername: profile.username,
-                twitterId: profile.id,
-                organizationId: ctx.session.orgId,
+
+          const user = await db.user.create({
+            data: {
+              role: "CUSTOMER",
+              memberships: {
+                create: {
+                  role: "OWNER",
+                  organization: {
+                    create: {
+                      name: "",
+                    },
+                  },
+                },
               },
-            })
+            },
+            select: {
+              id: true,
+              name: true,
+              role: true,
+              subscriptionStatus: true,
+              memberships: {
+                select: {
+                  organizationId: true,
+                  role: true,
+                  organization: {
+                    select: {
+                      subscriptionStatus: true,
+                    },
+                  },
+                },
+              },
+            },
+          })
+          const twitterAccount = await db.twitterAccount.create({
+            data: {
+              twitterToken: token,
+              twitterSecretToken: tokenSecret,
+              twitterUsername: profile.username,
+              twitterId: profile.id,
+              organizationId: ctx.session.orgId,
+            },
+          })
+          await ctx.session.$create({
+            userId: user.id,
+            roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
+            orgId: user?.memberships[0]?.organizationId,
+            subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
+          })
+          return user
+          if (ctx.session.orgId) {
+
             const user = await db.user.update({
               where: { id: ctx.session.userId as number },
 
