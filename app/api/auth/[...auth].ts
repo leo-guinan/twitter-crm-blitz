@@ -20,76 +20,104 @@ export default passportAuth(({ ctx, req, res }) => ({
           /*...*/
         },
         async function (token, tokenSecret, profile, done) {
-
-          console.log("Successfully retrieved data for user. User id: " + ctx.session.userId)
-
-          const user = await db.user.create({
-            data: {
-              role: "CUSTOMER",
-              memberships: {
-                create: {
-                  role: "OWNER",
-                  organization: {
-                    create: {
-                      name: "",
-                    },
-                  },
-                },
-              },
+          const lookedupUser = await db.twitterAccount.findFirst({
+            where: {
+              twitterId: profile.id,
             },
             select: {
-              id: true,
-              name: true,
-              role: true,
-              subscriptionStatus: true,
-              memberships: {
+              organizationId: true,
+              organization: {
                 select: {
-                  organizationId: true,
-                  role: true,
-                  organization: {
+                  subscriptionStatus: true,
+                  memberships: {
                     select: {
-                      subscriptionStatus: true,
+                      role: true,
+                      user: true,
                     },
                   },
                 },
               },
             },
           })
-          const twitterAccount = await db.twitterAccount.create({
-            data: {
-              twitterToken: token,
-              twitterSecretToken: tokenSecret,
-              twitterUsername: profile.username,
-              twitterId: profile.id,
-              organizationId: ctx.session.orgId,
-            },
-          })
-          await ctx.session.$create({
-            userId: user.id,
-            roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
-            orgId: user?.memberships[0]?.organizationId,
-            subscriptionStatus: user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
-          })
-          return user
-          if (ctx.session.orgId) {
-
-            const user = await db.user.update({
-              where: { id: ctx.session.userId as number },
-
+          console.log("lookedup USer: " + JSON.stringify(lookedupUser))
+          if (!lookedupUser) {
+            const user = await db.user.create({
               data: {
-                name: profile.displayName,
+                role: "CUSTOMER",
+                memberships: {
+                  create: {
+                    role: "OWNER",
+                    organization: {
+                      create: {
+                        name: "",
+                        twitterAccounts: {
+                          create: {
+                            twitterToken: token,
+                            twitterSecretToken: tokenSecret,
+                            twitterUsername: profile.username,
+                            twitterId: profile.id,
+                            twitterAccountWaitlist: {
+                              create: {},
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              select: {
+                id: true,
+                name: true,
+                role: true,
+                memberships: {
+                  select: {
+                    organizationId: true,
+                    role: true,
+                    organization: {
+                      select: {
+                        subscriptionStatus: true,
+                      },
+                    },
+                  },
+                },
               },
             })
 
-            await twitterFollowing.enqueue({ userId: user.id })
-            await twitterFollowers.enqueue({ userId: user.id })
+            await ctx.session.$create({
+              userId: user.id,
+              roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
+              orgId: user?.memberships[0]?.organizationId,
+              subscriptionStatus:
+                user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
+            })
+            const publicData = {
+              userId: user.id,
+              roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
+              source: "twitter",
+            }
+            done(undefined, { publicData })
+          } else {
+            const existingUser = lookedupUser!.organization!.memberships[0]!.user
+            await ctx.session.$create({
+              userId: existingUser.id,
+              roles: [
+                existingUser?.role,
+                lookedupUser.organization.memberships[0]?.role || MembershipRole.USER,
+              ],
+              orgId: lookedupUser.organizationId,
+              subscriptionStatus: lookedupUser?.organization?.subscriptionStatus || "incomplete",
+            })
+            const publicData = {
+              userId: existingUser.id,
+              roles: [
+                existingUser?.role,
+                lookedupUser!.organization?.memberships[0]?.role || MembershipRole.USER,
+              ],
+              source: "twitter",
+            }
+            done(undefined, { publicData })
           }
-          const publicData = {
-            userId: ctx.session.userId,
-            roles: ctx.session.roles,
-            source: "twitter",
-          }
-          done(undefined, { publicData })
         }
       ),
     },

@@ -13,7 +13,7 @@ declare module "blitz" {
     PublicData: {
       userId: User["id"]
       roles: Array<Role>
-      subscriptionStatus: User["subscriptionStatus"]
+      subscriptionStatus: Organization["subscriptionStatus"]
       orgId?: Organization["id"]
     }
   }

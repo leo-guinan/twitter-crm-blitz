@@ -1,18 +1,17 @@
-import React, { Suspense, useState } from "react"
-import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes, useMutation } from "blitz"
+import React, { Suspense } from "react"
+import { Head, usePaginatedQuery, useRouter, BlitzPage } from "blitz"
 import Layout from "../layouts/Layout"
-import getRelationships from "app/relationships/queries/getRelationships"
-import Button from "app/core/components/Button"
+
 import getRelationshipsForUser from "app/relationships/queries/getRelationshipsForUser"
-import createTag from "app/tags/mutations/createTag"
-import { faMinus } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import deleteTag from "app/tags/mutations/deleteTag"
+
 import { RelationshipsList } from "app/relationships/components/RelationshipList"
+import { isUserWaitlisted } from "../../../core/hooks/isUserWaitlisted"
+
 const ITEMS_PER_PAGE = 100
 
 const RelationshipPage: BlitzPage = () => {
   const router = useRouter()
+  const userWaitlisted = isUserWaitlisted()
 
   const page = Number(router.query.page) || 0
   const [{ relationships, hasMore }] = usePaginatedQuery(getRelationshipsForUser, {
@@ -28,7 +27,13 @@ const RelationshipPage: BlitzPage = () => {
 
       <div>
         <Suspense fallback={<div>Loading...</div>}>
-          <RelationshipsList relationships={relationships} hasMore={hasMore} />
+          {userWaitlisted && (
+            <div>
+              You&apos;re on the waitlist. We&apos;ll contact you soon. This is where your dashboard
+              will be.
+            </div>
+          )}
+          {!userWaitlisted && <RelationshipsList relationships={relationships} hasMore={hasMore} />}
         </Suspense>
       </div>
     </>

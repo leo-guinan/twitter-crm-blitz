@@ -13,7 +13,6 @@ export default Queue(
         where: { id: job.userId },
         select: {
           id: true,
-          twitterId: true,
           memberships: {
             select: {
               organization: {

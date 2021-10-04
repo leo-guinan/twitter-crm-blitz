@@ -11,6 +11,7 @@ import Button from "app/core/components/Button"
 import CTA from "app/core/components/CTA"
 import Welcome from "app/core/components/Welcome"
 import LandingPage from "app/core/components/LandingPage"
+import { isUserWaitlisted } from "../../core/hooks/isUserWaitlisted"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -19,12 +20,21 @@ import LandingPage from "app/core/components/LandingPage"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
-
-  if (currentUser) {
+  const userWaitlisted = isUserWaitlisted()
+  if (currentUser && !userWaitlisted) {
     return (
       <>
         <div>
           <Welcome />
+        </div>
+      </>
+    )
+  } else if (currentUser && userWaitlisted) {
+    return (
+      <>
+        <div>
+          You&apos;re on the waitlist. We&apos;ll contact you soon. This is where your dashboard
+          will be.
         </div>
       </>
     )

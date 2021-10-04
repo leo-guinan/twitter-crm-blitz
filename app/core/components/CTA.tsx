@@ -1,8 +1,10 @@
-import { getAntiCSRFToken } from "blitz"
+import { getAntiCSRFToken, Link, Routes } from "blitz"
 import Button from "app/core/components/Button"
 import { AnnotationIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { ChangeEvent, Fragment, useRef, useState } from "react"
+import { isUserWaitlisted } from "../hooks/isUserWaitlisted"
+import { useCurrentUser } from "../hooks/useCurrentUser"
 
 const CTA = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -10,16 +12,24 @@ const CTA = () => {
   const cancelButtonRef = useRef(null)
   const antiCSRFToken = getAntiCSRFToken()
   const [submitted, setSubmitted] = useState(false)
+  const userWaitlisted = isUserWaitlisted()
+  const currentUser = useCurrentUser()
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
   }
   const emailForm = (
     <div className="mt-2">
       <p className="text-sm text-gray-500">
-        <label className="text-gray-700" htmlFor="email">
-          Email:
-          <input type="email" name="email" value={email} onChange={handleEmailChange} />
-        </label>
+        <Fragment>
+          <a
+            className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+            href="/api/auth/twitter"
+          >
+            <span className="mx-4 text-lg font-normal">Log In With Twitter</span>
+            <span className="flex-grow text-right"></span>
+          </a>
+        </Fragment>
       </p>
     </div>
   )
@@ -55,13 +65,26 @@ const CTA = () => {
         </h2>
         <div className="lg:mt-0 lg:flex-shrink-0">
           <div className="mt-12 inline-flex rounded-md shadow">
-            <button
-              type="button"
-              onClick={() => setIsOpen(true)}
-              className="py-4 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-            >
-              Sign up for the Waiting List
-            </button>
+            {currentUser && !userWaitlisted && (
+              <Link href={Routes.RelationshipPage()}>
+                <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                  View Your Dashboard
+                </a>
+              </Link>
+            )}
+            {currentUser && userWaitlisted && (
+              <span>Thanks for signing up! We&apos;ll contact you soon!</span>
+            )}
+            {!currentUser && (
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="py-4 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+              >
+                Sign up for the Waiting List
+              </button>
+            )}
+
             <Transition.Root show={isOpen} as={Fragment}>
               <Dialog
                 as="div"
@@ -115,8 +138,6 @@ const CTA = () => {
                         </div>
                         {!submitted && (
                           <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                            <Button onClick={handleClick} label="Sign Up" color="blue" />
-
                             <Button
                               onClick={() => setIsOpen(false)}
                               // ref={cancelButtonRef}

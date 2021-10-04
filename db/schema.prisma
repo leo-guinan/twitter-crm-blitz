@@ -8,31 +8,24 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
+
 }
 
 // --------------------------------------
 
 model User {
-  id                 Int          @id @default(autoincrement())
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
-  name               String?
-  email              String?      @unique
-  hashedPassword     String?
-  role               GlobalRole   @default(CUSTOMER)
-  twitterToken       String?
-  twitterSecretToken String?
-  twitterBio         String?
-  twitterUsername    String?
-  twitterId          String?
-  stripeCustomerId   String?      @unique
-  price              String?
-  subscriptionStatus String?      @default("incomplete")
-  subscriptionId     String?
-  tokens             Token[]
-  memberships        Membership[]
-  sessions           Session[]
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  name           String?
+  email          String?      @unique
+  hashedPassword String?
+  role           GlobalRole   @default(CUSTOMER)
+  tokens         Token[]
+  memberships    Membership[]
+  sessions       Session[]
 }
 
 model TwitterAccount {
@@ -43,8 +36,10 @@ model TwitterAccount {
   twitterSecretToken               String?
   twitterBio                       String?
   twitterUsername                  String?
-  twitterId                        String?
-  organization                     Organization                     @relation(fields: [organizationId], references: [id])
+  twitterId                        String?                          @unique
+  twitterAccountWaitlistId         Int?
+  twitterAccountWaitlist           TwitterAccountWaitList?
+  organization                     Organization                     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId                   Int
   relationships                    Relationship[]
   stagedRelationships              RelationshipStaging[]
@@ -77,9 +72,9 @@ model Membership {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   role           MembershipRole @default(USER)
-  organization   Organization   @relation(fields: [organizationId], references: [id])
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId Int
-  user           User           @relation(fields: [userId], references: [id])
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         Int
   // When the user joins, we will clear out the name and email and set the user.
   invitedName    String?
@@ -155,7 +150,7 @@ model DirectMessage {
   from      String
   status    String?
 
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
+  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
 }
 
@@ -169,7 +164,7 @@ model Tag {
   TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
 
 
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
+  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
 }
 
@@ -198,7 +193,7 @@ model Relationship {
   status        String           @default("")
   tags          Tag[]
 
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
+  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
 
   events RelationshipEvent[]
@@ -213,7 +208,7 @@ model RelationshipStaging {
   twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
   twitterUserId String
 
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
+  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
   @@id([twitterAccountId, twitterUserId, type])
 }
@@ -233,7 +228,7 @@ model Trial {
   id             Int           @id @default(autoincrement())
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId Int
   totalDMs       Int           @default(100)
   usedDMs        Int           @default(0)
@@ -258,7 +253,7 @@ model TwitterAccountStatusHistorical {
   id               Int              @id @default(autoincrement())
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
-  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id])
+  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
   relationshipType RelationshipType
   status           ProcessingStatus
@@ -288,6 +283,14 @@ enum RelationshipEventType {
   DIRECT_MESSAGE_SENT
   DIRECT_MESSAGE_RECEIVED
   RELATIONSHIP_CREATED
+}
+
+model TwitterAccountWaitList {
+  id               Int            @id @default(autoincrement())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  twitterAccountId Int
+  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
 }
 
 model EmailWaitlist {

@@ -16,7 +16,7 @@ export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => 
   expiresAt.setHours(expiresAt.getHours() + RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS)
 
   // 3. If user with this email was found
-  if (user) {
+  if (user && user.email) {
     // 4. Delete any existing password reset tokens
     await db.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
     // 5. Save this new token in the database.

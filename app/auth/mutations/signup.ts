@@ -39,7 +39,6 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
       name: true,
       email: true,
       role: true,
-      subscriptionStatus: true,
       memberships: {
         select: {
           organizationId: true,

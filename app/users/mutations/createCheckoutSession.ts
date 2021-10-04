@@ -31,12 +31,12 @@ export default async function createCheckoutSession(
     },
   })
 
-  if (!user) {
+  if (!user || !user.email) {
     throw new Error("User not found")
   }
 
   const customer = await stripe.customers.create({
-    email: user.email,
+    email: user!.email,
   })
 
   await db.organization.update({
