@@ -1,10 +1,11 @@
-import { getAntiCSRFToken, Link, Routes } from "blitz"
+import { getAntiCSRFToken, Image, Link, Routes } from "blitz"
 import Button from "app/core/components/Button"
 import { AnnotationIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import React, { ChangeEvent, Fragment, useRef, useState } from "react"
 import { isUserWaitlisted } from "../hooks/isUserWaitlisted"
 import { useCurrentUser } from "../hooks/useCurrentUser"
+import signInWithTwitter from "../../../public/sign_in_with_twitter.png"
 
 const CTA = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,8 +27,7 @@ const CTA = () => {
             className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
             href="/api/auth/twitter"
           >
-            <span className="mx-4 text-lg font-normal">Log In With Twitter</span>
-            <span className="flex-grow text-right"></span>
+            <Image src={signInWithTwitter} />
           </a>
         </Fragment>
       </p>
