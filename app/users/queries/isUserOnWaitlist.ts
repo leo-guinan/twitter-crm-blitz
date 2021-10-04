@@ -35,6 +35,6 @@ export default async function isUserOnWaitlist(_ = null, { session }: Ctx) {
   })
   console.log(JSON.stringify(user))
   return (
-    user && !!user!.memberships[0]!.organization!.twitterAccounts[0]!.twitterAccountWaitlist!.id
+    user && !!user!?.memberships[0]?.organization?.twitterAccounts[0]?.twitterAccountWaitlist?.id
   )
 }
