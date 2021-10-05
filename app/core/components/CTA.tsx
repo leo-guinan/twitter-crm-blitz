@@ -42,20 +42,6 @@ const CTA = () => {
     </div>
   )
 
-  const handleClick = async () => {
-    await window.fetch("/api/waitlist/submit", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        email,
-      }),
-    })
-    setSubmitted(true)
-  }
-
   return (
     <div className="bg-white dark:bg-gray-800 ">
       <div className="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
