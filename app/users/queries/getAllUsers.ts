@@ -11,8 +11,18 @@ export default resolver.pipe(
     const users = await db.user.findMany({
       where,
       orderBy,
+      include: {
+        memberships: {
+          include: {
+            organization: {
+              include: {
+                twitterAccounts: true,
+              },
+            },
+          },
+        },
+      },
     })
-
     return users
   }
 )

@@ -65,6 +65,7 @@ model Organization {
   trialId            Int?
   memberships        Membership[]
   twitterAccounts    TwitterAccount[]
+  subscriptions      Subscription[]
 }
 
 model Membership {
@@ -182,6 +183,9 @@ model TwitterUser {
   stagedRelationships RelationshipStaging[]
   tags                Tag[]
   events              RelationshipEvent[]
+  likes               Tweet[]               @relation("liked")
+  retweets            Tweet[]               @relation("retweeted")
+  tweets              Tweet[]               @relation("wrote")
 
 
 }
@@ -309,4 +313,57 @@ model InviteCode {
   updatedAt DateTime        @updatedAt
   code      String
   emails    EmailWaitlist[]
+}
+
+model Tweet {
+  tweetId        String            @id
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  message        String
+  likedBy        TwitterUser[]     @relation("liked")
+  retweetedBy    TwitterUser[]     @relation("retweeted")
+  inResponseTo   Tweet?            @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
+  inResponseToId String?
+  responses      Tweet[]           @relation(name: "responses")
+  author         TwitterUser       @relation(name: "wrote", fields: [authorId], references: [twitterId])
+  authorId       String
+  collections    TweetCollection[]
+}
+
+model Subscription {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  owner       Organization      @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  collections TweetCollection[]
+
+}
+
+model TweetCollection {
+  id            Int            @id @default(autoincrement())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  tweets        Tweet[]
+  subscriptions Subscription[]
+}
+
+model Email {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  to        String
+  from      String
+  subject   String
+  body      String
+  htmlBody  String
+  status    EmailStatus
+
+}
+
+enum EmailStatus {
+  QUEUED
+  PROCESSING
+  SENT
+  ERROR
 }
