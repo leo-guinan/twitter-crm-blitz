@@ -95,6 +95,19 @@ const AdminDashboard = () => {
     })
   }
 
+  const handleFetchWeeklyDigest = async () => {
+    await window.fetch("/api/twitter/weekly-digest", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterAccountId: "1325102346792218629",
+      }),
+    })
+  }
+
   return (
     <>
       <section>
@@ -145,6 +158,13 @@ const AdminDashboard = () => {
         {/*</section>*/}
         <section>
           <Button onClick={handleSendEmail} label="Send Email" color="red" />
+        </section>
+        <section>
+          <Button
+            onClick={handleFetchWeeklyDigest}
+            label="Fetch Weekly Digest for User"
+            color="red"
+          />
         </section>
       </section>
     </>

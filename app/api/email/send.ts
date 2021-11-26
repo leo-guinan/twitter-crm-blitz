@@ -1,9 +1,5 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import db, { EmailStatus } from "db"
-import twitterFollowers from "app/api/queues/twitter-followers"
-import twitterFollowing from "app/api/queues/twitter-following"
-
-import sendEmail from "app/api/queues/send-email"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)

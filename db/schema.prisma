@@ -319,6 +319,7 @@ model Tweet {
   tweetId        String            @id
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
+  tweetCreatedAt DateTime
   message        String
   likedBy        TwitterUser[]     @relation("liked")
   retweetedBy    TwitterUser[]     @relation("retweeted")
@@ -330,22 +331,31 @@ model Tweet {
   collections    TweetCollection[]
 }
 
+enum SubscriptionCadence {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
 model Subscription {
-  id          Int               @id @default(autoincrement())
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  owner       Organization      @relation(fields: [ownerId], references: [id])
+  id          Int                 @id @default(autoincrement())
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  owner       Organization        @relation(fields: [ownerId], references: [id])
   ownerId     Int
   collections TweetCollection[]
-
+  cadence     SubscriptionCadence @default(WEEKLY)
 }
 
 model TweetCollection {
-  id            Int            @id @default(autoincrement())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  tweets        Tweet[]
-  subscriptions Subscription[]
+  id                 Int               @id @default(autoincrement())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  tweets             Tweet[]
+  subscriptions      Subscription[]
+  parentCollection   TweetCollection?  @relation(name: "parentChildCollection", fields: [parentCollectionId], references: [id])
+  parentCollectionId Int?
+  childCollections   TweetCollection[] @relation("parentChildCollection")
 }
 
 model Email {

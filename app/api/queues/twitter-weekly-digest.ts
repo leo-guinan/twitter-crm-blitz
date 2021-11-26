@@ -1,10 +1,8 @@
 import { Queue } from "quirrel/next"
-import db, { RelationshipType, ProcessingStatus } from "db"
 import Twitter from "twitter-lite"
-import twitterFollowers from "./twitter-followers"
-import { add } from "date-fns"
-import twitterLikes from "./twitter-likes"
-import twitterRetweets from "./twitter-retweets"
+
+import db, { Tweet } from "db"
+
 export default Queue(
   "api/queues/twitter-weekly-digest", // 👈 the route it's reachable on
   async (job: { twitterAccountId }) => {
@@ -20,16 +18,54 @@ export default Queue(
     const params = {
       query: `from:${job.twitterAccountId}`,
       max_results: 100,
-      "tweet.fields": "public_metrics,entities",
-      "user.fields": "entities",
+      "tweet.fields": "public_metrics,entities,created_at",
+      "user.fields": "entities,profile_image_url,name,description",
     }
-    client
+    let tweetDBObjects: Tweet[] = []
+
+    await client
       .get("tweets/search/recent", params)
       .then(async (results) => {
-        console.log(JSON.stringify(results))
-        results.data.map(async (tweet) => {
-          console.log(JSON.stringify(tweet))
-          //add tweet to collection of tweets, by user, group,
+        for (const tweet of results.data) {
+          let savedTweet = await db.tweet.upsert({
+            where: {
+              tweetId: tweet.id,
+            },
+            create: {
+              tweetId: tweet.id,
+              message: tweet.text,
+              tweetCreatedAt: tweet.created_at,
+              author: {
+                connectOrCreate: {
+                  where: {
+                    twitterId: job.twitterAccountId,
+                  },
+                  create: {
+                    twitterId: job.twitterAccountId,
+                    name: "",
+                    bio: "",
+                    profilePictureUrl: "",
+                  },
+                },
+              },
+            },
+            update: {},
+          })
+          tweetDBObjects.push(savedTweet)
+        }
+        const collectedTweets = tweetDBObjects.map((dbo) => {
+          console.log(JSON.stringify(dbo))
+          return {
+            tweetId: dbo.tweetId,
+          }
+        })
+        console.log(collectedTweets[0])
+        await db.tweetCollection.create({
+          data: {
+            tweets: {
+              connect: [...collectedTweets],
+            },
+          },
         })
       })
       .catch((e) => {
