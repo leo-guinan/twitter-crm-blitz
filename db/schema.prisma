@@ -186,6 +186,7 @@ model TwitterUser {
   likes               Tweet[]               @relation("liked")
   retweets            Tweet[]               @relation("retweeted")
   tweets              Tweet[]               @relation("wrote")
+  subscriptions       Subscription[]
 
 
 }
@@ -338,13 +339,14 @@ enum SubscriptionCadence {
 }
 
 model Subscription {
-  id          Int                 @id @default(autoincrement())
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  owner       Organization        @relation(fields: [ownerId], references: [id])
-  ownerId     Int
-  collections TweetCollection[]
-  cadence     SubscriptionCadence @default(WEEKLY)
+  id           Int                 @id @default(autoincrement())
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  owner        Organization        @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  collections  TweetCollection[]
+  cadence      SubscriptionCadence @default(WEEKLY)
+  twitterUsers TwitterUser[]
 }
 
 model TweetCollection {
@@ -352,7 +354,8 @@ model TweetCollection {
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   tweets             Tweet[]
-  subscriptions      Subscription[]
+  subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
+  subscriptionId     Int
   parentCollection   TweetCollection?  @relation(name: "parentChildCollection", fields: [parentCollectionId], references: [id])
   parentCollectionId Int?
   childCollections   TweetCollection[] @relation("parentChildCollection")

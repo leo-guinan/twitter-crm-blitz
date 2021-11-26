@@ -47,10 +47,10 @@ const Subscribe = () => {
     <>
       <section className="flex flex-auto gap-8 my-20 flex-wrap	justify-center">
         <PricingOption
-          optionName="Basic"
-          optionFeatures={["100 DMs for free", "Pay per DM"]}
-          optionPrice="$0.01"
-          optionUnit="DM sent"
+          optionName="Free"
+          optionFeatures={["1 Subscription"]}
+          optionPrice="Free"
+          optionUnit=""
           optionLink={{
             label: "Subscribe to Basic",
             data: "basic",
