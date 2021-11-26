@@ -63,7 +63,9 @@ export default Queue(
         await db.tweetCollection.create({
           data: {
             subscription: {
-              connect: 1,
+              connect: {
+                id: 1,
+              },
             },
             tweets: {
               connect: [...collectedTweets],
