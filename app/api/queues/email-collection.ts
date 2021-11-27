@@ -41,24 +41,25 @@ export default Queue(
         },
       },
     })
-    const emailHeader = `Hi ${subscription?.owner?.memberships[0]?.user?.name | ""}!
+    if (subscription) {
+      const emailHeader = `Hi ${subscription?.owner?.memberships[0]?.user?.name || ""}!
 
     Here's what ${subscription.twitterUsers[0].name} (@${
-      subscription.twitterUsers[0].username
-    }) had to say last week.
+        subscription.twitterUsers[0].username
+      }) had to say last week.
     `
-    const emailHtmlHeader = `<header>${emailHeader}</header>`
-    //{"collections":[{"id":9,"createdAt":"2021-11-26T18:14:17.785Z","updatedAt":"2021-11-26T18:14:17.788Z","subscriptionId":1,"parentCollectionId":null}]}
-    const tweetStrings = []
-    const tweetHTMLStrings = []
-    for (const collection of subscription.collections) {
-      for (const tweet of collection.tweets) {
-        tweetStrings.push(`
+      const emailHtmlHeader = `<header>${emailHeader}</header>`
+      //{"collections":[{"id":9,"createdAt":"2021-11-26T18:14:17.785Z","updatedAt":"2021-11-26T18:14:17.788Z","subscriptionId":1,"parentCollectionId":null}]}
+      const tweetStrings = []
+      const tweetHTMLStrings = []
+      for (const collection of subscription.collections) {
+        for (const tweet of collection.tweets) {
+          tweetStrings.push(`
           Timestamp: ${tweet.tweetCreatedAt}
           Message:
           ${tweet.message}
         `)
-        tweetHTMLStrings.push(`
+          tweetHTMLStrings.push(`
         <section>
           <span>Timestamp: </span> <span>${tweet.tweetCreatedAt}</span>
           <br />
@@ -66,27 +67,28 @@ export default Queue(
           <div>${tweet.message}</div>
         </section>
         `)
+        }
       }
-    }
 
-    const email = await db.email.create({
-      data: {
-        to: subscription.owner.memberships[0].user.email,
-        from: "leo@feathercrm.io",
-        subject: `Tweets from ${subscription.twitterUsers[0].name}`,
-        body: `
+      const email = await db.email.create({
+        data: {
+          to: subscription.owner.memberships[0].user.email,
+          from: "leo@feathercrm.io",
+          subject: `Tweets from ${subscription.twitterUsers[0].name}`,
+          body: `
         ${emailHeader}
         ${tweetStrings.join("\n")}
         `,
-        htmlBody: `
+          htmlBody: `
         ${emailHtmlHeader}
         ${tweetHTMLStrings.join("\n")}
         `,
-        status: EmailStatus.QUEUED,
-      },
-    })
+          status: EmailStatus.QUEUED,
+        },
+      })
 
-    console.log(`Created email: ${email.id}`)
+      console.log(`Created email: ${email.id}`)
+    }
   },
   { exclusive: true }
 )
