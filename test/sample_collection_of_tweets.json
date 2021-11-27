@@ -1,0 +1,908 @@
+{
+  "collections": [
+    {
+      "tweets": [
+        {
+          "tweetId": "1464291155139600387",
+          "createdAt": "2021-11-26T18:13:50.820Z",
+          "updatedAt": "2021-11-26T18:13:50.821Z",
+          "tweetCreatedAt": "2021-11-26T17:53:11.000Z",
+          "message": "RT @angrigoryan__: By becoming a member of Community Weekly Pro, you empower a creator (caugh me 👀) to continue on this strange path of con…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464276803065950208",
+          "createdAt": "2021-11-26T18:13:51.246Z",
+          "updatedAt": "2021-11-26T18:13:51.247Z",
+          "tweetCreatedAt": "2021-11-26T16:56:09.000Z",
+          "message": "Quick!\nCanadians and non-Americans\nLet’s take over twitter while the Americans are eating turkey \n\nWe here to take over!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464275404290732037",
+          "createdAt": "2021-11-26T18:13:51.582Z",
+          "updatedAt": "2021-11-26T18:13:51.583Z",
+          "tweetCreatedAt": "2021-11-26T16:50:35.000Z",
+          "message": "@dan_copy @dagorenouf 💩posting is a full-time job, fr",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464261952138579972",
+          "createdAt": "2021-11-26T18:13:51.830Z",
+          "updatedAt": "2021-11-26T18:13:51.830Z",
+          "tweetCreatedAt": "2021-11-26T15:57:08.000Z",
+          "message": "Did you know that the bird turkey is named after the country turkey?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464248113623875603",
+          "createdAt": "2021-11-26T18:13:52.142Z",
+          "updatedAt": "2021-11-26T18:13:52.143Z",
+          "tweetCreatedAt": "2021-11-26T15:02:09.000Z",
+          "message": "RT @bkh_leung: Confession of a bootstrap founder:\n\nIt’s been over two years and I still have no idea what I’m doing.\nDon’t think that’s goi…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464239581612683264",
+          "createdAt": "2021-11-26T18:13:52.386Z",
+          "updatedAt": "2021-11-26T18:13:52.387Z",
+          "tweetCreatedAt": "2021-11-26T14:28:15.000Z",
+          "message": "@TheRickyIO Great stuff\n\nLiked, commented, and subbed\n\nWatched all the way through too!\n\nThe twitter following video is 👌🏼🔥🔥🔥💯💯💯",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464238876738957320",
+          "createdAt": "2021-11-26T18:13:52.646Z",
+          "updatedAt": "2021-11-26T18:13:52.647Z",
+          "tweetCreatedAt": "2021-11-26T14:25:27.000Z",
+          "message": "RT @TheRickyIO: @bkh_leung https://t.co/DfuwrrPdYc",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464238546999459846",
+          "createdAt": "2021-11-26T18:13:52.937Z",
+          "updatedAt": "2021-11-26T18:13:52.937Z",
+          "tweetCreatedAt": "2021-11-26T14:24:08.000Z",
+          "message": "@jacksads Congrats!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464238063056470025",
+          "createdAt": "2021-11-26T18:13:53.179Z",
+          "updatedAt": "2021-11-26T18:13:53.180Z",
+          "tweetCreatedAt": "2021-11-26T14:22:13.000Z",
+          "message": "@TheRickyIO What's channel? I'll sub",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464237929451110416",
+          "createdAt": "2021-11-26T18:13:53.422Z",
+          "updatedAt": "2021-11-26T18:13:53.423Z",
+          "tweetCreatedAt": "2021-11-26T14:21:41.000Z",
+          "message": "@theandreboso Ugh, I hate being healthy too",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464237501523050503",
+          "createdAt": "2021-11-26T18:13:53.716Z",
+          "updatedAt": "2021-11-26T18:13:53.717Z",
+          "tweetCreatedAt": "2021-11-26T14:19:59.000Z",
+          "message": "RT @bkh_leung: Not tooting my own horn 🎺🎺\n\nBut people love the Twitter Spaces I host.\n\nIf you want to be in the know, join my newsletter.…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464231775794864128",
+          "createdAt": "2021-11-26T18:13:53.963Z",
+          "updatedAt": "2021-11-26T18:13:53.963Z",
+          "tweetCreatedAt": "2021-11-26T13:57:14.000Z",
+          "message": "@BrettPucino Throw 'em in a aluminum tray \nSoak in olive oil\nPop them in the barbecue (charcoal, ideally)\nOkay to let 'em crisp or burn a little around the edge\nTake 'em out\nSalt lightly\n\nsoooo good",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464219739803246598",
+          "createdAt": "2021-11-26T18:13:54.206Z",
+          "updatedAt": "2021-11-26T18:13:54.207Z",
+          "tweetCreatedAt": "2021-11-26T13:09:24.000Z",
+          "message": "RT @MaikoSakaiBiz: Hate to chase people for unpaid invoices &amp; deal with refunds? \n\nWhat you may not realize is changing the way you approac…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464219142844784692",
+          "createdAt": "2021-11-26T18:13:54.530Z",
+          "updatedAt": "2021-11-26T18:13:54.530Z",
+          "tweetCreatedAt": "2021-11-26T13:07:02.000Z",
+          "message": "@BrettPucino Grilled or smoked brussel sprouts https://t.co/ToqdRNnG7Q",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464218818478329856",
+          "createdAt": "2021-11-26T18:13:54.777Z",
+          "updatedAt": "2021-11-26T18:13:54.778Z",
+          "tweetCreatedAt": "2021-11-26T13:05:44.000Z",
+          "message": "RT @Nicholas_Duncan: We're currently at 24k users on https://t.co/c96xExjHlW\n\nIn the next 10 days we should hit 25k\n\n0.8% of our users are…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464218019484344357",
+          "createdAt": "2021-11-26T18:13:55.019Z",
+          "updatedAt": "2021-11-26T18:13:55.019Z",
+          "tweetCreatedAt": "2021-11-26T13:02:34.000Z",
+          "message": "\"No one is funding my company\"\n\nThis is one reason why... https://t.co/iZHP9kZt8p",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464217509247262747",
+          "createdAt": "2021-11-26T18:13:55.306Z",
+          "updatedAt": "2021-11-26T18:13:55.306Z",
+          "tweetCreatedAt": "2021-11-26T13:00:32.000Z",
+          "message": "@zealoustiger @threader_app compile",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464216672743661582",
+          "createdAt": "2021-11-26T18:13:55.551Z",
+          "updatedAt": "2021-11-26T18:13:55.552Z",
+          "tweetCreatedAt": "2021-11-26T12:57:13.000Z",
+          "message": "@leo_guinan is another one of these amazing crushers too!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464216431919308809",
+          "createdAt": "2021-11-26T18:13:55.806Z",
+          "updatedAt": "2021-11-26T18:13:55.807Z",
+          "tweetCreatedAt": "2021-11-26T12:56:15.000Z",
+          "message": "Seeing @StroutMotivateU, @oluadedej and @AndyM84 crush it really motivates and inspires me to keep getting back into the ring.\n\nThankful 🙏🏼 https://t.co/rzZEL7yM1A",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464215067096981520",
+          "createdAt": "2021-11-26T18:13:56.153Z",
+          "updatedAt": "2021-11-26T18:13:56.153Z",
+          "tweetCreatedAt": "2021-11-26T12:50:50.000Z",
+          "message": "@oluadedej But wagmi",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464097116830289921",
+          "createdAt": "2021-11-26T18:13:56.404Z",
+          "updatedAt": "2021-11-26T18:13:56.405Z",
+          "tweetCreatedAt": "2021-11-26T05:02:08.000Z",
+          "message": "RT @bkh_leung: It’s so reassuring to know that I’ve surrounded myself with really REALLY great people.\n\nI’m amazed that over 1600 of you ca…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464082771069054976",
+          "createdAt": "2021-11-26T18:13:56.646Z",
+          "updatedAt": "2021-11-26T18:13:56.646Z",
+          "tweetCreatedAt": "2021-11-26T04:05:08.000Z",
+          "message": "RT @bkh_leung: I don’t know who needs to hear this:\n\nFailing doesn’t mean you’re a failure.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464082288266858502",
+          "createdAt": "2021-11-26T18:13:56.933Z",
+          "updatedAt": "2021-11-26T18:13:56.934Z",
+          "tweetCreatedAt": "2021-11-26T04:03:13.000Z",
+          "message": "RT @bkh_leung: I don't ever want SwiftAds to get as complicated as Google Ads.\nAs powerful as Google Ads is, it will never open the purse s…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464066914976768001",
+          "createdAt": "2021-11-26T18:13:57.173Z",
+          "updatedAt": "2021-11-26T18:13:57.174Z",
+          "tweetCreatedAt": "2021-11-26T03:02:08.000Z",
+          "message": "Confession of a bootstrap founder:\n\nIt’s been over two years and I still have no idea what I’m doing.\nDon’t think that’s going to change any time soon…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464058998051778564",
+          "createdAt": "2021-11-26T18:13:57.416Z",
+          "updatedAt": "2021-11-26T18:13:57.417Z",
+          "tweetCreatedAt": "2021-11-26T02:30:40.000Z",
+          "message": "RT @DirtyDataGirl: @bkh_leung I direct everyone to the @intentionalist_ marketplace in my area. But then, I live surrounded by many awesome…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464058950588977159",
+          "createdAt": "2021-11-26T18:13:57.708Z",
+          "updatedAt": "2021-11-26T18:13:57.709Z",
+          "tweetCreatedAt": "2021-11-26T02:30:29.000Z",
+          "message": "RT @intentionalist_: @bkh_leung We got you! #BuyBlackFriday #SpendLikeItMatters \nhttps://t.co/tiXJoymWAj",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464052373219913730",
+          "createdAt": "2021-11-26T18:13:57.956Z",
+          "updatedAt": "2021-11-26T18:13:57.957Z",
+          "tweetCreatedAt": "2021-11-26T02:04:21.000Z",
+          "message": "https://t.co/zFKzARMioA",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464035960744730624",
+          "createdAt": "2021-11-26T18:13:58.206Z",
+          "updatedAt": "2021-11-26T18:13:58.207Z",
+          "tweetCreatedAt": "2021-11-26T00:59:08.000Z",
+          "message": "What are some of your favourite small businesses to support?\nIt’s Black Friday tomorrow and the holidays are coming up!!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464011909016047616",
+          "createdAt": "2021-11-26T18:13:58.492Z",
+          "updatedAt": "2021-11-26T18:13:58.493Z",
+          "tweetCreatedAt": "2021-11-25T23:23:33.000Z",
+          "message": "@peer_rich I'll gladly take payment in gold or silver!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464011740736335877",
+          "createdAt": "2021-11-26T18:13:58.748Z",
+          "updatedAt": "2021-11-26T18:13:58.749Z",
+          "tweetCreatedAt": "2021-11-25T23:22:53.000Z",
+          "message": "@tschill86 📍",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1464011399462543368",
+          "createdAt": "2021-11-26T18:13:58.992Z",
+          "updatedAt": "2021-11-26T18:13:58.993Z",
+          "tweetCreatedAt": "2021-11-25T23:21:32.000Z",
+          "message": "@tadaspetra Protip\nYou probably only need to be 80% efficient to win big\nThere will eventually be a point of diminishing return when trying to optimize up to 100%",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463989917386784774",
+          "createdAt": "2021-11-26T18:13:59.281Z",
+          "updatedAt": "2021-11-26T18:13:59.282Z",
+          "tweetCreatedAt": "2021-11-25T21:56:10.000Z",
+          "message": "RT @bkh_leung: I'm making a \"build-a-SaaS\" playbook \n\nThe marketing chapter will include campaign templates and budget outlines. \n\nIt'd be…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463975569910026242",
+          "createdAt": "2021-11-26T18:13:59.534Z",
+          "updatedAt": "2021-11-26T18:13:59.534Z",
+          "tweetCreatedAt": "2021-11-25T20:59:09.000Z",
+          "message": "RT @bkh_leung: Simple hack to make more friends on Twitter\n\n1. Be kind\n2. Follow more like-minded people\n3. Ask and answer questions (inter…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463915923555987471",
+          "createdAt": "2021-11-26T18:13:59.779Z",
+          "updatedAt": "2021-11-26T18:13:59.780Z",
+          "tweetCreatedAt": "2021-11-25T17:02:09.000Z",
+          "message": "It’s so reassuring to know that I’ve surrounded myself with really REALLY great people.\n\nI’m amazed that over 1600 of you care about what I have to say…\n\nThanks for your support 🙏🏼",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463901576196730888",
+          "createdAt": "2021-11-26T18:14:00.079Z",
+          "updatedAt": "2021-11-26T18:14:00.080Z",
+          "tweetCreatedAt": "2021-11-25T16:05:08.000Z",
+          "message": "I don’t know who needs to hear this:\n\nFailing doesn’t mean you’re a failure.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463895857544273924",
+          "createdAt": "2021-11-26T18:14:00.324Z",
+          "updatedAt": "2021-11-26T18:14:00.325Z",
+          "tweetCreatedAt": "2021-11-25T15:42:24.000Z",
+          "message": "@radavics 👋🏼\nI'll be the devils advocate and go all in on ads! https://t.co/zjEvRdyJZq",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463884946184060940",
+          "createdAt": "2021-11-26T18:14:00.575Z",
+          "updatedAt": "2021-11-26T18:14:00.576Z",
+          "tweetCreatedAt": "2021-11-25T14:59:03.000Z",
+          "message": "RT @Snoopy: Happy Thanksgiving!!! https://t.co/QICpzRhmUH",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463884792068554756",
+          "createdAt": "2021-11-26T18:14:00.865Z",
+          "updatedAt": "2021-11-26T18:14:00.866Z",
+          "tweetCreatedAt": "2021-11-25T14:58:26.000Z",
+          "message": "@dan_copy @oluadedej https://t.co/2VTMXvVga9",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463884611675729923",
+          "createdAt": "2021-11-26T18:14:01.110Z",
+          "updatedAt": "2021-11-26T18:14:01.111Z",
+          "tweetCreatedAt": "2021-11-25T14:57:43.000Z",
+          "message": "@dan_copy @oluadedej TAM total addressable market\nSAM serviceable addressable market \nSOM serviceable obtainable market",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463873971116511233",
+          "createdAt": "2021-11-26T18:14:01.354Z",
+          "updatedAt": "2021-11-26T18:14:01.354Z",
+          "tweetCreatedAt": "2021-11-25T14:15:26.000Z",
+          "message": "@oluadedej @dan_copy I agree\n\nI'd further extend the notion that SAM and SOM are probably just as useless \n\nInvestors that understand your area should see quickly how much potential your company has\n\nAnd tbh... I'm not sure if SwiftAds is a unicorn so I don't bother with it\n\n100MM is doable\n1B... 🤷🏻‍♂️",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463873347930972163",
+          "createdAt": "2021-11-26T18:14:01.644Z",
+          "updatedAt": "2021-11-26T18:14:01.645Z",
+          "tweetCreatedAt": "2021-11-25T14:12:58.000Z",
+          "message": "@StroutMotivateU 🙀",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463873231174180869",
+          "createdAt": "2021-11-26T18:14:01.931Z",
+          "updatedAt": "2021-11-26T18:14:01.932Z",
+          "tweetCreatedAt": "2021-11-25T14:12:30.000Z",
+          "message": "@StroutMotivateU Thanks, Jenn",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463873131500687363",
+          "createdAt": "2021-11-26T18:14:02.297Z",
+          "updatedAt": "2021-11-26T18:14:02.298Z",
+          "tweetCreatedAt": "2021-11-25T14:12:06.000Z",
+          "message": "@helloEngineur @heyohelen @geetfun @tomzaragoza @KingsongChen @jhlyeung Just followed errryone",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463869874929864711",
+          "createdAt": "2021-11-26T18:14:02.604Z",
+          "updatedAt": "2021-11-26T18:14:02.605Z",
+          "tweetCreatedAt": "2021-11-25T13:59:10.000Z",
+          "message": "The video production venture taught me a lot.\nMade me love video as a creative outlet (even though I’m not as creative as some of the amazing folks I’ve come across).\n\nAt the time, it was difficult facing failure. Now, I only have fond memories of those times.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463869870068621323",
+          "createdAt": "2021-11-26T18:14:02.858Z",
+          "updatedAt": "2021-11-26T18:14:02.858Z",
+          "tweetCreatedAt": "2021-11-25T13:59:09.000Z",
+          "message": "What was your first “entrepreneurial” experience?\n\nMine was buying and selling trading and collecting cards.\nAlways trying to trade up because I couldn’t afford the nice cards.\n\nLater in life, I started dabbling in video production and that was my first failed venture.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463858334839279620",
+          "createdAt": "2021-11-26T18:14:03.141Z",
+          "updatedAt": "2021-11-26T18:14:03.141Z",
+          "tweetCreatedAt": "2021-11-25T13:13:18.000Z",
+          "message": "@tschill86 🔥🔥🔥",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463858217725870089",
+          "createdAt": "2021-11-26T18:14:03.432Z",
+          "updatedAt": "2021-11-26T18:14:03.433Z",
+          "tweetCreatedAt": "2021-11-25T13:12:50.000Z",
+          "message": "@ThayDevToBe And marketers!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463858118207717381",
+          "createdAt": "2021-11-26T18:14:03.673Z",
+          "updatedAt": "2021-11-26T18:14:03.673Z",
+          "tweetCreatedAt": "2021-11-25T13:12:27.000Z",
+          "message": "@HustleFundVC @dunkhippo33 @ericbahn I'm probably not qualified... https://t.co/z5Lr7BKoFX",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463857876116594704",
+          "createdAt": "2021-11-26T18:14:03.911Z",
+          "updatedAt": "2021-11-26T18:14:03.911Z",
+          "tweetCreatedAt": "2021-11-25T13:11:29.000Z",
+          "message": "@ctwtn If there's demand...",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463857647321591812",
+          "createdAt": "2021-11-26T18:14:04.196Z",
+          "updatedAt": "2021-11-26T18:14:04.197Z",
+          "tweetCreatedAt": "2021-11-25T13:10:34.000Z",
+          "message": "@ryanckulp @ColinKeeley So, how many times can I retweet this?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463857117060812803",
+          "createdAt": "2021-11-26T18:14:04.441Z",
+          "updatedAt": "2021-11-26T18:14:04.442Z",
+          "tweetCreatedAt": "2021-11-25T13:08:28.000Z",
+          "message": "RT @ryanckulp: hi @colinkeeley!\n\nyou stole my online course and then pretended to seek acquisition of my company, Fomo .com, in order to ac…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463855526366916615",
+          "createdAt": "2021-11-26T18:14:04.700Z",
+          "updatedAt": "2021-11-26T18:14:04.701Z",
+          "tweetCreatedAt": "2021-11-25T13:02:09.000Z",
+          "message": "RT @bkh_leung: Recently, I gained control of my company back.\nI didn’t dump them, they didn’t dump me.\nIn the words of Thor, “it was a mutu…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463842490759401475",
+          "createdAt": "2021-11-26T18:14:05.004Z",
+          "updatedAt": "2021-11-26T18:14:05.005Z",
+          "tweetCreatedAt": "2021-11-25T12:10:21.000Z",
+          "message": "@dagorenouf Thanks, Dago\nYou've been an inspiration for sure",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463734724908797954",
+          "createdAt": "2021-11-26T18:14:05.296Z",
+          "updatedAt": "2021-11-26T18:14:05.297Z",
+          "tweetCreatedAt": "2021-11-25T05:02:07.000Z",
+          "message": "RT @bkh_leung: Any Toronto-based founders I should follow?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463729834635538432",
+          "createdAt": "2021-11-26T18:14:05.545Z",
+          "updatedAt": "2021-11-26T18:14:05.546Z",
+          "tweetCreatedAt": "2021-11-25T04:42:42.000Z",
+          "message": "@avonairik I don't get it\nI never have bad hair selfies https://t.co/M8Ci2Uwkns",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463729294128132096",
+          "createdAt": "2021-11-26T18:14:05.838Z",
+          "updatedAt": "2021-11-26T18:14:05.839Z",
+          "tweetCreatedAt": "2021-11-25T04:40:33.000Z",
+          "message": "@HustleFundVC @dunkhippo33 @ericbahn So is there an open position now or something?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463728659919945729",
+          "createdAt": "2021-11-26T18:14:06.087Z",
+          "updatedAt": "2021-11-26T18:14:06.088Z",
+          "tweetCreatedAt": "2021-11-25T04:38:01.000Z",
+          "message": "RT @lovelacecoding: Women in STEM are amazing 🔥",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463720393383022592",
+          "createdAt": "2021-11-26T18:14:06.334Z",
+          "updatedAt": "2021-11-26T18:14:06.335Z",
+          "tweetCreatedAt": "2021-11-25T04:05:11.000Z",
+          "message": "RT @bkh_leung: Asking your target audience what they want is almost like a cheat code\n\n(Speaking of cheat codes, this is my favourite...)",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463703046408474628",
+          "createdAt": "2021-11-26T18:14:06.618Z",
+          "updatedAt": "2021-11-26T18:14:06.619Z",
+          "tweetCreatedAt": "2021-11-25T02:56:15.000Z",
+          "message": "SwiftAds aims to take Google Ads and not make a black box.\nTell me what you’re trying to do and I’ll translate it into a simple WORKING advertising program for you.\n\nKeeping the product simple, effective.\n\nThat’s my moat.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463700090200199176",
+          "createdAt": "2021-11-26T18:14:06.872Z",
+          "updatedAt": "2021-11-26T18:14:06.873Z",
+          "tweetCreatedAt": "2021-11-25T02:44:30.000Z",
+          "message": "@shuggilippo It's magical until you experience slush :'(",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463699965641908229",
+          "createdAt": "2021-11-26T18:14:07.154Z",
+          "updatedAt": "2021-11-26T18:14:07.155Z",
+          "tweetCreatedAt": "2021-11-25T02:44:00.000Z",
+          "message": "@tdinh_me They're flexing on you",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463699641195761666",
+          "createdAt": "2021-11-26T18:14:07.449Z",
+          "updatedAt": "2021-11-26T18:14:07.450Z",
+          "tweetCreatedAt": "2021-11-25T02:42:43.000Z",
+          "message": "@JustinSaaS Did not know it was Wednesday 😵",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463698173357182989",
+          "createdAt": "2021-11-26T18:14:07.696Z",
+          "updatedAt": "2021-11-26T18:14:07.697Z",
+          "tweetCreatedAt": "2021-11-25T02:36:53.000Z",
+          "message": "RT @mcgillmd921: The best two ways to network on Twitter ... \n\nDMs and Spaces. \n\nIf you admire someone ... drop them a DM and let them know…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463697862991224832",
+          "createdAt": "2021-11-26T18:14:07.944Z",
+          "updatedAt": "2021-11-26T18:14:07.945Z",
+          "tweetCreatedAt": "2021-11-25T02:35:39.000Z",
+          "message": "@CristinaVanko Wait till you start dating smelly climber boys",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463697545092345856",
+          "createdAt": "2021-11-26T18:14:08.232Z",
+          "updatedAt": "2021-11-26T18:14:08.233Z",
+          "tweetCreatedAt": "2021-11-25T02:34:23.000Z",
+          "message": "@startup_brian @tryallison wagmi",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463687916950011904",
+          "createdAt": "2021-11-26T18:14:08.477Z",
+          "updatedAt": "2021-11-26T18:14:08.478Z",
+          "tweetCreatedAt": "2021-11-25T01:56:08.000Z",
+          "message": "Tag one person you’re thankful for.\n\nRecently, I met with @SmothersAaron.\nReally great guy, smart, and incredibly kind.\n\nHe’s building tons of cool stuff over there!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463682048586141700",
+          "createdAt": "2021-11-26T18:14:08.724Z",
+          "updatedAt": "2021-11-26T18:14:08.725Z",
+          "tweetCreatedAt": "2021-11-25T01:32:48.000Z",
+          "message": "@natmiletic Like at least once a week?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463681950238060547",
+          "createdAt": "2021-11-26T18:14:09.007Z",
+          "updatedAt": "2021-11-26T18:14:09.007Z",
+          "tweetCreatedAt": "2021-11-25T01:32:25.000Z",
+          "message": "@OnlyLearnOnce Thanks, Tom!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463681765890002950",
+          "createdAt": "2021-11-26T18:14:09.252Z",
+          "updatedAt": "2021-11-26T18:14:09.253Z",
+          "tweetCreatedAt": "2021-11-25T01:31:41.000Z",
+          "message": "@startup_brian I've had to catch myself typing \"us\" and correct it to \"me\"",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463679666951274497",
+          "createdAt": "2021-11-26T18:14:09.499Z",
+          "updatedAt": "2021-11-26T18:14:09.500Z",
+          "tweetCreatedAt": "2021-11-25T01:23:21.000Z",
+          "message": "RT @saam_codes: JavaScript or TypeScript ?\n\nWhich one do you prefer ? 👀",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463674403737292801",
+          "createdAt": "2021-11-26T18:14:09.781Z",
+          "updatedAt": "2021-11-26T18:14:09.782Z",
+          "tweetCreatedAt": "2021-11-25T01:02:26.000Z",
+          "message": "In the end, all I can do is keep doing what I think is right for the company.\nKeep growing slowly and steadily.\nWrite more content.\nBe helpful to people.\nHelp people solve problems in their advertising and marketing.\n\nNo rocket ship yet, we’re still building the launch pad. 🚀",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463674373848678405",
+          "createdAt": "2021-11-26T18:14:10.029Z",
+          "updatedAt": "2021-11-26T18:14:10.030Z",
+          "tweetCreatedAt": "2021-11-25T01:02:19.000Z",
+          "message": "All of a sudden, investors doubted whether I had what it took to build the company.\nThose who were interested in investing before lost interest.\n\nThis seriously put a healthy dose of self-doubt in me.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463674370539282432",
+          "createdAt": "2021-11-26T18:14:10.273Z",
+          "updatedAt": "2021-11-26T18:14:10.274Z",
+          "tweetCreatedAt": "2021-11-25T01:02:18.000Z",
+          "message": "Recently, I gained control of my company back.\nI didn’t dump them, they didn’t dump me.\nIn the words of Thor, “it was a mutual dumping”\n\nBut this brings me back to being a “solopreneur”. https://t.co/hkNwnYauUZ",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463630990774083586",
+          "createdAt": "2021-11-26T18:14:10.561Z",
+          "updatedAt": "2021-11-26T18:14:10.562Z",
+          "tweetCreatedAt": "2021-11-24T22:09:55.000Z",
+          "message": "RT @samroseloui: Join me in my Space! https://t.co/UAk31RrGJs",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463626251852210177",
+          "createdAt": "2021-11-26T18:14:10.806Z",
+          "updatedAt": "2021-11-26T18:14:10.807Z",
+          "tweetCreatedAt": "2021-11-24T21:51:05.000Z",
+          "message": "RT @hellostartupla: \"Questions to expect in a VC meeting\"\n\nHosted by @samroseloui Global Startup Pipeline Coordinator @Techstars \n\nBring Pe…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463612967631691785",
+          "createdAt": "2021-11-26T18:14:11.060Z",
+          "updatedAt": "2021-11-26T18:14:11.061Z",
+          "tweetCreatedAt": "2021-11-24T20:58:18.000Z",
+          "message": "RT @bkh_leung: Twitter is like having five conversations at once in real time while trying to teach a college course",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463568833772457984",
+          "createdAt": "2021-11-26T18:14:11.362Z",
+          "updatedAt": "2021-11-26T18:14:11.363Z",
+          "tweetCreatedAt": "2021-11-24T18:02:56.000Z",
+          "message": "@startup_brian @FiatMatch But I still followed fiatmatch",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463568469354598403",
+          "createdAt": "2021-11-26T18:14:11.609Z",
+          "updatedAt": "2021-11-26T18:14:11.610Z",
+          "tweetCreatedAt": "2021-11-24T18:01:29.000Z",
+          "message": "@startup_brian @FiatMatch But who's the founder?\nI prefer following people to companies",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463560588316004355",
+          "createdAt": "2021-11-26T18:14:11.859Z",
+          "updatedAt": "2021-11-26T18:14:11.860Z",
+          "tweetCreatedAt": "2021-11-24T17:30:10.000Z",
+          "message": "@sharthok_c Ohhh nice \nDoes klaar have a particular meaning?\nOr is it just a made up word?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463560422330712064",
+          "createdAt": "2021-11-26T18:14:12.152Z",
+          "updatedAt": "2021-11-26T18:14:12.153Z",
+          "tweetCreatedAt": "2021-11-24T17:29:30.000Z",
+          "message": "@hellostartupla If you're solving the right problem \nOr if you're on the right track \n\nStill very valid for testing your product and idea",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463560289333481477",
+          "createdAt": "2021-11-26T18:14:12.403Z",
+          "updatedAt": "2021-11-26T18:14:12.403Z",
+          "tweetCreatedAt": "2021-11-24T17:28:59.000Z",
+          "message": "@hellostartupla I'd argue that's only true if you're in deep tech or something so revolutionary that it's impossible to imagine for the general public \n\nAlso, asking what they want will point to problems and pain points they are facing\nThis is a soft data point to validate if you're solving...",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463553544011796485",
+          "createdAt": "2021-11-26T18:14:12.646Z",
+          "updatedAt": "2021-11-26T18:14:12.647Z",
+          "tweetCreatedAt": "2021-11-24T17:02:11.000Z",
+          "message": "Any Toronto-based founders I should follow?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463539216663650310",
+          "createdAt": "2021-11-26T18:14:12.945Z",
+          "updatedAt": "2021-11-26T18:14:12.946Z",
+          "tweetCreatedAt": "2021-11-24T16:05:15.000Z",
+          "message": "⬇️\n\nDo you know the rest of this cheat code?",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463539214792990733",
+          "createdAt": "2021-11-26T18:14:13.224Z",
+          "updatedAt": "2021-11-26T18:14:13.225Z",
+          "tweetCreatedAt": "2021-11-24T16:05:14.000Z",
+          "message": "⬇️",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463539210909069315",
+          "createdAt": "2021-11-26T18:14:13.481Z",
+          "updatedAt": "2021-11-26T18:14:13.482Z",
+          "tweetCreatedAt": "2021-11-24T16:05:13.000Z",
+          "message": "⬆️",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463539208165806080",
+          "createdAt": "2021-11-26T18:14:13.777Z",
+          "updatedAt": "2021-11-26T18:14:13.777Z",
+          "tweetCreatedAt": "2021-11-24T16:05:13.000Z",
+          "message": "⬆️",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463539204558929930",
+          "createdAt": "2021-11-26T18:14:14.022Z",
+          "updatedAt": "2021-11-26T18:14:14.022Z",
+          "tweetCreatedAt": "2021-11-24T16:05:12.000Z",
+          "message": "Asking your target audience what they want is almost like a cheat code\n\n(Speaking of cheat codes, this is my favourite...)",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463537200050675719",
+          "createdAt": "2021-11-26T18:14:14.268Z",
+          "updatedAt": "2021-11-26T18:14:14.268Z",
+          "tweetCreatedAt": "2021-11-24T15:57:14.000Z",
+          "message": "@damengchen @ChartMogul Wow\nCongrats!\n\n🎉🎉🎉",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463536844520501257",
+          "createdAt": "2021-11-26T18:14:14.564Z",
+          "updatedAt": "2021-11-26T18:14:14.565Z",
+          "tweetCreatedAt": "2021-11-24T15:55:49.000Z",
+          "message": "@rrhoover Oh and watches",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463536806067154950",
+          "createdAt": "2021-11-26T18:14:14.812Z",
+          "updatedAt": "2021-11-26T18:14:14.813Z",
+          "tweetCreatedAt": "2021-11-24T15:55:40.000Z",
+          "message": "@rrhoover Travel and collect cool cars",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463536658264043526",
+          "createdAt": "2021-11-26T18:14:15.066Z",
+          "updatedAt": "2021-11-26T18:14:15.067Z",
+          "tweetCreatedAt": "2021-11-24T15:55:05.000Z",
+          "message": "@sharthok_c How do you pronounce the name 😅",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463523590968598529",
+          "createdAt": "2021-11-26T18:14:15.381Z",
+          "updatedAt": "2021-11-26T18:14:15.381Z",
+          "tweetCreatedAt": "2021-11-24T15:03:09.000Z",
+          "message": "RT @bkh_leung: Protip\nJournal and write down your wins so you can look back and celebrate them in the future when you’re facing a down week.",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463507480328253446",
+          "createdAt": "2021-11-26T18:14:15.645Z",
+          "updatedAt": "2021-11-26T18:14:15.646Z",
+          "tweetCreatedAt": "2021-11-24T13:59:08.000Z",
+          "message": "What is your business idea?\nHow did you validate it?\n\nMe?\nI interviewed close to 150 small business owners to refine SwiftAds over the course of two years",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463492130031259658",
+          "createdAt": "2021-11-26T18:14:15.912Z",
+          "updatedAt": "2021-11-26T18:14:15.912Z",
+          "tweetCreatedAt": "2021-11-24T12:58:08.000Z",
+          "message": "RT @bkh_leung: If your entire business only relies on one person and/or one platform...\nYou're going to have a bad time",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463487104751747084",
+          "createdAt": "2021-11-26T18:14:16.209Z",
+          "updatedAt": "2021-11-26T18:14:16.210Z",
+          "tweetCreatedAt": "2021-11-24T12:38:10.000Z",
+          "message": "RT @theandreboso: Maybe instead of doing huge discounts that hurt your margins you could announce that friday will be the last day to buy a…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463480448127057930",
+          "createdAt": "2021-11-26T18:14:16.459Z",
+          "updatedAt": "2021-11-26T18:14:16.460Z",
+          "tweetCreatedAt": "2021-11-24T12:11:43.000Z",
+          "message": "RT @jmckinven: Since focusing on my pod I’ve made 0 sales from my handmade leather wallet business 🤷 \n\nBut, I’ve got a lot of inventory and…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463358567231205381",
+          "createdAt": "2021-11-26T18:14:16.724Z",
+          "updatedAt": "2021-11-26T18:14:16.725Z",
+          "tweetCreatedAt": "2021-11-24T04:07:24.000Z",
+          "message": "@leo_guinan @feathercrm Just saved this thread so I can read it later\nAbout to fall asleep...",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463358156919169027",
+          "createdAt": "2021-11-26T18:14:17.009Z",
+          "updatedAt": "2021-11-26T18:14:17.009Z",
+          "tweetCreatedAt": "2021-11-24T04:05:47.000Z",
+          "message": "RT @StroutMotivateU: Revenue &amp; Fundraising Update\nOctober: $2650\nNovember (week 1): $3550🪙\nNovember (week 2): $5650!💵\nNovember (week 3): $6…",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463350347255144454",
+          "createdAt": "2021-11-26T18:14:17.246Z",
+          "updatedAt": "2021-11-26T18:14:17.246Z",
+          "tweetCreatedAt": "2021-11-24T03:34:45.000Z",
+          "message": "@jonathanhillis5 Hope you're doing well!",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        },
+        {
+          "tweetId": "1463349700682203138",
+          "createdAt": "2021-11-26T18:14:17.484Z",
+          "updatedAt": "2021-11-26T18:14:17.485Z",
+          "tweetCreatedAt": "2021-11-24T03:32:11.000Z",
+          "message": "By far, the BlackBerry still has the best typing experience",
+          "inResponseToId": null,
+          "authorId": "293839862"
+        }
+      ]
+    }
+  ]
+}

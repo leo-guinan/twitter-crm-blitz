@@ -137,6 +137,7 @@ enum MembershipRole {
 }
 
 // The owners of the SaaS (you) can have a SUPERADMIN role to access all data
+
 enum GlobalRole {
   SUPERADMIN
   CUSTOMER
@@ -164,7 +165,6 @@ model Tag {
   twitterUserId String
   TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
 
-
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
 }
@@ -187,7 +187,6 @@ model TwitterUser {
   retweets            Tweet[]               @relation("retweeted")
   tweets              Tweet[]               @relation("wrote")
   subscriptions       Subscription[]
-
 
 }
 

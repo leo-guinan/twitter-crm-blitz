@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [userToMigrate, setUserToMigrate] = useState(0)
   const [userToMigrateOrg, setUserToMigrateOrg] = useState(0)
   const [selectedWaitlistUser, setSelectedWaitlistUser] = useState("")
+  const [twitterAccountUrl, setTwitterAccountUrl] = useState("")
   const [selectedUserToFetch, setSelectedUserToFetch] = useState("")
   const [waitlisted] = useQuery(getWaitlistedUsers, {})
   const handleRefreshRelationships = async () => {
@@ -85,6 +86,10 @@ const AdminDashboard = () => {
     handlePopulateUser()
   }
 
+  const handleTwitterAccountUrlChange = (event) => {
+    setTwitterAccountUrl(event.target.value)
+  }
+
   const handleSendEmail = async () => {
     await window.fetch("/api/email/send", {
       method: "POST",
@@ -104,6 +109,19 @@ const AdminDashboard = () => {
       },
       body: JSON.stringify({
         twitterAccountId: "1325102346792218629",
+      }),
+    })
+  }
+
+  const handleSubscribeToUser = async () => {
+    await window.fetch("/api/twitter/subscribe-to-user", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterAccountUrl,
       }),
     })
   }
@@ -162,6 +180,14 @@ const AdminDashboard = () => {
         <section>
           <Button
             onClick={handleFetchWeeklyDigest}
+            label="Fetch Weekly Digest for User"
+            color="red"
+          />
+        </section>
+        <section>
+          <input type="url" onChange={handleTwitterAccountUrlChange} value={twitterAccountUrl} />
+          <Button
+            onClick={handleSubscribeToUser}
             label="Fetch Weekly Digest for User"
             color="red"
           />

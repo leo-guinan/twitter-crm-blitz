@@ -1,5 +1,5 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
-import twitterWeeklyDigest from "app/api/queues/twitter-weekly-digest"
+import twitterWeeklyDigest from "app/api/queues/twitter-subscribe-to-user"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)

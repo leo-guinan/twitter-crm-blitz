@@ -1,11 +1,11 @@
 import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
 
-import db, { Tweet } from "db"
+import db, { SubscriptionCadence, Tweet } from "db"
 
 export default Queue(
-  "api/queues/twitter-weekly-digest", // 👈 the route it's reachable on
-  async (job: { twitterAccountId }) => {
+  "api/queues/twitter-subscribe-to-user", // 👈 the route it's reachable on
+  async (job: { twitterAccountId; twitterUserToSubscribeTo; organizationId }) => {
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
       version: "2", // version "1.1" is the default (change for other subdomains)
@@ -36,16 +36,8 @@ export default Queue(
               message: tweet.text,
               tweetCreatedAt: tweet.created_at,
               author: {
-                connectOrCreate: {
-                  where: {
-                    twitterId: job.twitterAccountId,
-                  },
-                  create: {
-                    twitterId: job.twitterAccountId,
-                    name: "",
-                    bio: "",
-                    profilePictureUrl: "",
-                  },
+                connect: {
+                  twitterId: job.twitterAccountId,
                 },
               },
             },
@@ -54,17 +46,25 @@ export default Queue(
           tweetDBObjects.push(savedTweet)
         }
         const collectedTweets = tweetDBObjects.map((dbo) => {
-          console.log(JSON.stringify(dbo))
           return {
             tweetId: dbo.tweetId,
           }
         })
-        console.log(collectedTweets[0])
         await db.tweetCollection.create({
           data: {
             subscription: {
-              connect: {
-                id: 1,
+              create: {
+                cadence: SubscriptionCadence.WEEKLY,
+                owner: {
+                  connect: {
+                    id: job.organizationId,
+                  },
+                },
+                twitterUsers: {
+                  connect: {
+                    twitterId: job.twitterUserToSubscribeTo,
+                  },
+                },
               },
             },
             tweets: {
