@@ -33,6 +33,7 @@ export default resolver.pipe(
             message: true,
             author: {
               select: {
+                id: true,
                 name: true,
                 profilePictureUrl: true,
               },

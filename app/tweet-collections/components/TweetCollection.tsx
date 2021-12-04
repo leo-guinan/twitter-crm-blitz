@@ -8,7 +8,7 @@ interface AuthorItem {
 interface TweetItem {
   id: number
   message: string
-  tweetCreatedAt: Date
+  tweetCreatedAt: any
   author: AuthorItem
 }
 

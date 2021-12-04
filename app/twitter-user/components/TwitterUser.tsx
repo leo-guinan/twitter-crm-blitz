@@ -9,7 +9,7 @@ interface ITwitterUser {
 interface ITwitterUserProps {
   twitterUser: ITwitterUser
   actionCTA: string
-  actionHandler: (twitterId: string) => void
+  actionHandler: (event: any) => void
 }
 
 const TwitterUser = ({ twitterUser, actionCTA, actionHandler }: ITwitterUserProps) => {
