@@ -126,6 +126,20 @@ const AdminDashboard = () => {
     })
   }
 
+  const handleRefreshBrian = async () => {
+    await window.fetch("/api/twitter/refresh-user", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterId: "293839862", //brian
+        // twitterId: "1325102346792218629" // Leo
+      }),
+    })
+  }
+  7
   return (
     <>
       <section>
@@ -191,6 +205,9 @@ const AdminDashboard = () => {
             label="Fetch Weekly Digest for User"
             color="red"
           />
+        </section>
+        <section>
+          <Button onClick={handleRefreshBrian} label="Refresh Brian" color="green" />
         </section>
       </section>
     </>

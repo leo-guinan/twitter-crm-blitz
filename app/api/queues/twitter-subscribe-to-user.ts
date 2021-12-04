@@ -2,6 +2,7 @@ import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
 
 import db, { SubscriptionCadence, Tweet } from "db"
+import emailCollection from "./email-collection"
 
 export default Queue(
   "api/queues/twitter-subscribe-to-user", // 👈 the route it's reachable on
@@ -16,7 +17,7 @@ export default Queue(
     })
 
     const params = {
-      query: `from:${job.twitterAccountId}`,
+      query: `(from:${job.twitterUserToSubscribeTo}) -is:reply -is:retweet -is:quote`,
       max_results: 100,
       "tweet.fields": "public_metrics,entities,created_at",
       "user.fields": "entities,profile_image_url,name,description",
@@ -37,11 +38,17 @@ export default Queue(
               tweetCreatedAt: tweet.created_at,
               author: {
                 connect: {
-                  twitterId: job.twitterAccountId,
+                  twitterId: job.twitterUserToSubscribeTo,
                 },
               },
             },
-            update: {},
+            update: {
+              author: {
+                connect: {
+                  twitterId: job.twitterUserToSubscribeTo,
+                },
+              },
+            },
           })
           tweetDBObjects.push(savedTweet)
         }
@@ -50,7 +57,7 @@ export default Queue(
             tweetId: dbo.tweetId,
           }
         })
-        await db.tweetCollection.create({
+        const tweetCollection = await db.tweetCollection.create({
           data: {
             subscription: {
               create: {
@@ -71,6 +78,15 @@ export default Queue(
               connect: [...collectedTweets],
             },
           },
+          select: {
+            id: true,
+            subscription: true,
+          },
+        })
+        console.log(JSON.stringify(tweetCollection))
+        await emailCollection.enqueue({
+          subscriptionId: tweetCollection.subscription.id,
+          collectionId: tweetCollection.id,
         })
       })
       .catch((e) => {

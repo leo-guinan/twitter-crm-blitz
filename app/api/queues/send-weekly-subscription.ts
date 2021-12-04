@@ -29,7 +29,7 @@ export default CronJob(
       console.log(JSON.stringify(twitterUserSubscribedTo))
       if (twitterUserSubscribedTo) {
         const params = {
-          query: `from:${twitterUserSubscribedTo.twitterId}`,
+          query: `(from:${twitterUserSubscribedTo.twitterId}) -is:reply -is:retweet -is:quote`,
           max_results: 100,
           "tweet.fields": "public_metrics,entities,created_at",
           "user.fields": "entities,profile_image_url,name,description",

@@ -2,6 +2,7 @@ import React, { ReactNode, Suspense } from "react"
 import { Head } from "blitz"
 
 import Sidebar from "app/core/components/Sidebar"
+import Tool from "../../../core/components/Tool"
 
 type LayoutProps = {
   title?: string
@@ -28,7 +29,7 @@ const Layout = ({ title, children }: LayoutProps) => {
               </div>
             </div>
             <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
-              <section>{children}</section>
+              <Tool>{children}</Tool>
             </div>
           </div>
         </main>

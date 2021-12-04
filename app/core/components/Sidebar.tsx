@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import Button from "./Button"
 import { GlobalRole } from "db"
 import logout from "app/auth/mutations/logout"
+import SubscriptionsPage from "../../pages/subscriptions"
 
 const Sidebar = () => {
   const currentUser = useCurrentUser()
@@ -100,12 +101,12 @@ const Sidebar = () => {
                     </a>
                   </Link>
                 )}
-                <Link href={Routes.RelationshipPage()}>
+                <Link href={Routes.SubscriptionsPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
                     href="#"
                   >
-                    <span className="mx-4 text-lg font-normal">Relationships</span>
+                    <span className="mx-4 text-lg font-normal">Subscriptions</span>
                     <span className="flex-grow text-right"></span>
                   </a>
                 </Link>

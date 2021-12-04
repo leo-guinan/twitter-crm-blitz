@@ -11,20 +11,8 @@ export default resolver.pipe(
   resolver.zod(GetTweetCollection),
   resolver.authorize(),
   async ({ id }, ctx) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const currentOrganization = await db.organization.findFirst({
-      where: {
-        id: ctx.session.orgId,
-      },
-      select: {
-        twitterAccounts: {
-          select: {
-            id: true,
-            twitterId: true,
-          },
-        },
-      },
-    })
+    const orgId = ctx.session.orgId
+
     const tweetCollection = await db.tweetCollection.findFirst({
       where: {
         id,
@@ -56,6 +44,8 @@ export default resolver.pipe(
 
     if (!tweetCollection) throw new NotFoundError()
 
-    return tweetCollection
+    if (tweetCollection.subscription.owner.id === ctx.session.orgId) return tweetCollection.tweets
+
+    return []
   }
 )

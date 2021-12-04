@@ -1,4 +1,4 @@
-import { paginate, resolver } from "blitz"
+import { Ctx, paginate, resolver } from "blitz"
 import db, { Prisma } from "db"
 
 interface GetSubscriptionsInput
@@ -6,8 +6,8 @@ interface GetSubscriptionsInput
 
 export default resolver.pipe(
   resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetSubscriptionsInput) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  async ({ where, orderBy, skip = 0, take = 100 }: GetSubscriptionsInput, ctx: Ctx) => {
+    const orgId = ctx.session.orgId
     const {
       items: subscriptions,
       hasMore,
@@ -17,7 +17,23 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.subscription.count({ where }),
-      query: (paginateArgs) => db.subscription.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.subscription.findMany({
+          ...paginateArgs,
+          where: {
+            ...where,
+            ownerId: orgId,
+          },
+          orderBy,
+          select: {
+            twitterUsers: true,
+            name: true,
+            id: true,
+            type: true,
+            status: true,
+            cadence: true,
+          },
+        }),
     })
 
     return {

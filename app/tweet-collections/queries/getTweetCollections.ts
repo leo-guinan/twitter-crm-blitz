@@ -1,4 +1,4 @@
-import { paginate, resolver } from "blitz"
+import { Ctx, paginate, resolver } from "blitz"
 import db, { Prisma } from "db"
 
 interface GetTweetCollectionsInput
@@ -6,8 +6,9 @@ interface GetTweetCollectionsInput
 
 export default resolver.pipe(
   resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetTweetCollectionsInput) => {
+  async ({ where, orderBy, skip = 0, take = 100 }: GetTweetCollectionsInput, ctx: Ctx) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+
     const {
       items: tweetCollections,
       hasMore,
@@ -17,9 +18,18 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.tweetCollection.count({ where }),
-      query: (paginateArgs) => db.tweetCollection.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.tweetCollection.findMany({
+          ...paginateArgs,
+          where: {
+            subscription: {
+              ownerId: ctx.session.orgId,
+            },
+          },
+          orderBy,
+        }),
     })
-
+    console.log(JSON.stringify(tweetCollections))
     return {
       tweetCollections,
       nextPage,

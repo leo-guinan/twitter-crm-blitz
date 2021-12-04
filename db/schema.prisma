@@ -337,21 +337,39 @@ enum SubscriptionCadence {
   MONTHLY
 }
 
+enum SubscriptionType {
+  PERSONAL
+  COMMUNITY
+  BUSINESS
+  FREE
+  SELF
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Subscription {
-  id           Int                 @id @default(autoincrement())
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  owner        Organization        @relation(fields: [ownerId], references: [id])
-  ownerId      Int
-  collections  TweetCollection[]
-  cadence      SubscriptionCadence @default(WEEKLY)
-  twitterUsers TwitterUser[]
+  id                     Int                 @id @default(autoincrement())
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  owner                  Organization        @relation(fields: [ownerId], references: [id])
+  ownerId                Int
+  collections            TweetCollection[]
+  cadence                SubscriptionCadence @default(WEEKLY)
+  twitterUsers           TwitterUser[]
+  name                   String              @default("Subscription")
+  type                   SubscriptionType    @default(PERSONAL)
+  status                 SubscriptionStatus  @default(ACTIVE)
+  nextDelieveryScheduled DateTime?
 }
 
 model TweetCollection {
   id                 Int               @id @default(autoincrement())
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
+  name               String            @default("Tweet Collection")
   tweets             Tweet[]
   subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
   subscriptionId     Int
