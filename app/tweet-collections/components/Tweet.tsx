@@ -4,7 +4,7 @@ interface AuthorItem {
 }
 
 interface TweetItem {
-  id: number
+  tweetId: string
   message: string
   tweetCreatedAt: Date
   author: AuthorItem
@@ -16,7 +16,7 @@ interface TweetProps {
 
 const Tweet = (props: TweetProps) => {
   return (
-    <div className="w-96 mx-auto px-4 py-4 bg-white shadow-md rounded-lg" key={props.tweet.id}>
+    <div className="w-96 mx-auto px-4 py-4 bg-white shadow-md rounded-lg" key={props.tweet.tweetId}>
       <div className="py-2 flex flex-row items-center justify-between">
         <div className="flex flex-row items-center">
           <a

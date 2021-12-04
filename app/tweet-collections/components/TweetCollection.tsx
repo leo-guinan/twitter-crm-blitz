@@ -6,7 +6,7 @@ interface AuthorItem {
 }
 
 interface TweetItem {
-  id: number
+  tweetId: string
   message: string
   tweetCreatedAt: any
   author: AuthorItem
@@ -22,7 +22,7 @@ const TweetCollection = (props: TweetCollectionProps) => {
       {props.tweets &&
         props.tweets
           .sort((firstEl, secondEl) => firstEl.tweetCreatedAt - secondEl.tweetCreatedAt)
-          .map((tweet) => <Tweet tweet={tweet} key={tweet.id} />)}
+          .map((tweet) => <Tweet tweet={tweet} key={tweet.tweetId} />)}
     </div>
   )
 }

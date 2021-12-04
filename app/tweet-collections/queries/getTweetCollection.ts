@@ -29,7 +29,7 @@ export default resolver.pipe(
         },
         tweets: {
           select: {
-            id: true,
+            tweetId: true,
             tweetCreatedAt: true,
             message: true,
             author: {
