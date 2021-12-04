@@ -9,6 +9,8 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
 
     await twitterWeeklyDigest.enqueue({
       twitterAccountId,
+      twitterUserToSubscribeTo: "",
+      organizationId: "",
     })
   }
   res.statusCode = 200

@@ -1,17 +1,8 @@
 import React, { Suspense, useState } from "react"
-import {
-  Head,
-  Link,
-  usePaginatedQuery,
-  useRouter,
-  BlitzPage,
-  Routes,
-  getAntiCSRFToken,
-} from "blitz"
+import { BlitzPage, getAntiCSRFToken, Head, usePaginatedQuery, useRouter } from "blitz"
 import Layout from "app/pages/feather/layouts/Layout"
 import getSubscriptions from "app/subscriptions/queries/getSubscriptions"
 import Button from "../../core/components/Button"
-import TwitterUser from "../../twitter-user/components/TwitterUser"
 import TwitterUserList from "../../twitter-user/components/TwitterUserList"
 
 const ITEMS_PER_PAGE = 100
@@ -35,9 +26,6 @@ export const SubscriptionsList = () => {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
-
-  const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
-  const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
   const handleLookupUser = async () => {
     const response = await window
@@ -154,16 +142,16 @@ export const SubscriptionsList = () => {
                             <div className="flex-shrink-0 h-10 w-10">
                               <img
                                 className="h-10 w-10 rounded-full"
-                                src={subscription.twitterUsers[0].profilePictureUrl}
+                                src={subscription?.twitterUsers[0]?.profilePictureUrl}
                                 alt=""
                               />
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">
-                                {subscription.twitterUsers[0].name}
+                                {subscription?.twitterUsers[0]?.name}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {"@" + subscription.twitterUsers[0].username}
+                                {"@" + subscription?.twitterUsers[0]?.username}
                               </div>
                             </div>
                           </div>

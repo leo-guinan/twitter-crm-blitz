@@ -33,7 +33,7 @@ export default resolver.pipe(
             message: true,
             author: {
               select: {
-                id: true,
+                twitterId: true,
                 name: true,
                 profilePictureUrl: true,
               },
