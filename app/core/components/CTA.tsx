@@ -20,7 +20,7 @@ const CTA = () => {
         </h2>
         <div className="lg:mt-0 lg:flex-shrink-0">
           <div className="mt-12 inline-flex rounded-md shadow">
-            {currentUser && !userWaitlisted && (
+            {currentUser && (
               <Link href={Routes.SubscriptionsPage()}>
                 <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                   View Your Subscriptions
