@@ -17,7 +17,7 @@ const LoginPage: BlitzPage = () => {
   )
 }
 
-LoginPage.redirectAuthenticatedTo = "/feather/"
+LoginPage.redirectAuthenticatedTo = "/subscriptions/"
 LoginPage.getLayout = (page) => <Layout title="Log In">{page}</Layout>
 
 export default LoginPage
