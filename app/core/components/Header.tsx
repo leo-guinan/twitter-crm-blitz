@@ -22,8 +22,8 @@ const Header = () => {
         //   link: "/#pricing",
         // },
         {
-          label: "Dashboard",
-          link: "/feather/relationships",
+          label: "Subscriptions",
+          link: "/subscriptions",
         },
       ]
     : [
@@ -77,19 +77,19 @@ const Header = () => {
                   </a> */}
                   <span className="lg:flex-grow ml-auto">
                     {currentUser && (
-                      <Link href={Routes.RelationshipPage()}>
+                      <Link href={Routes.SubscriptionsPage()}>
                         <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                          Dashboard
+                          My Subscriptions
                         </a>
                       </Link>
                     )}
                     {!currentUser && (
                       <span>
-                        {/* <Link href={Routes.SignupPage()}>
+                        <Link href={Routes.SignupPage()}>
                           <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Signup
                           </a>
-                        </Link> */}
+                        </Link>
                         <Link href={Routes.LoginPage()}>
                           <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Already have an account? Login
