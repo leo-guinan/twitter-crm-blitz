@@ -39,7 +39,6 @@ export default passportAuth(({ ctx, req, res }) => ({
               },
             },
           })
-          console.log("lookedup USer: " + JSON.stringify(lookedupUser))
           if (!lookedupUser) {
             const user = await db.user.create({
               data: {

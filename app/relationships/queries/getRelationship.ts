@@ -6,7 +6,6 @@ interface GetRelationshipsInput extends Pick<Prisma.RelationshipFindUniqueArgs, 
 export default resolver.pipe(
   resolver.authorize(),
   async ({ where }: GetRelationshipsInput, ctx) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
     const currentOrganization = await db.organization.findFirst({
       where: {
         id: ctx.session.orgId,

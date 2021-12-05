@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "TwitterUser" ADD COLUMN     "followers" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "friends" INTEGER NOT NULL DEFAULT 0;

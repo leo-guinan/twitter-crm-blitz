@@ -1,6 +1,6 @@
 const Features = () => {
   return (
-    <div className="sm:flex flex-wrap justify-center items-center text-center gap-8">
+    <div className="sm:flex flex-wrap justify-center items-center text-center gap-8 py-8">
       <h2 className="w-full text-5xl">Features</h2>
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 bg-white mt-6  shadow-lg rounded-lg dark:bg-gray-800">
         <div className="flex-shrink-0">
@@ -18,11 +18,10 @@ const Features = () => {
           </div>
         </div>
         <h3 className="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
-          Easily send DMs to multiple contacts
+          Make sure you don&apos;t miss out on what your favorite Twitter friends have to say.
         </h3>
         <p className="text-md  text-gray-500 dark:text-gray-300 py-4">
-          Have a bunch of DMs to send to your contacts? Send a single DM to multiple contacts
-          easily!
+          Easily subscribe to the people you care about and make sure you stay informed.
         </p>
       </div>
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 mt-6 sm:mt-16 md:mt-20 lg:mt-24 bg-white shadow-lg rounded-lg dark:bg-gray-800">
@@ -41,10 +40,10 @@ const Features = () => {
           </div>
         </div>
         <h3 className="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
-          Manage Relationships
+          Manage the online relationships you care about.
         </h3>
         <p className="text-md text-gray-500 dark:text-gray-300 py-4">
-          Easily search, sort, and tag your contacts for easily grouping
+          Don&apos;t let the noise of social media drown out the voices you value.
         </p>
       </div>
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 py-4 bg-white shadow-lg rounded-lg dark:bg-gray-800">
@@ -63,10 +62,10 @@ const Features = () => {
           </div>
         </div>
         <h3 className="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
-          Coming Soon: Search and manage your direct messages
+          Forget likes and retweets.
         </h3>
         <p className="text-md  text-gray-500 dark:text-gray-300 py-4">
-          Pro members will get access to easier management of their direct messages
+          Feather gives you the tools to build strong online relationships.
         </p>
       </div>
     </div>

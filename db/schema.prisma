@@ -65,6 +65,7 @@ model Organization {
   trialId            Int?
   memberships        Membership[]
   twitterAccounts    TwitterAccount[]
+  subscriptions      Subscription[]
 }
 
 model Membership {
@@ -136,6 +137,7 @@ enum MembershipRole {
 }
 
 // The owners of the SaaS (you) can have a SUPERADMIN role to access all data
+
 enum GlobalRole {
   SUPERADMIN
   CUSTOMER
@@ -163,7 +165,6 @@ model Tag {
   twitterUserId String
   TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
 
-
   twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
   twitterAccountId Int
 }
@@ -182,7 +183,10 @@ model TwitterUser {
   stagedRelationships RelationshipStaging[]
   tags                Tag[]
   events              RelationshipEvent[]
-
+  likes               Tweet[]               @relation("liked")
+  retweets            Tweet[]               @relation("retweeted")
+  tweets              Tweet[]               @relation("wrote")
+  subscriptions       Subscription[]
 
 }
 
@@ -309,4 +313,87 @@ model InviteCode {
   updatedAt DateTime        @updatedAt
   code      String
   emails    EmailWaitlist[]
+}
+
+model Tweet {
+  tweetId        String            @id
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  tweetCreatedAt DateTime
+  message        String
+  likedBy        TwitterUser[]     @relation("liked")
+  retweetedBy    TwitterUser[]     @relation("retweeted")
+  inResponseTo   Tweet?            @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
+  inResponseToId String?
+  responses      Tweet[]           @relation(name: "responses")
+  author         TwitterUser       @relation(name: "wrote", fields: [authorId], references: [twitterId])
+  authorId       String
+  collections    TweetCollection[]
+}
+
+enum SubscriptionCadence {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum SubscriptionType {
+  PERSONAL
+  COMMUNITY
+  BUSINESS
+  FREE
+  SELF
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Subscription {
+  id                     Int                 @id @default(autoincrement())
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  owner                  Organization        @relation(fields: [ownerId], references: [id])
+  ownerId                Int
+  collections            TweetCollection[]
+  cadence                SubscriptionCadence @default(WEEKLY)
+  twitterUsers           TwitterUser[]
+  name                   String              @default("Subscription")
+  type                   SubscriptionType    @default(PERSONAL)
+  status                 SubscriptionStatus  @default(ACTIVE)
+  nextDelieveryScheduled DateTime?
+}
+
+model TweetCollection {
+  id                 Int               @id @default(autoincrement())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  name               String            @default("Tweet Collection")
+  tweets             Tweet[]
+  subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
+  subscriptionId     Int
+  parentCollection   TweetCollection?  @relation(name: "parentChildCollection", fields: [parentCollectionId], references: [id])
+  parentCollectionId Int?
+  childCollections   TweetCollection[] @relation("parentChildCollection")
+}
+
+model Email {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  to        String
+  from      String
+  subject   String
+  body      String
+  htmlBody  String
+  status    EmailStatus
+
+}
+
+enum EmailStatus {
+  QUEUED
+  PROCESSING
+  SENT
+  ERROR
 }

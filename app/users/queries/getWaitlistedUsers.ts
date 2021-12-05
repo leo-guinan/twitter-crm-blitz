@@ -1,5 +1,5 @@
-import { paginate, resolver } from "blitz"
-import db, { Prisma, GlobalRole } from "db"
+import { resolver } from "blitz"
+import db, { GlobalRole, Prisma } from "db"
 
 interface GetUsersInput
   extends Pick<Prisma.UserFindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
@@ -17,9 +17,7 @@ export default resolver.pipe(
       },
     })
     if (currentUser && currentUser.role === GlobalRole.SUPERADMIN) {
-      const results = await db.twitterAccountWaitList.findMany({ select: { twitterAccount: true } })
-      console.log("results: " + JSON.stringify(results))
-      return results
+      return await db.twitterAccountWaitList.findMany({ select: { twitterAccount: true } })
     }
     return []
   }

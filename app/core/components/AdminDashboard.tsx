@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Button from "./Button"
 import { getAntiCSRFToken, useQuery } from "blitz"
 import getAllUsers from "app/users/queries/getAllUsers"
@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [userToMigrate, setUserToMigrate] = useState(0)
   const [userToMigrateOrg, setUserToMigrateOrg] = useState(0)
   const [selectedWaitlistUser, setSelectedWaitlistUser] = useState("")
+  const [twitterAccountUrl, setTwitterAccountUrl] = useState("")
+  const [selectedUserToFetch, setSelectedUserToFetch] = useState("")
   const [waitlisted] = useQuery(getWaitlistedUsers, {})
   const handleRefreshRelationships = async () => {
     await window.fetch("/api/twitter/populate", {
@@ -22,6 +24,7 @@ const AdminDashboard = () => {
       },
     })
   }
+
   const handleProcessMutuals = async () => {
     await window.fetch("/api/twitter/populate", {
       method: "POST",
@@ -45,6 +48,24 @@ const AdminDashboard = () => {
     })
   }
 
+  const handleLookupEngagement = async () => {
+    await window.fetch("/api/twitter/engagement-lookup", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterAccountId: selectedUserToFetch,
+      }),
+    })
+  }
+
+  const handleSelectUserToFetch = (event) => {
+    console.log(`selected User to fetch: ${selectedUserToFetch}`)
+    setSelectedUserToFetch(event.target.value)
+  }
+
   const handleSelectUser = (event) => {
     setUserToAddTrial(event.target.value)
   }
@@ -65,6 +86,60 @@ const AdminDashboard = () => {
     handlePopulateUser()
   }
 
+  const handleTwitterAccountUrlChange = (event) => {
+    setTwitterAccountUrl(event.target.value)
+  }
+
+  const handleSendEmail = async () => {
+    await window.fetch("/api/email/send", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
+  const handleFetchWeeklyDigest = async () => {
+    await window.fetch("/api/twitter/weekly-digest", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterAccountId: "1325102346792218629",
+      }),
+    })
+  }
+
+  const handleSubscribeToUser = async () => {
+    await window.fetch("/api/twitter/subscribe-to-user", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterAccountUrl,
+      }),
+    })
+  }
+
+  const handleRefreshBrian = async () => {
+    await window.fetch("/api/twitter/refresh-user", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+      body: JSON.stringify({
+        twitterId: "293839862", //brian
+        // twitterId: "1325102346792218629" // Leo
+      }),
+    })
+  }
+  7
   return (
     <>
       <section>
@@ -93,6 +168,46 @@ const AdminDashboard = () => {
             ))}
           </select>
           <Button onClick={handlePopulateWaitlistUser} label="populate" color="blue" />
+        </section>
+        {/*<section className="engagement-lookup">*/}
+        {/*  <select name="users"*/}
+        {/*          onChange={handleSelectUserToFetch}*/}
+        {/*  >*/}
+        {/*    {users.map((user) => (*/}
+        {/*      user.memberships[0].organization.twitterAccounts[0] && (*/}
+        {/*        <option*/}
+        {/*          key={user.memberships[0].organization.twitterAccounts[0].twitterId}*/}
+        {/*          value={user.memberships[0].organization.twitterAccounts[0] ? user.memberships[0].organization.twitterAccounts[0].twitterId : ""}*/}
+
+        {/*        >*/}
+        {/*          {user.memberships[0].organization.twitterAccounts[0].twitterUsername}*/}
+        {/*        </option>*/}
+        {/*      )*/}
+
+        {/*    ))}*/}
+        {/*  </select>*/}
+        {/*  <Button onClick={handleLookupEngagement} label="engagement" color="blue" />*/}
+        {/*</section>*/}
+        <section>
+          <Button onClick={handleSendEmail} label="Send Email" color="red" />
+        </section>
+        <section>
+          <Button
+            onClick={handleFetchWeeklyDigest}
+            label="Fetch Weekly Digest for User"
+            color="red"
+          />
+        </section>
+        <section>
+          <input type="url" onChange={handleTwitterAccountUrlChange} value={twitterAccountUrl} />
+          <Button
+            onClick={handleSubscribeToUser}
+            label="Fetch Weekly Digest for User"
+            color="red"
+          />
+        </section>
+        <section>
+          <Button onClick={handleRefreshBrian} label="Refresh Brian" color="green" />
         </section>
       </section>
     </>
