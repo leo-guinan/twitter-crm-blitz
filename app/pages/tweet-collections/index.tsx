@@ -11,12 +11,6 @@ const TweetCollectionsPage: BlitzPage = () => {
       </Head>
 
       <div>
-        <p>
-          <Link href={Routes.NewTweetCollectionPage()}>
-            <a>Create TweetCollection</a>
-          </Link>
-        </p>
-
         <Suspense fallback={<div>Loading...</div>}>
           <TweetCollectionsList />
         </Suspense>

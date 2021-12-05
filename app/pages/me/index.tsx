@@ -26,12 +26,6 @@ const MePage: BlitzPage = () => {
       </Head>
 
       <div>
-        <p>
-          <Link href={Routes.NewTweetCollectionPage()}>
-            <a>Create TweetCollection</a>
-          </Link>
-        </p>
-
         <Suspense fallback={<div>Loading...</div>}>
           <Tool>
             <section className="grid grid-flow-row">
