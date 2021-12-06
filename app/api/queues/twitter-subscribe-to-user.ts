@@ -27,67 +27,71 @@ export default Queue(
     await client
       .get("tweets/search/recent", params)
       .then(async (results) => {
-        for (const tweet of results.data) {
-          let savedTweet = await db.tweet.upsert({
-            where: {
-              tweetId: tweet.id,
-            },
-            create: {
-              tweetId: tweet.id,
-              message: tweet.text,
-              tweetCreatedAt: tweet.created_at,
-              author: {
-                connect: {
-                  twitterId: job.twitterUserToSubscribeTo,
-                },
+        if (results.data) {
+          for (const tweet of results.data) {
+            let savedTweet = await db.tweet.upsert({
+              where: {
+                tweetId: tweet.id,
               },
-            },
-            update: {
-              author: {
-                connect: {
-                  twitterId: job.twitterUserToSubscribeTo,
-                },
-              },
-            },
-          })
-          tweetDBObjects.push(savedTweet)
-        }
-        const collectedTweets = tweetDBObjects.map((dbo) => {
-          return {
-            tweetId: dbo.tweetId,
-          }
-        })
-        const tweetCollection = await db.tweetCollection.create({
-          data: {
-            subscription: {
               create: {
-                cadence: SubscriptionCadence.WEEKLY,
-                owner: {
-                  connect: {
-                    id: job.organizationId,
-                  },
-                },
-                twitterUsers: {
+                tweetId: tweet.id,
+                message: tweet.text,
+                tweetCreatedAt: tweet.created_at,
+                author: {
                   connect: {
                     twitterId: job.twitterUserToSubscribeTo,
                   },
                 },
               },
+              update: {
+                author: {
+                  connect: {
+                    twitterId: job.twitterUserToSubscribeTo,
+                  },
+                },
+              },
+            })
+            tweetDBObjects.push(savedTweet)
+          }
+          const collectedTweets = tweetDBObjects.map((dbo) => {
+            return {
+              tweetId: dbo.tweetId,
+            }
+          })
+          const tweetCollection = await db.tweetCollection.create({
+            data: {
+              subscription: {
+                create: {
+                  cadence: SubscriptionCadence.WEEKLY,
+                  owner: {
+                    connect: {
+                      id: job.organizationId,
+                    },
+                  },
+                  twitterUsers: {
+                    connect: {
+                      twitterId: job.twitterUserToSubscribeTo,
+                    },
+                  },
+                },
+              },
+              tweets: {
+                connect: [...collectedTweets],
+              },
             },
-            tweets: {
-              connect: [...collectedTweets],
+            select: {
+              id: true,
+              subscription: true,
             },
-          },
-          select: {
-            id: true,
-            subscription: true,
-          },
-        })
-        console.log(JSON.stringify(tweetCollection))
-        await emailCollection.enqueue({
-          subscriptionId: tweetCollection.subscription.id,
-          collectionId: tweetCollection.id,
-        })
+          })
+          console.log(JSON.stringify(tweetCollection))
+          await emailCollection.enqueue({
+            subscriptionId: tweetCollection.subscription.id,
+            collectionId: tweetCollection.id,
+          })
+        } else {
+          console.error("No results found. Can't make collection.")
+        }
       })
       .catch((e) => {
         console.error(e)
