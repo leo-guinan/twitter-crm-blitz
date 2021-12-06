@@ -28,6 +28,7 @@ export default passportAuth(({ ctx, req, res }) => ({
               organizationId: true,
               organization: {
                 select: {
+                  id: true,
                   subscriptionStatus: true,
                   memberships: {
                     select: {
@@ -86,17 +87,19 @@ export default passportAuth(({ ctx, req, res }) => ({
             await ctx.session.$create({
               userId: user.id,
               roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
-              orgId: user?.memberships[0]?.organizationId,
+              orgId: user?.memberships[0]?.organization?.id,
               subscriptionStatus:
                 user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
             })
             const publicData = {
               userId: user.id,
               roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
+              orgId: user?.memberships[0]?.organization?.id,
               source: "twitter",
             }
             done(undefined, { publicData })
           } else {
+            console.log(`User: ${JSON.stringify(lookedupUser)}`)
             const existingUser = lookedupUser!.organization!.memberships[0]!.user
             await ctx.session.$create({
               userId: existingUser.id,
@@ -104,7 +107,7 @@ export default passportAuth(({ ctx, req, res }) => ({
                 existingUser?.role,
                 lookedupUser.organization.memberships[0]?.role || MembershipRole.USER,
               ],
-              orgId: lookedupUser.organizationId,
+              orgId: lookedupUser.organization.id,
               subscriptionStatus: lookedupUser?.organization?.subscriptionStatus || "incomplete",
             })
             const publicData = {
@@ -113,6 +116,7 @@ export default passportAuth(({ ctx, req, res }) => ({
                 existingUser?.role,
                 lookedupUser!.organization?.memberships[0]?.role || MembershipRole.USER,
               ],
+              orgId: lookedupUser.organization.id,
               source: "twitter",
             }
             done(undefined, { publicData })

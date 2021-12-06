@@ -1,8 +1,7 @@
-import { AuthenticationError, Link, useMutation, Routes } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { useMutation, Image } from "blitz"
 import login from "app/auth/mutations/login"
-import { Login } from "app/auth/validations"
+import React, { Fragment } from "react"
+import signInWithTwitter from "../../../public/sign_in_with_twitter.png"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -13,40 +12,14 @@ export const LoginForm = (props: LoginFormProps) => {
 
   return (
     <div>
-      <h1>Login</h1>
-
-      <Form
-        submitText="Login"
-        schema={Login}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
-          try {
-            await loginMutation(values)
-            props.onSuccess?.()
-          } catch (error) {
-            if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
-            } else {
-              return {
-                [FORM_ERROR]:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
-              }
-            }
-          }
-        }}
-      >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-        <div>
-          <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
-          </Link>
-        </div>
-      </Form>
-
-      <div style={{ marginTop: "1rem" }}>
-        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
-      </div>
+      <Fragment>
+        <a
+          className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+          href="/api/auth/twitter"
+        >
+          <Image src={signInWithTwitter} />
+        </a>
+      </Fragment>
     </div>
   )
 }

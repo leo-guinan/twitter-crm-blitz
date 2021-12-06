@@ -84,18 +84,14 @@ const Header = () => {
                       </Link>
                     )}
                     {!currentUser && (
-                      <span>
-                        <Link href={Routes.SignupPage()}>
-                          <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                            Signup
-                          </a>
-                        </Link>
-                        <Link href={Routes.LoginPage()}>
-                          <a className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                            Already have an account? Login
-                          </a>
-                        </Link>
-                      </span>
+                      <Fragment>
+                        <a
+                          className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                          href="/api/auth/twitter"
+                        >
+                          Sign In With Twitter
+                        </a>
+                      </Fragment>
                     )}
                   </span>
                 </div>

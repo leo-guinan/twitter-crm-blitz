@@ -1,8 +1,7 @@
-import { useMutation } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { useMutation, Image } from "blitz"
 import signup from "app/auth/mutations/signup"
-import { Signup } from "app/auth/validations"
+import React, { Fragment } from "react"
+import signInWithTwitter from "../../../public/sign_in_with_twitter.png"
 
 type SignupFormProps = {
   onSuccess?: () => void
@@ -13,29 +12,14 @@ export const SignupForm = (props: SignupFormProps) => {
 
   return (
     <div>
-      <h1>Create an Account</h1>
-
-      <Form
-        submitText="Create Account"
-        schema={Signup}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
-          try {
-            await signupMutation(values)
-            props.onSuccess?.()
-          } catch (error) {
-            if (error.code === "P2002" && error.meta?.target?.includes("email")) {
-              // This error comes from Prisma
-              return { email: "This email is already being used" }
-            } else {
-              return { [FORM_ERROR]: error.toString() }
-            }
-          }
-        }}
-      >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-      </Form>
+      <Fragment>
+        <a
+          className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+          href="/api/auth/twitter"
+        >
+          <Image src={signInWithTwitter} />
+        </a>
+      </Fragment>
     </div>
   )
 }
