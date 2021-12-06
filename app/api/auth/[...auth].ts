@@ -76,6 +76,7 @@ export default passportAuth(({ ctx, req, res }) => ({
                     role: true,
                     organization: {
                       select: {
+                        id: true,
                         subscriptionStatus: true,
                       },
                     },
