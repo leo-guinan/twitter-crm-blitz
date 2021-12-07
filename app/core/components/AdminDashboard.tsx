@@ -82,13 +82,6 @@ const AdminDashboard = () => {
   return (
     <>
       <section>
-        <Button
-          label="Refresh Relationships"
-          onClick={handleRefreshRelationships}
-          color="blue"
-          className="my-4"
-        />
-
         {/*<section className="engagement-lookup">*/}
         {/*  <select name="users"*/}
         {/*          onChange={handleSelectUserToFetch}*/}

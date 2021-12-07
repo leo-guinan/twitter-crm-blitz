@@ -2,8 +2,6 @@
 import { passportAuth } from "blitz"
 import TwitterStrategy from "passport-twitter"
 import db, { MembershipRole } from "db"
-import twitterFollowing from "app/api/queues/twitter-following"
-import twitterFollowers from "app/api/queues/twitter-followers"
 
 export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/feather",
