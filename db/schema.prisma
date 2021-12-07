@@ -29,27 +29,17 @@ model User {
 }
 
 model TwitterAccount {
-  id                               Int                              @id @default(autoincrement())
-  createdAt                        DateTime                         @default(now())
-  updatedAt                        DateTime                         @updatedAt
-  twitterToken                     String?
-  twitterSecretToken               String?
-  twitterBio                       String?
-  twitterUsername                  String?
-  twitterId                        String?                          @unique
-  twitterAccountWaitlistId         Int?
-  twitterAccountWaitlist           TwitterAccountWaitList?
-  organization                     Organization                     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  organizationId                   Int
-  relationships                    Relationship[]
-  stagedRelationships              RelationshipStaging[]
-  directMessages                   DirectMessage[]
-  tags                             Tag[]
-  twitterDataPulls                 TwitterDataPull[]
-  twitterAccountStatuses           TwitterAccountStatus[]
-  twitterAccountHistoricalStatuses TwitterAccountStatusHistorical[]
-  events                           RelationshipEvent[]
+  id                 Int      @id @default(autoincrement())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  twitterToken       String?
+  twitterSecretToken String?
+  twitterBio         String?
+  twitterUsername    String?
+  twitterId          String?  @unique
 
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organizationId Int
 }
 
 model Organization {
@@ -61,8 +51,6 @@ model Organization {
   price              String?
   subscriptionStatus String?          @default("incomplete")
   subscriptionId     String?
-  trial              Trial?
-  trialId            Int?
   memberships        Membership[]
   twitterAccounts    TwitterAccount[]
   subscriptions      Subscription[]
@@ -124,12 +112,6 @@ enum TokenType {
   RESET_PASSWORD
 }
 
-enum RelationshipType {
-  FOLLOWER
-  FOLLOWING
-  MUTUAL
-}
-
 enum MembershipRole {
   OWNER
   ADMIN
@@ -143,176 +125,21 @@ enum GlobalRole {
   CUSTOMER
 }
 
-model DirectMessage {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  message   String
-  to        String
-  from      String
-  status    String?
-
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-  twitterAccountId Int
-}
-
-model Tag {
-  id            Int          @id @default(autoincrement())
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  value         String
-  relationship  Relationship @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
-  twitterUserId String
-  TwitterUser   TwitterUser? @relation(fields: [twitterUserId], references: [twitterId])
-
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-  twitterAccountId Int
-}
-
 model TwitterUser {
-  twitterId           String                @id
-  username            String?
-  name                String
-  bio                 String
-  profilePictureUrl   String
-  friends             Int                   @default(0)
-  followers           Int                   @default(0)
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  relationships       Relationship[]
-  stagedRelationships RelationshipStaging[]
-  tags                Tag[]
-  events              RelationshipEvent[]
-  likes               Tweet[]               @relation("liked")
-  retweets            Tweet[]               @relation("retweeted")
-  tweets              Tweet[]               @relation("wrote")
-  subscriptions       Subscription[]
+  twitterId         String         @id
+  username          String?
+  name              String
+  bio               String
+  profilePictureUrl String
+  friends           Int            @default(0)
+  followers         Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  likes             Tweet[]        @relation("liked")
+  retweets          Tweet[]        @relation("retweeted")
+  tweets            Tweet[]        @relation("wrote")
+  subscriptions     Subscription[]
 
-}
-
-model Relationship {
-  type          RelationshipType
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  twitterUser   TwitterUser      @relation(fields: [twitterUserId], references: [twitterId])
-  twitterUserId String
-  status        String           @default("")
-  tags          Tag[]
-
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-  twitterAccountId Int
-
-  events RelationshipEvent[]
-  @@id([twitterAccountId, twitterUserId])
-}
-
-model RelationshipStaging {
-  type      RelationshipType
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-
-  twitterUser   TwitterUser @relation(fields: [twitterUserId], references: [twitterId])
-  twitterUserId String
-
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-  twitterAccountId Int
-  @@id([twitterAccountId, twitterUserId, type])
-}
-
-model TwitterDataPull {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int
-  relationshipType RelationshipType
-  paginationToken  String?
-}
-
-model Trial {
-  id             Int           @id @default(autoincrement())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId Int
-  totalDMs       Int           @default(100)
-  usedDMs        Int           @default(0)
-}
-
-model TwitterAccountStatus {
-  id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int
-  relationshipType RelationshipType
-  status           ProcessingStatus
-  before           Int?
-  after            Int?
-  paginationToken  String?
-
-  @@unique([twitterAccountId, relationshipType])
-}
-
-model TwitterAccountStatusHistorical {
-  id               Int              @id @default(autoincrement())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  twitterAccount   TwitterAccount?  @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-  twitterAccountId Int
-  relationshipType RelationshipType
-  status           ProcessingStatus
-  before           Int?
-  after            Int?
-}
-
-enum ProcessingStatus {
-  NOT_STARTED
-  PROCESSING
-  COMPLETE
-}
-
-model RelationshipEvent {
-  id               Int             @id @default(autoincrement())
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  twitterUser      TwitterUser     @relation(fields: [twitterUserId], references: [twitterId])
-  twitterUserId    String
-  twitterAccount   TwitterAccount? @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int
-  relationship     Relationship    @relation(fields: [twitterAccountId, twitterUserId], references: [twitterAccountId, twitterUserId])
-
-}
-
-enum RelationshipEventType {
-  DIRECT_MESSAGE_SENT
-  DIRECT_MESSAGE_RECEIVED
-  RELATIONSHIP_CREATED
-}
-
-model TwitterAccountWaitList {
-  id               Int            @id @default(autoincrement())
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  twitterAccountId Int
-  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id], onDelete: Cascade)
-}
-
-model EmailWaitlist {
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  email        String      @id
-  inviteCode   InviteCode? @relation(fields: [inviteCodeId], references: [id])
-  inviteCodeId Int?
-}
-
-model InviteCode {
-  id        Int             @id @default(autoincrement())
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  code      String
-  emails    EmailWaitlist[]
 }
 
 model Tweet {

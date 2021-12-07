@@ -1,5 +1,4 @@
-import { useMutation, Image } from "blitz"
-import login from "app/auth/mutations/login"
+import { Image } from "blitz"
 import React, { Fragment } from "react"
 import signInWithTwitter from "../../../public/sign_in_with_twitter.png"
 
@@ -8,8 +7,6 @@ type LoginFormProps = {
 }
 
 export const LoginForm = (props: LoginFormProps) => {
-  const [loginMutation] = useMutation(login)
-
   return (
     <div>
       <Fragment>
