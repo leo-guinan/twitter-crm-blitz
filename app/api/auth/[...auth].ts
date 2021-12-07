@@ -56,9 +56,6 @@ export default passportAuth(({ ctx, req, res }) => ({
                             twitterSecretToken: tokenSecret,
                             twitterUsername: profile.username,
                             twitterId: profile.id,
-                            twitterAccountWaitlist: {
-                              create: {},
-                            },
                           },
                         },
                       },

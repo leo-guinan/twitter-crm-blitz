@@ -1,9 +1,6 @@
 import { Queue } from "quirrel/next"
 import db from "db"
 import Twitter from "twitter-lite"
-import createCheckoutSession from "app/users/mutations/createCheckoutSession"
-import customerPortal from "app/users/mutations/customerPortal"
-import stripe from "integrations/stripe"
 
 export default Queue(
   "api/queues/twitter-send-dm", // 👈 the route it's reachable on
@@ -20,7 +17,6 @@ export default Queue(
                 subscriptionStatus: true,
                 price: true,
                 subscriptionId: true,
-                trial: true,
                 twitterAccounts: {
                   select: {
                     id: true,
@@ -36,13 +32,6 @@ export default Queue(
       },
     })
 
-    if (
-      !user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterToken ||
-      !user?.memberships[0]?.organization?.twitterAccounts[0]?.twitterSecretToken
-    ) {
-      console.log("authentication error")
-      return
-    }
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
       version: "1.1", // version "1.1" is the default (change for other subdomains)
@@ -55,24 +44,6 @@ export default Queue(
     })
 
     if (user) {
-      if (
-        !user?.memberships[0]?.organization?.trial &&
-        user?.memberships[0]?.organization?.subscriptionStatus !== "active"
-      ) {
-        console.error("User not authorized to send DM. Please check subscription status")
-        //figure out how to send user to subscribe link
-        return
-      } else if (
-        user?.memberships[0]?.organization?.subscriptionStatus !== "active" &&
-        user?.memberships[0]?.organization?.trial &&
-        user?.memberships[0]?.organization?.trial?.totalDMs -
-          user?.memberships[0]?.organization?.trial?.usedDMs <
-          job.toTwitterUserIds.length
-      ) {
-        console.log("not enough trial DMs remaining to send all DMs. Please check status")
-        return
-      }
-
       for (const twitterUserId of job.toTwitterUserIds) {
         const params = {
           event: {
@@ -91,57 +62,9 @@ export default Queue(
           .post("direct_messages/events/new", params)
           .then(async (results) => {
             console.log(results)
-            if (user?.memberships[0]?.organization?.trial) {
-              const trial = await db.trial.update({
-                where: {
-                  id: user?.memberships[0]?.organization?.trial?.id,
-                },
-                data: {
-                  usedDMs: {
-                    increment: 1,
-                  },
-                },
-              })
-              if (trial.usedDMs >= trial.totalDMs) {
-                await db.trial.delete({
-                  where: {
-                    id: user.memberships[0].organization.trial.id,
-                  },
-                })
-              }
-            } else {
-              if (
-                user?.memberships[0]?.organization?.subscriptionId &&
-                (user?.memberships[0]?.organization?.price ===
-                  process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_BASIC ||
-                  user?.memberships[0]?.organization?.price ===
-                    process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PREMIUM)
-              ) {
-                console.log("Sending usage record to stripe for user: " + user.id)
-                const usageRecord = await stripe.subscriptionItems.createUsageRecord(
-                  user?.memberships[0]?.organization?.subscriptionId,
-                  { quantity: 1, timestamp: Math.ceil(Date.now() / 1000) }
-                )
-              }
-            }
           })
           .catch(async (error) => {
             console.error(error)
-            if (error.code === 349) {
-              console.error("Unable to send messages to user: " + twitterUserId)
-              const twitterAccountId = user!.memberships[0]!.organization!.twitterAccounts[0]!.id
-              if (twitterAccountId) {
-                await db.relationship.updateMany({
-                  where: {
-                    twitterAccountId,
-                    twitterUserId,
-                  },
-                  data: {
-                    status: "Unable to receive DM",
-                  },
-                })
-              }
-            }
           })
       }
     }

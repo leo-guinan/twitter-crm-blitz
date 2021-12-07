@@ -1,8 +1,6 @@
 import { Queue } from "quirrel/next"
-import db, { RelationshipType, ProcessingStatus, Tweet } from "db"
+import db, { Tweet } from "db"
 import Twitter from "twitter-lite"
-import twitterFollowing from "./twitter-following"
-import { add } from "date-fns"
 
 export default Queue(
   "api/queues/twitter-refresh-user", // 👈 the route it's reachable on

@@ -1,7 +1,4 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
-import db, { RelationshipType, ProcessingStatus } from "db"
-import twitterFollowers from "app/api/queues/twitter-followers"
-import twitterFollowing from "app/api/queues/twitter-following"
 import twitterEngagement from "app/api/queues/twitter-engagement"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {

@@ -1,10 +1,8 @@
 import { Queue } from "quirrel/next"
-import db, { RelationshipType, ProcessingStatus } from "db"
 import Twitter from "twitter-lite"
-import twitterFollowers from "./twitter-followers"
-import { add } from "date-fns"
 import twitterLikes from "./twitter-likes"
 import twitterRetweets from "./twitter-retweets"
+
 export default Queue(
   "api/queues/twitter-engagement", // 👈 the route it's reachable on
   async (job: { twitterAccountId }) => {

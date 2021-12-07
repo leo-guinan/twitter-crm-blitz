@@ -6,8 +6,8 @@ const Success: BlitzPage = () => {
     <div className="container">
       <main>
         <p>Success!</p>
-        <Link href={Routes.RelationshipPage()}>
-          <a>Back to Relationships</a>
+        <Link href={Routes.SubscriptionsPage()}>
+          <a>Back to Subscriptions</a>
         </Link>
       </main>
     </div>
