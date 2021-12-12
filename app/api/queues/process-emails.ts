@@ -4,7 +4,7 @@ import sendEmail from "./send-email"
 
 export default CronJob(
   "api/queues/process-emails", // 👈 the route that it's reachable on
-  "0-59/5 * * * *", // every 5 minutes
+  "0 0 * * 0", // once a week for now
   async () => {
     const emails = await db.email.findMany({
       where: {

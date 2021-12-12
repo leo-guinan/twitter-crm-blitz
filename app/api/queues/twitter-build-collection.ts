@@ -1,11 +1,11 @@
 import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
-import { subDays } from "date-fns"
+import { formatISO, subDays } from "date-fns"
 import emailCollection from "./email-collection"
 import db, { SubscriptionCadence, Tweet } from "db"
 
 export default Queue(
-  "api/queues/twitter-subscribe-to-user", // 👈 the route it's reachable on
+  "api/queues/twitter-build-collection", // 👈 the route it's reachable on
   async (job: { subscriptionId }) => {
     const subscription = await db.subscription.findFirst({
       where: {
@@ -13,14 +13,18 @@ export default Queue(
       },
       select: {
         cadence: true,
-        twitterUsers: true,
+        twitterAccounts: {
+          select: {
+            twitterAccount: true,
+          },
+        },
       },
     })
     if (subscription) {
-      const twitterAccountQueryString = `(from:(${subscription.twitterUsers
-        .map((twitterUser) => twitterUser.username)
-        .join(" OR ")})) -is:reply -is:retweet -is:quote`
-
+      const twitterAccountQueryString = `(${subscription.twitterAccounts
+        .map((twitterUser) => "from:" + twitterUser.twitterAccount.twitterUsername)
+        .join(" OR ")}) -is:reply -is:retweet -is:quote`
+      console.log(twitterAccountQueryString)
       const client = new Twitter({
         subdomain: "api", // "api" is the default (change for other subdomains)
         version: "2", // version "1.1" is the default (change for other subdomains)
@@ -36,65 +40,76 @@ export default Queue(
           : subscription.cadence === SubscriptionCadence.DAILY
           ? subDays(new Date(), 1)
           : ""
-
-      const params = {
-        query: twitterAccountQueryString,
-        max_results: 100,
-        "tweet.fields": "public_metrics,entities,created_at,author_id",
-        "user.fields": "entities,profile_image_url,name,description",
-        start_time: startTime,
-      }
+      console.log(startTime)
+      const params = startTime
+        ? {
+            query: twitterAccountQueryString,
+            max_results: 100,
+            "tweet.fields": "public_metrics,entities,created_at,author_id",
+            "user.fields": "entities,profile_image_url,name,description",
+            start_time: formatISO(startTime),
+          }
+        : {
+            query: twitterAccountQueryString,
+            max_results: 100,
+            "tweet.fields": "public_metrics,entities,created_at,author_id",
+            "user.fields": "entities,profile_image_url,name,description",
+          }
       let tweetDBObjects: Tweet[] = []
 
       await client
         .get("tweets/search/recent", params)
         .then(async (results) => {
-          for (const tweet of results.data) {
-            let savedTweet = await db.tweet.upsert({
-              where: {
-                tweetId: tweet.id,
-              },
-              create: {
-                tweetId: tweet.id,
-                message: tweet.text,
-                tweetCreatedAt: tweet.created_at,
-                author: {
-                  connect: {
-                    twitterId: tweet.author_id,
+          if (results.data) {
+            for (const tweet of results.data) {
+              let savedTweet = await db.tweet.upsert({
+                where: {
+                  tweetId: tweet.id,
+                },
+                create: {
+                  tweetId: tweet.id,
+                  message: tweet.text,
+                  tweetCreatedAt: tweet.created_at,
+                  author: {
+                    connect: {
+                      twitterId: tweet.author_id,
+                    },
                   },
                 },
-              },
-              update: {
-                author: {
-                  connect: {
-                    twitterId: tweet.author_id,
+                update: {
+                  author: {
+                    connect: {
+                      twitterId: tweet.author_id,
+                    },
                   },
+                },
+              })
+              tweetDBObjects.push(savedTweet)
+            }
+            const collectedTweets = tweetDBObjects.map((dbo) => {
+              return {
+                tweetId: dbo.tweetId,
+              }
+            })
+            const twitterCollection = await db.tweetCollection.create({
+              data: {
+                subscription: {
+                  connect: {
+                    id: job.subscriptionId,
+                  },
+                },
+                tweets: {
+                  connect: [...collectedTweets],
                 },
               },
             })
-            tweetDBObjects.push(savedTweet)
+            await emailCollection.enqueue({
+              subscriptionId: job.subscriptionId,
+              collectionId: twitterCollection.id,
+            })
+          } else {
+            console.log("No tweets found. Skipping.")
           }
-          const collectedTweets = tweetDBObjects.map((dbo) => {
-            return {
-              tweetId: dbo.tweetId,
-            }
-          })
-          const twitterCollection = await db.tweetCollection.create({
-            data: {
-              subscription: {
-                connect: {
-                  id: job.subscriptionId,
-                },
-              },
-              tweets: {
-                connect: [...collectedTweets],
-              },
-            },
-          })
-          await emailCollection.enqueue({
-            subscriptionId: job.subscriptionId,
-            collectionId: twitterCollection.id,
-          })
         })
         .catch((e) => {
           console.error(e)

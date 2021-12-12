@@ -21,22 +21,22 @@ export default Queue(
     await client
       .get(`users/${job.twitterId}`, params)
       .then(async (results) => {
-        await db.twitterUser.upsert({
+        await db.twitterAccount.upsert({
           where: {
             twitterId: job.twitterId,
           },
           create: {
             twitterId: job.twitterId,
-            username: results.data.username,
-            name: results.data.name,
-            bio: results.data.description,
-            profilePictureUrl: results.data.profile_image_url,
+            twitterUsername: results.data.username,
+            twitterName: results.data.name,
+            twitterBio: results.data.description,
+            twitterProfilePictureUrl: results.data.profile_image_url,
           },
           update: {
-            username: results.data.username,
-            name: results.data.name,
-            bio: results.data.description,
-            profilePictureUrl: results.data.profile_image_url,
+            twitterUsername: results.data.username,
+            twitterName: results.data.name,
+            twitterBio: results.data.description,
+            twitterProfilePictureUrl: results.data.profile_image_url,
           },
         })
       })

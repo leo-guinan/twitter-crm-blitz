@@ -65,20 +65,40 @@ const AdminDashboard = () => {
     })
   }
 
-  const handleRefreshBrian = async () => {
-    await window.fetch("/api/twitter/refresh-user", {
+  const handleRefreshUsers = async () => {
+    await window.fetch("/api/admin/update-twitter-accounts", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
+  const handleMigrateUsersToAccounts = async () => {
+    await window.fetch("/api/admin/migrate-subscriptions", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
+  const handleRunTweetCollection = async () => {
+    const tweetCollectionToRun = 41
+    await window.fetch("/api/admin/run-tweet-collection", {
       method: "POST",
       credentials: "include",
       headers: {
         "anti-csrf": antiCSRFToken,
       },
       body: JSON.stringify({
-        twitterId: "293839862", //brian
-        // twitterId: "1325102346792218629" // Leo
+        twitterAccountUrl,
       }),
     })
   }
-  7
+
   return (
     <>
       <section>
@@ -120,7 +140,17 @@ const AdminDashboard = () => {
           />
         </section>
         <section>
-          <Button onClick={handleRefreshBrian} label="Refresh Brian" color="green" />
+          <Button onClick={handleRefreshUsers} label="Refresh Accounts" color="red" />
+        </section>
+        <section>
+          <Button
+            onClick={handleMigrateUsersToAccounts}
+            label="Migrate Subscriptions"
+            color="red"
+          />
+        </section>
+        <section>
+          <Button onClick={handleRunTweetCollection} label="Run Tweet Collection" color="red" />
         </section>
       </section>
     </>

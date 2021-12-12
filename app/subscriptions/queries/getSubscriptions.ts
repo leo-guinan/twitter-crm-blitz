@@ -26,7 +26,11 @@ export default resolver.pipe(
           },
           orderBy,
           select: {
-            twitterUsers: true,
+            twitterAccounts: {
+              select: {
+                twitterAccount: true,
+              },
+            },
             name: true,
             id: true,
             type: true,
@@ -35,7 +39,6 @@ export default resolver.pipe(
           },
         }),
     })
-
     return {
       subscriptions,
       nextPage,

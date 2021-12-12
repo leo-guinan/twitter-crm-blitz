@@ -1,19 +1,24 @@
-import { resolver } from "blitz"
-import db from "db"
+import { Ctx, NotFoundError, resolver } from "blitz"
+import db, { SubscriptionCadence } from "db"
 import { z } from "zod"
 
 const UpdateSubscription = z.object({
   id: z.number(),
-  name: z.string(),
+  cadence: z.enum([SubscriptionCadence.DAILY, SubscriptionCadence.WEEKLY]),
 })
 
 export default resolver.pipe(
   resolver.zod(UpdateSubscription),
   resolver.authorize(),
-  async ({ id, ...data }) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const subscription = await db.subscription.update({ where: { id }, data })
+  async ({ id, ...data }, ctx: Ctx) => {
+    const orgId = ctx.session.orgId
 
-    return subscription
+    const subscription = await db.subscription.findFirst({
+      where: { id, ownerId: orgId },
+    })
+    if (!subscription) {
+      throw new NotFoundError("Subscription not found.")
+    }
+    return await db.subscription.update({ where: { id }, data })
   }
 )

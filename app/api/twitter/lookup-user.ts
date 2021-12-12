@@ -28,9 +28,9 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
       if (twitterUrl.host === "twitter.com") {
         //first, see if we have this user's profile in the db already. Then no need for api lookup.
 
-        const localTwitterUser = await db.twitterUser.findFirst({
+        const localTwitterUser = await db.twitterAccount.findFirst({
           where: {
-            username: {
+            twitterUsername: {
               equals: twitterUrl.pathname.split("/")[1],
               mode: "insensitive",
             },
@@ -53,19 +53,27 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
           const params = {
             "user.fields": "id,profile_image_url,name,description",
           }
-          let tweetDBObjects: Tweet[] = []
 
-          const twitterUser = await client
+          await client
             .get(`users/by/username${twitterUrl.pathname}`, params)
             .then(async (results) => {
               console.log(JSON.stringify(results.data))
-              const lookedupUser = await db.twitterUser.create({
-                data: {
+              const lookedupUser = await db.twitterAccount.upsert({
+                where: {
                   twitterId: results.data.id,
-                  username: results.data.username,
-                  name: results.data.name,
-                  bio: results.data.description,
-                  profilePictureUrl: results.data.profile_image_url,
+                },
+                create: {
+                  twitterId: results.data.id,
+                  twitterUsername: results.data.username,
+                  twitterName: results.data.name,
+                  twitterBio: results.data.description,
+                  twitterProfilePictureUrl: results.data.profile_image_url,
+                },
+                update: {
+                  twitterUsername: results.data.username,
+                  twitterName: results.data.name,
+                  twitterBio: results.data.description,
+                  twitterProfilePictureUrl: results.data.profile_image_url,
                 },
               })
               res.statusCode = 200

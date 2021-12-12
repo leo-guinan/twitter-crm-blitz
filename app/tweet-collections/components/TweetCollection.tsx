@@ -3,6 +3,7 @@ import Tweet from "./Tweet"
 interface AuthorItem {
   name: string
   profilePictureUrl: string
+  username: string
 }
 
 interface TweetItem {

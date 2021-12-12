@@ -37,6 +37,7 @@ export default resolver.pipe(
                 twitterId: true,
                 name: true,
                 profilePictureUrl: true,
+                username: true,
               },
             },
           },
@@ -46,7 +47,8 @@ export default resolver.pipe(
 
     if (!tweetCollection) throw new NotFoundError()
 
-    if (tweetCollection.subscription.owner.id === ctx.session.orgId) return tweetCollection.tweets
+    if (tweetCollection?.subscription?.owner?.id === ctx.session.orgId)
+      return tweetCollection.tweets
 
     return []
   }

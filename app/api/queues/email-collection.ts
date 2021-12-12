@@ -2,6 +2,7 @@ import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
 
 import db, { EmailStatus, SubscriptionCadence, Tweet } from "db"
+import processEmail from "./process-email"
 
 export default Queue(
   "api/queues/email-collection", // 👈 the route it's reachable on
@@ -33,15 +34,19 @@ export default Queue(
             },
           },
         },
-        twitterUsers: {
+        twitterAccounts: {
           select: {
-            name: true,
-            username: true,
+            twitterAccount: {
+              select: {
+                twitterName: true,
+                twitterUsername: true,
+              },
+            },
           },
         },
       },
     })
-    const nameOfUserSubscribedTo = subscription?.twitterUsers[0]?.name
+    const nameOfUserSubscribedTo = subscription?.twitterAccounts[0]?.twitterAccount?.twitterName
     if (subscription) {
       const emailHeader = `Here's a link to your latest collection for ${nameOfUserSubscribedTo}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
 
@@ -72,6 +77,7 @@ export default Queue(
         })
 
         console.log(`Created email: ${email.id}`)
+        await processEmail.enqueue({ emailId: email.id })
       }
     }
   },

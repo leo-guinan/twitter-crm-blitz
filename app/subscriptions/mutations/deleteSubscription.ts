@@ -1,4 +1,4 @@
-import { resolver } from "blitz"
+import { Ctx, NotFoundError, resolver } from "blitz"
 import db from "db"
 import { z } from "zod"
 
@@ -9,10 +9,16 @@ const DeleteSubscription = z.object({
 export default resolver.pipe(
   resolver.zod(DeleteSubscription),
   resolver.authorize(),
-  async ({ id }) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const subscription = await db.subscription.deleteMany({ where: { id } })
+  async ({ id }, ctx: Ctx) => {
+    const orgId = ctx.session.orgId
 
-    return subscription
+    const subscription = await db.subscription.findFirst({
+      where: { id, ownerId: orgId },
+    })
+    if (!subscription) {
+      throw new NotFoundError("Subscription not found.")
+    }
+
+    return await db.subscription.deleteMany({ where: { id } })
   }
 )

@@ -29,17 +29,26 @@ model User {
 }
 
 model TwitterAccount {
-  id                 Int      @id @default(autoincrement())
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  twitterToken       String?
-  twitterSecretToken String?
-  twitterBio         String?
-  twitterUsername    String?
-  twitterId          String?  @unique
+  id                       Int                              @id @default(autoincrement())
+  createdAt                DateTime                         @default(now())
+  updatedAt                DateTime                         @updatedAt
+  twitterToken             String?
+  twitterSecretToken       String?
+  twitterBio               String?
+  twitterUsername          String?
+  twitterName              String?
+  twitterProfilePictureUrl String?
+  twitterId                String?                          @unique
+  consentStatus            ConsentStatus                    @default(PROVISIONAL)
+  organization             Organization?                    @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organizationId           Int?
+  subscriptions            TwitterAccountsInSubscriptions[]
+}
 
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  organizationId Int
+enum ConsentStatus {
+  APPROVED
+  PROVISIONAL
+  DECLINED
 }
 
 model Organization {
@@ -51,9 +60,17 @@ model Organization {
   price              String?
   subscriptionStatus String?          @default("incomplete")
   subscriptionId     String?
+  planType           PlanType         @default(FREE)
   memberships        Membership[]
   twitterAccounts    TwitterAccount[]
   subscriptions      Subscription[]
+}
+
+enum PlanType {
+  FREE
+  PERSONAL
+  COMMUNITY
+  PROFESSIONAL
 }
 
 model Membership {
@@ -142,6 +159,16 @@ model TwitterUser {
 
 }
 
+model TwitterAccountsInSubscriptions {
+  twitterAccount   TwitterAccount   @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+  subscription     Subscription     @relation(fields: [subscriptionId], references: [id])
+  subscriptionId   Int
+  type             SubscriptionType
+
+  @@id([twitterAccountId, subscriptionId, type])
+}
+
 model Tweet {
   tweetId        String            @id
   createdAt      DateTime          @default(now())
@@ -178,17 +205,18 @@ enum SubscriptionStatus {
 }
 
 model Subscription {
-  id                     Int                 @id @default(autoincrement())
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
-  owner                  Organization        @relation(fields: [ownerId], references: [id])
+  id                     Int                              @id @default(autoincrement())
+  createdAt              DateTime                         @default(now())
+  updatedAt              DateTime                         @updatedAt
+  owner                  Organization                     @relation(fields: [ownerId], references: [id])
   ownerId                Int
   collections            TweetCollection[]
-  cadence                SubscriptionCadence @default(WEEKLY)
+  cadence                SubscriptionCadence              @default(WEEKLY)
   twitterUsers           TwitterUser[]
-  name                   String              @default("Subscription")
-  type                   SubscriptionType    @default(PERSONAL)
-  status                 SubscriptionStatus  @default(ACTIVE)
+  twitterAccounts        TwitterAccountsInSubscriptions[]
+  name                   String                           @default("Subscription")
+  type                   SubscriptionType                 @default(PERSONAL)
+  status                 SubscriptionStatus               @default(ACTIVE)
   nextDelieveryScheduled DateTime?
 }
 
@@ -198,8 +226,8 @@ model TweetCollection {
   updatedAt          DateTime          @updatedAt
   name               String            @default("Tweet Collection")
   tweets             Tweet[]
-  subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
-  subscriptionId     Int
+  subscription       Subscription?     @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  subscriptionId     Int?
   parentCollection   TweetCollection?  @relation(name: "parentChildCollection", fields: [parentCollectionId], references: [id])
   parentCollectionId Int?
   childCollections   TweetCollection[] @relation("parentChildCollection")
