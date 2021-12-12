@@ -144,7 +144,7 @@ enum GlobalRole {
 
 model TwitterUser {
   twitterId         String         @id
-  username          String?
+  username          String         @default("")
   name              String
   bio               String
   profilePictureUrl String

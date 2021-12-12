@@ -101,9 +101,9 @@ export default passportAuth(({ ctx, req, res }) => ({
               userId: existingUser.id,
               roles: [
                 existingUser?.role,
-                lookedupUser.organization.memberships[0]?.role || MembershipRole.USER,
+                lookedupUser?.organization?.memberships[0]?.role || MembershipRole.USER,
               ],
-              orgId: lookedupUser.organization.id,
+              orgId: lookedupUser?.organization?.id,
               subscriptionStatus: lookedupUser?.organization?.subscriptionStatus || "incomplete",
             })
             const publicData = {
@@ -112,7 +112,7 @@ export default passportAuth(({ ctx, req, res }) => ({
                 existingUser?.role,
                 lookedupUser!.organization?.memberships[0]?.role || MembershipRole.USER,
               ],
-              orgId: lookedupUser.organization.id,
+              orgId: lookedupUser?.organization?.id,
               source: "twitter",
             }
             done(undefined, { publicData })
