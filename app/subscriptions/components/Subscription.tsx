@@ -1,13 +1,18 @@
 import { CalendarIcon, ChevronRightIcon } from "@heroicons/react/solid"
 
 interface ITwitterUser {
-  twitterId: string
-  profilePictureUrl: string
-  name: string
+  twitterId: string | null
+  twitterProfilePictureUrl: string | null
+  twitterName: string | null
+  twitterUsername: string | null
+}
+
+interface ITwitterAccount {
+  twitterAccount: ITwitterUser
 }
 
 interface ISubscription {
-  twitterUsers: ITwitterUser[]
+  twitterAccounts: ITwitterAccount[]
   name: string
   id: number
 }
@@ -44,12 +49,12 @@ const Subscription = (props: ISubscriptionProps) => {
             </div>
             <div className="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
               <div className="flex overflow-hidden -space-x-1">
-                {props.subscription.twitterUsers.map((twitterUser) => (
+                {props.subscription.twitterAccounts.map((twitterUser) => (
                   <img
-                    key={twitterUser.twitterId}
+                    key={twitterUser.twitterAccount.twitterId}
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                    src={twitterUser.profilePictureUrl}
-                    alt={twitterUser.name}
+                    src={twitterUser.twitterAccount.twitterProfilePictureUrl}
+                    alt={twitterUser.twitterAccount.twitterName}
                   />
                 ))}
               </div>
