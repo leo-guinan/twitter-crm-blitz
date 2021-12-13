@@ -53,8 +53,8 @@ const Subscription = (props: ISubscriptionProps) => {
                   <img
                     key={twitterUser.twitterAccount.twitterId}
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                    src={twitterUser.twitterAccount.twitterProfilePictureUrl}
-                    alt={twitterUser.twitterAccount.twitterName}
+                    src={twitterUser.twitterAccount.twitterProfilePictureUrl || ""}
+                    alt={twitterUser.twitterAccount.twitterName || ""}
                   />
                 ))}
               </div>
