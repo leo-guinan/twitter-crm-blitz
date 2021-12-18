@@ -68,11 +68,12 @@ const Pricing = () => {
     const planToSubscribeTo = plans.find((plan) => plan.id == event.target.dataset.plan)
     console.log(JSON.stringify(planToSubscribeTo))
     // console.log("plan: " + prices[event.target.dataset.plan])
+    if (!planToSubscribeTo!.stripeMonthlyPlanId || !planToSubscribeTo!.stripeAnnualPlanId) return
     let lineItem = {
       priceId:
         currentPlanSelected === "Monthly"
-          ? planToSubscribeTo.stripeMonthlyPlanId
-          : planToSubscribeTo.stripeAnnualPlanId,
+          ? planToSubscribeTo!.stripeMonthlyPlanId
+          : planToSubscribeTo!.stripeAnnualPlanId,
       quantity: 1,
     }
 
