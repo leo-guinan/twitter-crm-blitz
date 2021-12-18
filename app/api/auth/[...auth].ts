@@ -1,5 +1,6 @@
-// app/api/auth/[...auth].ts
+// // app/api/auth/[...auth].ts
 import { passportAuth } from "blitz"
+
 import TwitterStrategy from "passport-twitter"
 import db, { MembershipRole } from "db"
 
@@ -122,3 +123,10 @@ export default passportAuth(({ ctx, req, res }) => ({
     },
   ],
 }))
+// export default passportAuth({
+//   successRedirectUrl: "/",
+//   errorRedirectUrl: "/",
+//   strategies: [
+//
+//   ],
+// });

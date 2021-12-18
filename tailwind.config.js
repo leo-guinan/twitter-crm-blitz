@@ -39,7 +39,7 @@ module.exports = {
       zIndex: ["hover", "active"],
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
   future: {
     purgeLayersByDefault: true,
   },

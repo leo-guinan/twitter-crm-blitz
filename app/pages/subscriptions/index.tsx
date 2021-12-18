@@ -15,6 +15,12 @@ import TwitterUserList from "../../twitter-user/components/TwitterUserList"
 import { SubscriptionCadence } from "db"
 import updateSubscription from "app/subscriptions/mutations/updateSubscription"
 import isSubscribedToUser from "app/subscriptions/queries/isSubscribedToUser"
+import getNumberOfActivePersonalSubscriptions from "../../subscriptions/queries/getNumberOfActivePersonalSubscriptions"
+import { useCurrentOrganization } from "../../core/hooks/useCurrentOrganization"
+import UpgradePlan from "../../core/components/UpgradePlan"
+import AddEmailModal from "../../core/components/AddEmailModal"
+import updateUserEmail from "../../users/mutations/updateUserEmail"
+import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 
 const ITEMS_PER_PAGE = 100
 
@@ -22,6 +28,9 @@ export const SubscriptionsList = () => {
   const antiCSRFToken = getAntiCSRFToken()
   const router = useRouter()
   const page = Number(router.query.page) || 0
+  const currentUser = useCurrentUser()
+
+  const [openPlanModal, setOpenPlanModal] = useState(false)
   const [cadenceToSet, setCadenceToSet] = useState("")
   const [updateSubscriptionMutation] = useMutation(updateSubscription)
   const [twitterAccountUrl, setTwitterAccountUrl] = useState("")
@@ -34,10 +43,35 @@ export const SubscriptionsList = () => {
     profilePictureUrl: "",
   })
 
+  const [email, setEmail] = useState("")
+  const [emailNeeded, setEmailNeeded] = useState(!currentUser?.email)
+
+  const [updateUserEmailMutation] = useMutation(updateUserEmail)
+
+  const saveEmail = async () => {
+    if (email) {
+      await updateUserEmailMutation({ email })
+      setEmailNeeded(false)
+    }
+  }
+
+  const [
+    numberOfActivePersonalSubscriptions,
+    { setQueryData: setNumberOfActivePersonalSubscriptions },
+  ] = useQuery(getNumberOfActivePersonalSubscriptions, {})
+
   const [isUserSubscribedToTwitterUserToSubscribeTo, { setQueryData: setSubscribed }] = useQuery(
     isSubscribedToUser,
     { twitterId: twitterUserToSubscribeTo.twitterId }
   )
+
+  const organization = useCurrentOrganization()
+
+  const maxSubscriptionsReached =
+    numberOfActivePersonalSubscriptions === organization!.plan!.personalSubscriptionQuota
+
+  const maxSubscriptionsExceeded =
+    numberOfActivePersonalSubscriptions > organization!.plan!.personalSubscriptionQuota
 
   const SUBSCRIPTION_CADENCES = {
     DAILY: SubscriptionCadence.DAILY,
@@ -128,6 +162,10 @@ export const SubscriptionsList = () => {
     setTwitterAccountUrl(event.target.value)
   }
 
+  const handleOpenPlanModal = () => {
+    setOpenPlanModal(!openPlanModal)
+  }
+
   return (
     <div>
       <section>
@@ -169,6 +207,33 @@ export const SubscriptionsList = () => {
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <span className={``}>
+                  {maxSubscriptionsExceeded && (
+                    <span className={`inline-block p-4 m-1 text-red-700`}>
+                      You are over your subscription limit. Please deactivate some subscriptions or
+                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
+                        {" "}
+                        upgrade your plan.
+                      </a>
+                    </span>
+                  )}
+
+                  {maxSubscriptionsReached && (
+                    <span>
+                      Maximum subscriptions reached.
+                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
+                        Please upgrade your plan for more.
+                      </a>
+                    </span>
+                  )}
+
+                  {!maxSubscriptionsExceeded && !maxSubscriptionsReached && (
+                    <span>
+                      {numberOfActivePersonalSubscriptions} /{" "}
+                      {organization?.plan?.personalSubscriptionQuota} subscriptions used
+                    </span>
+                  )}
+                </span>
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -319,6 +384,14 @@ export const SubscriptionsList = () => {
                   </tbody>
                 </table>
               </div>
+              <UpgradePlan open={openPlanModal} setOpen={setOpenPlanModal} />
+              <AddEmailModal
+                email={email}
+                setEmail={setEmail}
+                open={emailNeeded}
+                setOpen={setEmailNeeded}
+                saveEmail={saveEmail}
+              />
             </div>
           </div>
         </div>

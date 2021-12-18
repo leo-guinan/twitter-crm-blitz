@@ -41,12 +41,30 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription
 
+      console.log(`${JSON.stringify(subscription)}`)
+      const plan = await db.plan.findFirst({
+        where: {
+          OR: [
+            {
+              stripeMonthlyPlanId: subscription?.items?.data[0]?.price.id,
+            },
+            {
+              stripeAnnualPlanId: subscription?.items?.data[0]?.price.id,
+            },
+          ],
+        },
+      })
+      if (!plan) {
+        console.log(`⚠️  Could not find plan for subscription ${subscription.id}`)
+        return res.status(400).end()
+      }
       await db.organization.update({
         where: { stripeCustomerId: subscription.customer as string },
         data: {
           subscriptionStatus: subscription.status,
           price: subscription?.items?.data[0]?.price.id,
           subscriptionId: subscription?.items?.data[0]?.id,
+          planId: plan.id,
         },
       })
       break

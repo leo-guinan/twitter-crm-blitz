@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Organization" ADD COLUMN     "planId" INTEGER NOT NULL DEFAULT 1;
+
+-- AddForeignKey
+ALTER TABLE "Organization" ADD FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE SET NULL ON UPDATE CASCADE;
