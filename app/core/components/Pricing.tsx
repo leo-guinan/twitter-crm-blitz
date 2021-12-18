@@ -117,12 +117,6 @@ const Pricing = () => {
               </button>
             </div>
           </div>
-          {/*  name           String         @unique
-  description    String
-  monthlyPrice   Decimal        @default(0)
-  yearlyPrice    Decimal        @default(0)
-  type           PlanType
-  stripePlanId   String*/}
           <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">
             {plans.map((plan) => (
               <div
@@ -142,14 +136,20 @@ const Pricing = () => {
                       {currentPlanSelected === "Annual" ? "/yr" : "/mo"}
                     </span>
                   </p>
-                  <a
-                    href=""
-                    className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900"
-                    data-plan={plan.id}
-                    onClick={handleClick}
-                  >
-                    Buy {plan.displayName}
-                  </a>
+
+                  {plan.displayName === "Free" && <>Free</>}
+                  {plan.displayName !== "Free" && (
+                    <>
+                      <a
+                        href=""
+                        className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900"
+                        data-plan={plan.id}
+                        onClick={handleClick}
+                      >
+                        Buy {plan.displayName}
+                      </a>
+                    </>
+                  )}
                 </div>
                 <div className="pt-6 pb-8 px-6">
                   <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">

@@ -231,6 +231,10 @@ export const SubscriptionsList = () => {
                     <span>
                       {numberOfActivePersonalSubscriptions} /{" "}
                       {organization?.plan?.personalSubscriptionQuota} subscriptions used
+                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
+                        {" "}
+                        (Upgrade your Plan).
+                      </a>
                     </span>
                   )}
                 </span>
