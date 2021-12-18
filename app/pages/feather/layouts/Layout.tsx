@@ -1,8 +1,10 @@
-import React, { ReactNode, Suspense } from "react"
-import { Head } from "blitz"
-
+import React, { ReactNode, Suspense, useState } from "react"
+import { Head, useMutation } from "blitz"
 import Sidebar from "app/core/components/Sidebar"
 import Tool from "../../../core/components/Tool"
+import AddEmailModal from "../../../core/components/AddEmailModal"
+import { useCurrentUser } from "../../../core/hooks/useCurrentUser"
+import updateUserEmail from "../../../users/mutations/updateUserEmail"
 
 type LayoutProps = {
   title?: string

@@ -60,7 +60,8 @@ model Organization {
   price              String?
   subscriptionStatus String?          @default("incomplete")
   subscriptionId     String?
-  planType           PlanType         @default(FREE)
+  plan               Plan             @relation(fields: [planId], references: [id], onDelete: SetNull)
+  planId             Int              @default(1)
   memberships        Membership[]
   twitterAccounts    TwitterAccount[]
   subscriptions      Subscription[]
@@ -202,6 +203,22 @@ enum SubscriptionType {
 enum SubscriptionStatus {
   ACTIVE
   INACTIVE
+}
+
+model Plan {
+  id                        Int            @id @default(autoincrement())
+  createdAt                 DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
+  name                      String         @unique
+  displayName               String         @default("Plan")
+  description               String
+  monthlyPrice              Decimal        @default(0)
+  yearlyPrice               Decimal        @default(0)
+  type                      PlanType
+  stripeMonthlyPlanId       String?
+  stripeAnnualPlanId        String?
+  personalSubscriptionQuota Int
+  organizations             Organization[]
 }
 
 model Subscription {
