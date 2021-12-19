@@ -19,15 +19,32 @@ export default passportAuth(({ ctx, req, res }) => ({
           /*...*/
         },
         async function (token, tokenSecret, profile, done) {
-          const lookedupUser = await db.twitterAccount.findFirst({
+          const email = profile.emails && profile.emails[0]?.value
+
+          const twitterAccountLoggingIn = await db.twitterAccount.upsert({
             where: {
               twitterId: profile.id,
             },
+            create: {
+              twitterToken: token,
+              twitterSecretToken: tokenSecret,
+              twitterUsername: profile.username,
+              twitterId: profile.id,
+            },
+            update: {
+              twitterToken: token,
+              twitterSecretToken: tokenSecret,
+              twitterUsername: profile.username,
+            },
             select: {
-              organizationId: true,
+              twitterToken: true,
+              twitterSecretToken: true,
+              twitterUsername: true,
+              twitterId: true,
               organization: {
                 select: {
                   id: true,
+                  name: true,
                   subscriptionStatus: true,
                   memberships: {
                     select: {
@@ -39,94 +56,99 @@ export default passportAuth(({ ctx, req, res }) => ({
               },
             },
           })
-          if (!lookedupUser) {
-            const user = await db.user.create({
+          let organization
+          let orgId
+          let subscriptionStatus = "incomplete"
+          const roles: any[] = []
+
+          if (!twitterAccountLoggingIn.organization) {
+            console.log("No organization found for twitter account. Creating one.")
+            organization = await db.organization.create({
               data: {
-                role: "CUSTOMER",
+                name: "",
                 memberships: {
                   create: {
                     role: "OWNER",
-                    organization: {
+                    user: {
                       create: {
-                        name: "",
-                        twitterAccounts: {
-                          create: {
-                            twitterToken: token,
-                            twitterSecretToken: tokenSecret,
-                            twitterUsername: profile.username,
-                            twitterId: profile.id,
-                          },
-                        },
+                        role: "CUSTOMER",
+                        email: email,
                       },
                     },
+                  },
+                },
+                twitterAccounts: {
+                  connect: {
+                    twitterId: profile.id,
                   },
                 },
               },
               select: {
                 id: true,
                 name: true,
-                role: true,
+                subscriptionStatus: true,
                 memberships: {
                   select: {
-                    organizationId: true,
                     role: true,
-                    organization: {
+                    user: {
                       select: {
                         id: true,
-                        subscriptionStatus: true,
+                        role: true,
+                        email: true,
+
+                        memberships: true,
                       },
                     },
                   },
                 },
               },
             })
+            if (organization) {
+              console.log("Organization created")
+              roles.push(organization.memberships[0].user.role)
+              roles.push(organization.memberships[0].role)
+              orgId = organization.id
+            }
+          } else {
+            roles.push(twitterAccountLoggingIn?.organization?.memberships[0]?.user.role)
+            roles.push(twitterAccountLoggingIn?.organization?.memberships[0]?.role)
+            orgId = twitterAccountLoggingIn.organization.id
+          }
 
+          console.log(`Twitter User: ${profile.username}`)
+
+          const user = organization
+            ? organization.memberships[0].user
+            : twitterAccountLoggingIn?.organization?.memberships[0]?.user
+
+          console.log(`User: ${JSON.stringify(user)}`)
+
+          if (user) {
             await ctx.session.$create({
               userId: user.id,
-              roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
-              orgId: user?.memberships[0]?.organization?.id,
-              subscriptionStatus:
-                user?.memberships[0]?.organization?.subscriptionStatus || "incomplete",
+              roles,
+              orgId,
+              subscriptionStatus,
             })
             const publicData = {
               userId: user.id,
-              roles: [user?.role, user?.memberships[0]?.role || MembershipRole.USER],
-              orgId: user?.memberships[0]?.organization?.id,
+              roles,
+              orgId,
               source: "twitter",
             }
             done(undefined, { publicData })
           } else {
-            console.log(`User: ${JSON.stringify(lookedupUser)}`)
-            const existingUser = lookedupUser!.organization!.memberships[0]!.user
-            await ctx.session.$create({
-              userId: existingUser.id,
-              roles: [
-                existingUser?.role,
-                lookedupUser?.organization?.memberships[0]?.role || MembershipRole.USER,
-              ],
-              orgId: lookedupUser?.organization?.id,
-              subscriptionStatus: lookedupUser?.organization?.subscriptionStatus || "incomplete",
+            done(undefined, {
+              publicData: {
+                userId: null,
+                roles: [],
+                orgId: null,
+                source: "twitter",
+              },
             })
-            const publicData = {
-              userId: existingUser.id,
-              roles: [
-                existingUser?.role,
-                lookedupUser!.organization?.memberships[0]?.role || MembershipRole.USER,
-              ],
-              orgId: lookedupUser?.organization?.id,
-              source: "twitter",
-            }
-            done(undefined, { publicData })
           }
         }
       ),
     },
   ],
 }))
-// export default passportAuth({
-//   successRedirectUrl: "/",
-//   errorRedirectUrl: "/",
-//   strategies: [
-//
-//   ],
-// });
