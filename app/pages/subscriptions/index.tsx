@@ -179,8 +179,6 @@ export const SubscriptionsList = () => {
 
   const handleOpenPlanModal = () => {
     setOpenPlanModal(!openPlanModal)
-    setOpenPlanModal(!!openPlanModal)
-    setOpenPlanModal(!!!openPlanModal)
   }
 
   return (
