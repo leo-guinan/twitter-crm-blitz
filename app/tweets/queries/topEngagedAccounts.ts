@@ -49,7 +49,6 @@ export default resolver.pipe(
           console.log(JSON.stringify(like))
           if (!stats[like.id]) {
             stats[like.id] = {
-              id: like.id,
               likes: 1,
               retweets: 0,
             }
@@ -64,7 +63,6 @@ export default resolver.pipe(
           //save retweet to twitter account key
           if (!stats[retweet.id]) {
             stats[retweet.id] = {
-              id: retweet.id,
               likes: 0,
               retweets: 1,
             }
@@ -78,43 +76,57 @@ export default resolver.pipe(
 
     console.log(JSON.stringify(calced))
 
-    const stats = calced
-      .filter((item) => !!item)
-      .reduce((acc, cur) => {
-        if (!acc) {
-          return cur
-        }
-
-        for (const [key, value] of Object.entries(cur)) {
-          console.log(key)
-          console.log(JSON.stringify(value))
-          if (!acc[key]) {
-            acc[key] = value
-          } else {
-            acc[key].likes += value.likes
-            acc[key].retweets += value.retweets
+    const stats: undefined | { [key: string]: { likes: number; retweets: number } } = calced
+      ?.filter((item) => !!item)
+      ?.reduce(
+        (
+          acc: { [key: string]: { likes: number; retweets: number } },
+          cur: { [key: string]: { likes: number; retweets: number } }
+        ) => {
+          if (!acc) {
+            return cur
           }
-        }
-        return acc
-      }, {})
-    console.log(JSON.stringify(Object.values(stats)))
-    const totals = Object.values(stats).sort(
-      (a: { likes: number; retweets: number }, b: { likes: number; retweets: number }) => {
-        if (a.likes + a.retweets > b.likes + b.retweets) {
-          return -1
-        }
-        if (a.likes + a.retweets < b.likes + b.retweets) {
-          return 1
-        }
-        return 0
-      }
-    )
 
-    const entries = Object.entries(totals.slice(0, 10))
-    return entries.map(([key, value]) => {
-      console.log(key)
-      console.log(JSON.stringify(value))
-      return twitterAccounts[value.id]
-    })
+          for (const [key, value] of Object.entries(cur)) {
+            if (!acc[key]) {
+              acc[key] = { likes: value.likes, retweets: value.retweets }
+            } else {
+              acc[key]!.likes += value.likes
+              acc[key]!.retweets += value.retweets
+            }
+          }
+          return acc
+        },
+        {}
+      )
+    if (stats) {
+      const totals = Object.entries(stats)
+        .map(([key, value]) => {
+          return {
+            id: key,
+            likes: value.likes,
+            retweets: value.retweets,
+          }
+        })
+        .sort(
+          (
+            a: { id: string; likes: number; retweets: number },
+            b: { id: string; likes: number; retweets: number }
+          ) => {
+            if (a.likes + a.retweets > b.likes + b.retweets) {
+              return -1
+            }
+            if (a.likes + a.retweets < b.likes + b.retweets) {
+              return 1
+            }
+            return 0
+          }
+        )
+
+      const entries = totals.slice(0, 10)
+      return entries.map((value: { id: string; likes: number; retweets: number }) => {
+        return twitterAccounts[value.id]
+      })
+    }
   }
 )

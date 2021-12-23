@@ -227,7 +227,10 @@ export const SubscriptionsList = () => {
                   {maxSubscriptionsExceeded && (
                     <span className={`inline-block p-4 m-1 text-red-700`}>
                       You are over your subscription limit. Please deactivate some subscriptions or
-                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
+                      <a
+                        className="cursor-pointer underline"
+                        onClick={() => setOpenPlanModal(true)}
+                      >
                         {" "}
                         upgrade your plan.
                       </a>
@@ -237,7 +240,10 @@ export const SubscriptionsList = () => {
                   {maxSubscriptionsReached && (
                     <span>
                       Maximum subscriptions reached.
-                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
+                      <a
+                        className="cursor-pointer underline"
+                        onClick={() => setOpenPlanModal(true)}
+                      >
                         Please upgrade your plan for more.
                       </a>
                     </span>
@@ -435,7 +441,7 @@ export const SubscriptionsList = () => {
                   </div>
                 </div>
               </div>
-              <UpgradePlan open={!!openPlanModal} setOpen={setOpenPlanModal} />
+              <UpgradePlan open={openPlanModal} setOpen={setOpenPlanModal} />
               <AddEmailModal
                 email={email}
                 setEmail={setEmail}

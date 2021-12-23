@@ -3,12 +3,12 @@ import db, { SubscriptionCadence } from "db"
 import emailCollection from "./email-collection"
 
 export default CronJob(
-  "api/queues/send-weekly-subscription", // 👈 the route that it's reachable on
-  "0 0 * * 0", // every week, sunday midnight
+  "api/queues/send-daily-subscription", // 👈 the route that it's reachable on
+  "0 1 * * *", // every day at 1am
   async () => {
     const subscriptions = await db.subscription.findMany({
       where: {
-        cadence: SubscriptionCadence.WEEKLY,
+        cadence: SubscriptionCadence.DAILY,
       },
       include: {
         twitterAccounts: {
@@ -27,7 +27,7 @@ export default CronJob(
           where: {
             authorAccountId: twitterAccount.twitterAccount.id,
             tweetCreatedAt: {
-              gt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+              gt: new Date(Date.now() - 1000 * 60 * 60 * 24),
             },
           },
           select: {
@@ -64,3 +64,8 @@ export default CronJob(
     }
   }
 )
+
+//step 1: get collection of tweets for the week
+//step 2: add collection to subscription
+//step 3: create body of email
+//step 4: queue up email to send

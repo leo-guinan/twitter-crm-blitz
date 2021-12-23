@@ -4,7 +4,7 @@ import db from "db"
 
 export default CronJob(
   "api/queues/daily-refresh", // 👈 the route that it's reachable on
-  "0 0 * * 0", // once a week for now
+  "0 1 * * *", // once a day at 1am
   async () => {
     const accountsToRefresh = await db.twitterAccount.findMany({
       where: {

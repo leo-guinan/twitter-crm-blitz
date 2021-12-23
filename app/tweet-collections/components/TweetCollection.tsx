@@ -10,7 +10,7 @@ interface TweetItem {
   tweetId: string
   message: string
   tweetCreatedAt: any
-  author: AuthorItem
+  author: AuthorItem | null
 }
 
 interface TweetCollectionProps {
