@@ -89,7 +89,7 @@ export const SubscriptionsList = () => {
   })
 
   const [engagedAccountsSubscribed] = useQuery(isSubscribedToUsers, {
-    twitterIds: recommendedAccounts.map((account) => account.twitterId),
+    twitterIds: recommendedAccounts ? recommendedAccounts.map((account) => account.twitterId) : [],
   })
 
   const isSubscribedToTwitterUser = (twitterId) => {
@@ -179,6 +179,8 @@ export const SubscriptionsList = () => {
 
   const handleOpenPlanModal = () => {
     setOpenPlanModal(!openPlanModal)
+    setOpenPlanModal(!!openPlanModal)
+    setOpenPlanModal(!!!openPlanModal)
   }
 
   return (
