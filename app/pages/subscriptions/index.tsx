@@ -21,6 +21,8 @@ import UpgradePlan from "../../core/components/UpgradePlan"
 import AddEmailModal from "../../core/components/AddEmailModal"
 import updateUserEmail from "../../users/mutations/updateUserEmail"
 import { useCurrentUser } from "../../core/hooks/useCurrentUser"
+import topEngagedAccounts from "../../tweets/queries/topEngagedAccounts"
+import isSubscribedToUsers from "../../subscriptions/queries/isSubscribedToUsers"
 
 const ITEMS_PER_PAGE = 100
 
@@ -33,20 +35,22 @@ export const SubscriptionsList = () => {
   const [openPlanModal, setOpenPlanModal] = useState(false)
   const [cadenceToSet, setCadenceToSet] = useState("")
   const [updateSubscriptionMutation] = useMutation(updateSubscription)
-  const [twitterAccountUrl, setTwitterAccountUrl] = useState("")
+  const [twitterUserToLookup, setTwitterUserToLookup] = useState("")
   const [currentlyEditingSubscription, setCurrentlyEditingSubscription] = useState("")
   const [twitterUserToSubscribeTo, setTwitterUserToSubscribeTo] = useState({
     twitterId: "",
-    username: "",
-    name: "",
-    bio: "",
-    profilePictureUrl: "",
+    twitterUsername: "",
+    twitterName: "",
+    twitterBio: "",
+    twitterProfilePictureUrl: "",
   })
 
   const [email, setEmail] = useState("")
   const [emailNeeded, setEmailNeeded] = useState(!currentUser?.email)
 
   const [updateUserEmailMutation] = useMutation(updateUserEmail)
+
+  const [recommendedAccounts] = useQuery(topEngagedAccounts, {})
 
   const saveEmail = async () => {
     if (email) {
@@ -84,6 +88,17 @@ export const SubscriptionsList = () => {
     take: ITEMS_PER_PAGE,
   })
 
+  const [engagedAccountsSubscribed] = useQuery(isSubscribedToUsers, {
+    twitterIds: recommendedAccounts.map((account) => account.twitterId),
+  })
+
+  const isSubscribedToTwitterUser = (twitterId) => {
+    if (twitterId === twitterUserToSubscribeTo) {
+      return isUserSubscribedToTwitterUserToSubscribeTo
+    }
+    return engagedAccountsSubscribed[twitterId]
+  }
+
   const handleLookupUser = async () => {
     const response = await window
       .fetch("/api/twitter/lookup-user", {
@@ -93,17 +108,17 @@ export const SubscriptionsList = () => {
           "anti-csrf": antiCSRFToken,
         },
         body: JSON.stringify({
-          twitterAccountUrl,
+          twitterUsername: twitterUserToLookup,
         }),
       })
       .then((response) => response.json())
       .then((json) =>
         setTwitterUserToSubscribeTo({
           twitterId: json.twitterId,
-          username: json.twitterUsername,
-          name: json.twitterName,
-          bio: json.twitterBio,
-          profilePictureUrl: json.twitterProfilePictureUrl,
+          twitterUsername: json.twitterUsername,
+          twitterName: json.twitterName,
+          twitterBio: json.twitterBio,
+          twitterProfilePictureUrl: json.twitterProfilePictureUrl,
         })
       )
   }
@@ -112,7 +127,7 @@ export const SubscriptionsList = () => {
     const twitterId = event.target.dataset.twitterId
     const newSubscription = {
       twitterUsers: [twitterUserToSubscribeTo],
-      name: `Subscription to ${twitterUserToSubscribeTo.name}`,
+      name: `Subscription to ${twitterUserToSubscribeTo.twitterName}`,
       id: "temp",
       type: "PERSONAL",
       status: "ACTIVE",
@@ -158,8 +173,8 @@ export const SubscriptionsList = () => {
     setCadenceToSet(event.target.value)
   }
 
-  const handleTwitterAccountUrlChange = (event) => {
-    setTwitterAccountUrl(event.target.value)
+  const handleTwitterUserToLookupChange = (event) => {
+    setTwitterUserToLookup(event.target.value)
   }
 
   const handleOpenPlanModal = () => {
@@ -174,10 +189,10 @@ export const SubscriptionsList = () => {
             <div className="border-2  m-4 w-full max-w-xs p-6 mx-auto">
               <input
                 type="url"
-                onChange={handleTwitterAccountUrlChange}
-                value={twitterAccountUrl}
+                onChange={handleTwitterUserToLookupChange}
+                value={twitterUserToLookup}
                 className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full block sm:text-sm border-gray-300 rounded-md"
-                placeholder="https://twitter.com/feathercrm"
+                placeholder="feathercrm"
               />
               <Button
                 onClick={handleLookupUser}
@@ -186,7 +201,7 @@ export const SubscriptionsList = () => {
                 className="grid-cols-1"
               />
               <p className="mt-2 text-sm text-gray-500" id="email-description">
-                Drop the user&apos;s profile link in the box.
+                Enter the username to lookup..
               </p>
             </div>
           </div>
@@ -197,7 +212,8 @@ export const SubscriptionsList = () => {
               twitterUsers={[twitterUserToSubscribeTo]}
               actionHandler={handleSubscribeToUser}
               actionCTA="Subscribe"
-              actionPerformed={isUserSubscribedToTwitterUserToSubscribeTo}
+              actionPerformed={isSubscribedToTwitterUser}
+              view="standard"
             />
           </section>
         )}
@@ -238,157 +254,188 @@ export const SubscriptionsList = () => {
                     </span>
                   )}
                 </span>
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Subscription Type
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Cadence
-                      </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Edit</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {subscriptions.map((subscription) => (
-                      <tr key={subscription.id}>
-                        {parseInt(currentlyEditingSubscription) === subscription.id && (
-                          <>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="flex-shrink-0 h-10 w-10">
-                                  <img
-                                    className="h-10 w-10 rounded-full"
-                                    src={
-                                      subscription?.twitterAccounts[0]?.twitterAccount
-                                        ?.twitterProfilePictureUrl
-                                    }
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {subscription?.twitterAccounts[0]?.twitterAccount?.twitterName}
+                <div className="grid grid-cols-3">
+                  <div className="col-span-2 mt-8">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Name
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Subscription Type
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Status
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Cadence
+                          </th>
+                          <th scope="col" className="relative px-6 py-3">
+                            <span className="sr-only">Edit</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {subscriptions.map((subscription) => (
+                          <tr key={subscription.id}>
+                            {parseInt(currentlyEditingSubscription) === subscription.id && (
+                              <>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="flex-shrink-0 h-10 w-10">
+                                      <img
+                                        className="h-10 w-10 rounded-full"
+                                        src={
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterProfilePictureUrl
+                                        }
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="ml-4">
+                                      <div className="text-sm font-medium text-gray-900">
+                                        {
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterName
+                                        }
+                                      </div>
+                                      <div className="text-sm text-gray-500">
+                                        {"@" +
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterUsername}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    {"@" +
-                                      subscription?.twitterAccounts[0]?.twitterAccount
-                                        ?.twitterUsername}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">{subscription.type}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {subscription.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              <select
-                                name={`subscription_${subscription.id}`}
-                                onChange={handleSelectCadence}
-                              >
-                                {Object.keys(SUBSCRIPTION_CADENCES).map((cadence) => (
-                                  <option
-                                    value={cadence}
-                                    key={`subscription_${subscription.id}_${cadence}`}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{subscription.type}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {subscription.status}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  <select
+                                    name={`subscription_${subscription.id}`}
+                                    onChange={handleSelectCadence}
                                   >
-                                    {cadence}
-                                  </option>
-                                ))}
-                              </select>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                                data-subscription-id={subscription.id}
-                                onClick={handleSaveSubscription}
-                              >
-                                Save
-                              </a>
-                            </td>
-                          </>
-                        )}
-                        {parseInt(currentlyEditingSubscription) !== subscription.id && (
-                          <>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="flex-shrink-0 h-10 w-10">
-                                  <img
-                                    className="h-10 w-10 rounded-full"
-                                    src={
-                                      subscription?.twitterAccounts[0]?.twitterAccount
-                                        ?.twitterProfilePictureUrl
-                                    }
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {subscription?.twitterAccounts[0]?.twitterAccount?.twitterName}
+                                    {Object.keys(SUBSCRIPTION_CADENCES).map((cadence) => (
+                                      <option
+                                        value={cadence}
+                                        key={`subscription_${subscription.id}_${cadence}`}
+                                      >
+                                        {cadence}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                  <a
+                                    href="#"
+                                    className="text-indigo-600 hover:text-indigo-900"
+                                    data-subscription-id={subscription.id}
+                                    onClick={handleSaveSubscription}
+                                  >
+                                    Save
+                                  </a>
+                                </td>
+                              </>
+                            )}
+                            {parseInt(currentlyEditingSubscription) !== subscription.id && (
+                              <>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="flex-shrink-0 h-10 w-10">
+                                      <img
+                                        className="h-10 w-10 rounded-full"
+                                        src={
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterProfilePictureUrl
+                                        }
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="ml-4">
+                                      <div className="text-sm font-medium text-gray-900">
+                                        {
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterName
+                                        }
+                                      </div>
+                                      <div className="text-sm text-gray-500">
+                                        {"@" +
+                                          subscription?.twitterAccounts[0]?.twitterAccount
+                                            ?.twitterUsername}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    {"@" +
-                                      subscription?.twitterAccounts[0]?.twitterAccount
-                                        ?.twitterUsername}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">{subscription.type}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {subscription.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {subscription.cadence}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              {/*<a*/}
-                              {/*  href="#"*/}
-                              {/*  className="text-indigo-600 hover:text-indigo-900"*/}
-                              {/*  data-subscription-id={subscription.id}*/}
-                              {/*  onClick={handleEditSubscription}*/}
-                              {/*>*/}
-                              {/*  Edit*/}
-                              {/*</a>*/}
-                            </td>
-                          </>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{subscription.type}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {subscription.status}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {subscription.cadence}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                  {/*<a*/}
+                                  {/*  href="#"*/}
+                                  {/*  className="text-indigo-600 hover:text-indigo-900"*/}
+                                  {/*  data-subscription-id={subscription.id}*/}
+                                  {/*  onClick={handleEditSubscription}*/}
+                                  {/*>*/}
+                                  {/*  Edit*/}
+                                  {/*</a>*/}
+                                </td>
+                              </>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="m-8 border-2 p-4">
+                    <h2 className="w-full border-b-2 p-4 flex">
+                      <span className="inline-block mx-auto">Most engagement</span>
+                    </h2>
+                    {recommendedAccounts && (
+                      <>
+                        <TwitterUserList
+                          twitterUsers={recommendedAccounts}
+                          actionHandler={handleSubscribeToUser}
+                          actionCTA="Subscribe"
+                          actionPerformed={isSubscribedToTwitterUser}
+                          view="compact"
+                        />
+                      </>
+                    )}
+                    {!recommendedAccounts && (
+                      <div className="text-center">
+                        <div className="text-gray-500">No recommended accounts yet</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <UpgradePlan open={openPlanModal} setOpen={setOpenPlanModal} />
+              <UpgradePlan open={!!openPlanModal} setOpen={setOpenPlanModal} />
               <AddEmailModal
                 email={email}
                 setEmail={setEmail}

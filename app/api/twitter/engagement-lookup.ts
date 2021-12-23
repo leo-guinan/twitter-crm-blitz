@@ -8,7 +8,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     const { twitterAccountId } = JSON.parse(req.body)
 
     await twitterEngagement.enqueue({
-      twitterAccountId,
+      twitterAccountTwitterId: twitterAccountId,
     })
   }
   res.statusCode = 200

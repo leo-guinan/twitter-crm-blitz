@@ -1,9 +1,9 @@
 import {
   AppProps,
-  ErrorBoundary,
-  ErrorComponent,
   AuthenticationError,
   AuthorizationError,
+  ErrorBoundary,
+  ErrorComponent,
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
 } from "blitz"

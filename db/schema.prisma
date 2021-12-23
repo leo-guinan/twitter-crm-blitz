@@ -43,6 +43,9 @@ model TwitterAccount {
   organization             Organization?                    @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId           Int?
   subscriptions            TwitterAccountsInSubscriptions[]
+  likes                    Tweet[]                          @relation("likes")
+  retweets                 Tweet[]                          @relation("retweets")
+  tweets                   Tweet[]                          @relation("tweets")
 }
 
 enum ConsentStatus {
@@ -171,19 +174,23 @@ model TwitterAccountsInSubscriptions {
 }
 
 model Tweet {
-  tweetId        String            @id
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  tweetCreatedAt DateTime
-  message        String
-  likedBy        TwitterUser[]     @relation("liked")
-  retweetedBy    TwitterUser[]     @relation("retweeted")
-  inResponseTo   Tweet?            @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
-  inResponseToId String?
-  responses      Tweet[]           @relation(name: "responses")
-  author         TwitterUser       @relation(name: "wrote", fields: [authorId], references: [twitterId])
-  authorId       String
-  collections    TweetCollection[]
+  tweetId         String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  tweetCreatedAt  DateTime
+  message         String
+  likedBy         TwitterUser[]     @relation("liked")
+  retweetedBy     TwitterUser[]     @relation("retweeted")
+  likes           TwitterAccount[]  @relation("likes")
+  retweets        TwitterAccount[]  @relation("retweets")
+  inResponseTo    Tweet?            @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
+  inResponseToId  String?
+  responses       Tweet[]           @relation(name: "responses")
+  author          TwitterUser?      @relation(name: "wrote", fields: [authorId], references: [twitterId])
+  authorId        String?
+  authorAccount   TwitterAccount?   @relation(name: "tweets", fields: [authorAccountId], references: [id])
+  authorAccountId Int?
+  collections     TweetCollection[]
 }
 
 enum SubscriptionCadence {

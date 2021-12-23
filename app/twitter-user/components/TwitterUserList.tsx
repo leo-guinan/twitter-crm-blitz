@@ -2,17 +2,18 @@ import TwitterUser from "./TwitterUser"
 
 interface ITwitterUser {
   twitterId: string
-  username: string
-  name: string
-  bio: string
-  profilePictureUrl: string
+  twitterUsername: string
+  twitterName: string
+  twitterBio: string
+  twitterProfilePictureUrl: string
 }
 
 interface ITwitterUserListProps {
   twitterUsers: ITwitterUser[]
   actionCTA: string
   actionHandler: (twitterId) => void
-  actionPerformed: boolean
+  actionPerformed: (twitterUserId) => boolean
+  view: "compact" | "standard"
 }
 
 const TwitterUserList = ({
@@ -20,6 +21,7 @@ const TwitterUserList = ({
   actionCTA,
   actionHandler,
   actionPerformed,
+  view = "standard",
 }: ITwitterUserListProps) => {
   return (
     <>
@@ -34,6 +36,7 @@ const TwitterUserList = ({
                   actionHandler={actionHandler}
                   actionPerformed={actionPerformed}
                   key={twitterUser.twitterId}
+                  view={view}
                 />
               </li>
             ))}
