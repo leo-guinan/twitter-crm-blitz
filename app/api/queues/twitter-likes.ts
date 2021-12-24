@@ -38,28 +38,30 @@ export default Queue(
     client
       .get("tweets/" + job.tweetId + "/liking_users", params)
       .then(async (results) => {
-        results.data.map(async (user) => {
-          await db.tweet.update({
-            where: {
-              tweetId: job.tweetId,
-            },
-            data: {
-              likes: {
-                connectOrCreate: {
-                  where: {
-                    twitterId: user.id,
-                  },
-                  create: {
-                    twitterId: user.id,
-                    twitterName: user.name,
-                    twitterUsername: user.username,
-                    twitterProfilePictureUrl: user.profile_image_url,
+        if (results && results.data) {
+          results.data.map(async (user) => {
+            await db.tweet.update({
+              where: {
+                tweetId: job.tweetId,
+              },
+              data: {
+                likes: {
+                  connectOrCreate: {
+                    where: {
+                      twitterId: user.id,
+                    },
+                    create: {
+                      twitterId: user.id,
+                      twitterName: user.name,
+                      twitterUsername: user.username,
+                      twitterProfilePictureUrl: user.profile_image_url,
+                    },
                   },
                 },
               },
-            },
+            })
           })
-        })
+        }
       })
       .catch((e) => {
         if ("errors" in e) {
