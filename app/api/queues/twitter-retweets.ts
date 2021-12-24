@@ -3,7 +3,7 @@ import Twitter from "twitter-lite"
 import db from "../../../db"
 
 export default Queue(
-  "api/queues/twitter-engagement", // 👈 the route it's reachable on
+  "api/queues/twitter-retweets", // 👈 the route it's reachable on
   async (job: { tweetId; twitterAccountTwitterId }) => {
     let client
     const authenticatedUser = await db.twitterAccount.findFirst({
@@ -61,8 +61,23 @@ export default Queue(
         })
       })
       .catch((e) => {
-        console.error(e)
+        if ("errors" in e) {
+          // Twitter API error
+          if (e.errors[0].code === 88) {
+            // rate limit exceeded
+            console.log(
+              "Rate limit will reset on",
+              new Date(e._headers.get("x-rate-limit-reset") * 1000)
+            )
+          } else {
+            console.error(e)
+          }
+        } else {
+          console.error(e)
+        }
       })
   },
-  { exclusive: true }
+  {
+    retry: ["5min", "10min", "20min"],
+  }
 )
