@@ -11,10 +11,12 @@ export default Queue(
       },
     })
 
+    console.log(JSON.stringify(twitterAccountToSubscribeTo))
+
     //first, make sure subscription doesn't already exist
     const existingSubscription = await db.twitterAccount.findFirst({
       where: {
-        twitterId: job.twitterAccountId,
+        twitterId: job.twitterUserToSubscribeTo,
         subscriptions: {
           some: {
             subscription: {
@@ -35,6 +37,9 @@ export default Queue(
         },
       },
     })
+
+    console.log(JSON.stringify(existingSubscription))
+
     if (!existingSubscription && twitterAccountToSubscribeTo) {
       const subscription = await db.subscription.create({
         data: {

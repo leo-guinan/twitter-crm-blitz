@@ -124,10 +124,20 @@ export const SubscriptionsList = () => {
   }
 
   const handleSubscribeToUser = async (event) => {
+    let twitterAccountToSubscribeTo
     const twitterId = event.target.dataset.twitterId
+    if (twitterId === twitterUserToSubscribeTo.twitterId) {
+      twitterAccountToSubscribeTo = twitterUserToSubscribeTo
+      setSubscribed(true, { refetch: false })
+    } else if (recommendedAccounts) {
+      twitterAccountToSubscribeTo = recommendedAccounts.find(
+        (account) => account.twitterId === twitterId
+      )
+      engagedAccountsSubscribed[twitterId] = true
+    }
     const newSubscription = {
-      twitterUsers: [twitterUserToSubscribeTo],
-      name: `Subscription to ${twitterUserToSubscribeTo.twitterName}`,
+      twitterUsers: [twitterAccountToSubscribeTo],
+      name: `New Subscription`,
       id: "temp",
       type: "PERSONAL",
       status: "ACTIVE",
@@ -137,8 +147,7 @@ export const SubscriptionsList = () => {
       { subscriptions: [newSubscription, ...subscriptions], hasMore },
       { refetch: false }
     )
-    setSubscribed(true, { refetch: false })
-    console.log(twitterId)
+
     await window.fetch("/api/twitter/subscribe-to-user", {
       method: "POST",
       credentials: "include",
@@ -260,36 +269,36 @@ export const SubscriptionsList = () => {
                     </span>
                   )}
                 </span>
-                <div className="grid grid-cols-3">
-                  <div className="col-span-2 mt-8">
+                <div className="grid grid-cols-11">
+                  <div className="col-span-7 mt-8">
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
                             Name
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
                             Subscription Type
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
                             Status
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
                             Cadence
                           </th>
-                          <th scope="col" className="relative px-6 py-3">
+                          <th scope="col" className="relative px-4 py-3">
                             <span className="sr-only">Edit</span>
                           </th>
                         </tr>
@@ -299,7 +308,7 @@ export const SubscriptionsList = () => {
                           <tr key={subscription.id}>
                             {parseInt(currentlyEditingSubscription) === subscription.id && (
                               <>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
                                     <div className="flex-shrink-0 h-10 w-10">
                                       <img
@@ -326,15 +335,15 @@ export const SubscriptionsList = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">{subscription.type}</div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-4 py-4 whitespace-nowrap">
                                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     {subscription.status}
                                   </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                                   <select
                                     name={`subscription_${subscription.id}`}
                                     onChange={handleSelectCadence}
@@ -349,7 +358,7 @@ export const SubscriptionsList = () => {
                                     ))}
                                   </select>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                                   <a
                                     href="#"
                                     className="text-indigo-600 hover:text-indigo-900"
@@ -361,64 +370,65 @@ export const SubscriptionsList = () => {
                                 </td>
                               </>
                             )}
-                            {parseInt(currentlyEditingSubscription) !== subscription.id && (
-                              <>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center">
-                                    <div className="flex-shrink-0 h-10 w-10">
-                                      <img
-                                        className="h-10 w-10 rounded-full"
-                                        src={
-                                          subscription?.twitterAccounts[0]?.twitterAccount
-                                            ?.twitterProfilePictureUrl
-                                        }
-                                        alt=""
-                                      />
-                                    </div>
-                                    <div className="ml-4">
-                                      <div className="text-sm font-medium text-gray-900">
-                                        {
-                                          subscription?.twitterAccounts[0]?.twitterAccount
-                                            ?.twitterName
-                                        }
+                            {parseInt(currentlyEditingSubscription) !== subscription.id &&
+                              subscription.twitterAccounts && (
+                                <>
+                                  <td className="px-4 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                      <div className="flex-shrink-0 h-10 w-10">
+                                        <img
+                                          className="h-10 w-10 rounded-full"
+                                          src={
+                                            subscription?.twitterAccounts[0]?.twitterAccount
+                                              ?.twitterProfilePictureUrl
+                                          }
+                                          alt=""
+                                        />
                                       </div>
-                                      <div className="text-sm text-gray-500">
-                                        {"@" +
-                                          subscription?.twitterAccounts[0]?.twitterAccount
-                                            ?.twitterUsername}
+                                      <div className="ml-4">
+                                        <div className="text-sm font-medium text-gray-900">
+                                          {
+                                            subscription?.twitterAccounts[0]?.twitterAccount
+                                              ?.twitterName
+                                          }
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                          {"@" +
+                                            subscription?.twitterAccounts[0]?.twitterAccount
+                                              ?.twitterUsername}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">{subscription.type}</div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {subscription.status}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {subscription.cadence}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                  {/*<a*/}
-                                  {/*  href="#"*/}
-                                  {/*  className="text-indigo-600 hover:text-indigo-900"*/}
-                                  {/*  data-subscription-id={subscription.id}*/}
-                                  {/*  onClick={handleEditSubscription}*/}
-                                  {/*>*/}
-                                  {/*  Edit*/}
-                                  {/*</a>*/}
-                                </td>
-                              </>
-                            )}
+                                  </td>
+                                  <td className="px-4 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-900">{subscription.type}</div>
+                                  </td>
+                                  <td className="px-4 py-4 whitespace-nowrap">
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                      {subscription.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {subscription.cadence}
+                                  </td>
+                                  <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a
+                                      href="#"
+                                      className="text-indigo-600 hover:text-indigo-900"
+                                      data-subscription-id={subscription.id}
+                                      onClick={handleEditSubscription}
+                                    >
+                                      Edit
+                                    </a>
+                                  </td>
+                                </>
+                              )}
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <div className="m-8 border-2 p-4">
+                  <div className="m-8 border-2 col-span-4 p-4">
                     <h2 className="w-full border-b-2 p-4 flex">
                       <span className="inline-block mx-auto">Most engagement</span>
                     </h2>

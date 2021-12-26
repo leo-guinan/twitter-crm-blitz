@@ -74,8 +74,6 @@ export default resolver.pipe(
       }
     })
 
-    console.log(JSON.stringify(calced))
-
     const stats: undefined | { [key: string]: { likes: number; retweets: number } } = calced
       ?.filter((item) => !!item)
       ?.reduce(
