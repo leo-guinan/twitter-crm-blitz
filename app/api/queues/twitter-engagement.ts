@@ -43,68 +43,70 @@ export default Queue(
       .get("tweets/search/recent", params)
       .then(async (results) => {
         console.log(JSON.stringify(results))
-        results.data.map(async (tweet) => {
-          const savedTweet = await db.tweet.upsert({
-            where: {
-              tweetId: tweet.id,
-            },
-            create: {
-              tweetId: tweet.id,
-              message: tweet.text,
-              tweetCreatedAt: tweet.created_at,
-              authorAccount: {
-                connectOrCreate: {
-                  where: {
-                    twitterId: tweet.author_id,
-                  },
-                  create: {
-                    twitterId: tweet.author_id,
+        if (results && results.data) {
+          results.data.map(async (tweet) => {
+            const savedTweet = await db.tweet.upsert({
+              where: {
+                tweetId: tweet.id,
+              },
+              create: {
+                tweetId: tweet.id,
+                message: tweet.text,
+                tweetCreatedAt: tweet.created_at,
+                authorAccount: {
+                  connectOrCreate: {
+                    where: {
+                      twitterId: tweet.author_id,
+                    },
+                    create: {
+                      twitterId: tweet.author_id,
+                    },
                   },
                 },
               },
-            },
-            update: {
-              authorAccount: {
-                connectOrCreate: {
-                  where: {
-                    twitterId: tweet.author_id,
-                  },
-                  create: {
-                    twitterId: tweet.author_id,
+              update: {
+                authorAccount: {
+                  connectOrCreate: {
+                    where: {
+                      twitterId: tweet.author_id,
+                    },
+                    create: {
+                      twitterId: tweet.author_id,
+                    },
                   },
                 },
               },
-            },
-          })
-          const public_metrics = tweet.public_metrics
-          if (public_metrics.like_count > 0) {
-            //send tweet id to queue - look up liking users
-            await twitterLikes.enqueue({
-              tweetId: tweet.id,
-              twitterAccountTwitterId: job.twitterAccountTwitterId,
             })
-          }
-          if (public_metrics.retweet_count > 0) {
-            await twitterRetweets.enqueue({
-              tweetId: tweet.id,
-              twitterAccountTwitterId: job.twitterAccountTwitterId,
-            })
-          }
-          if (public_metrics.quote_count > 0) {
-          }
-          if (public_metrics.reply_count > 0) {
-          }
+            const public_metrics = tweet.public_metrics
+            if (public_metrics.like_count > 0) {
+              //send tweet id to queue - look up liking users
+              await twitterLikes.enqueue({
+                tweetId: tweet.id,
+                twitterAccountTwitterId: job.twitterAccountTwitterId,
+              })
+            }
+            if (public_metrics.retweet_count > 0) {
+              await twitterRetweets.enqueue({
+                tweetId: tweet.id,
+                twitterAccountTwitterId: job.twitterAccountTwitterId,
+              })
+            }
+            if (public_metrics.quote_count > 0) {
+            }
+            if (public_metrics.reply_count > 0) {
+            }
 
-          if (tweet.entities) {
-            const mentions = tweet.entities.mentions
-            if (mentions) {
-              for (const mention in tweet.entities.mentions) {
-                console.log(JSON.stringify(mentions[mention]))
+            if (tweet.entities) {
+              const mentions = tweet.entities.mentions
+              if (mentions) {
+                for (const mention in tweet.entities.mentions) {
+                  console.log(JSON.stringify(mentions[mention]))
+                }
               }
             }
-          }
-          const text = tweet.text
-        })
+            const text = tweet.text
+          })
+        }
       })
       .catch((e) => {
         if ("errors" in e) {

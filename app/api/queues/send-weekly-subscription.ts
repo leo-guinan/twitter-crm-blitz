@@ -38,29 +38,31 @@ export default CronJob(
         })
 
         collectedTweets.push(
-          latestTweets.map((dbo) => {
+          ...latestTweets.map((dbo) => {
             return {
               tweetId: dbo.tweetId,
             }
           })
         )
       }
-      const newCollection = await db.tweetCollection.create({
-        data: {
-          subscription: {
-            connect: {
-              id: subscription.id,
+      if (collectedTweets.length > 0) {
+        const newCollection = await db.tweetCollection.create({
+          data: {
+            subscription: {
+              connect: {
+                id: subscription.id,
+              },
+            },
+            tweets: {
+              connect: [...collectedTweets],
             },
           },
-          tweets: {
-            connect: [...collectedTweets],
-          },
-        },
-      })
-      await emailCollection.enqueue({
-        subscriptionId: subscription.id,
-        collectionId: newCollection.id,
-      })
+        })
+        await emailCollection.enqueue({
+          subscriptionId: subscription.id,
+          collectionId: newCollection.id,
+        })
+      }
     }
   }
 )

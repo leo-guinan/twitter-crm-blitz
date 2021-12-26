@@ -10,18 +10,19 @@ export default CronJob(
       where: {
         cadence: SubscriptionCadence.DAILY,
       },
-      include: {
+      select: {
+        id: true,
         twitterAccounts: {
-          include: {
+          select: {
             twitterAccount: true,
           },
         },
       },
     })
 
-    const collectedTweets: any[] = []
-
     for (const subscription of subscriptions) {
+      const collectedTweets: any[] = []
+
       for (const twitterAccount of subscription.twitterAccounts) {
         const latestTweets = await db.tweet.findMany({
           where: {
@@ -38,29 +39,33 @@ export default CronJob(
         })
 
         collectedTweets.push(
-          latestTweets.map((dbo) => {
+          ...latestTweets.map((dbo) => {
             return {
               tweetId: dbo.tweetId,
             }
           })
         )
-      }
-      const newCollection = await db.tweetCollection.create({
-        data: {
-          subscription: {
-            connect: {
-              id: subscription.id,
+        console.log(JSON.stringify(collectedTweets))
+        if (collectedTweets.length > 0) {
+          const newCollection = await db.tweetCollection.create({
+            data: {
+              name: `Daily Collection for subscription: ${subscription.id}`,
+              subscription: {
+                connect: {
+                  id: subscription.id,
+                },
+              },
+              tweets: {
+                connect: [...collectedTweets],
+              },
             },
-          },
-          tweets: {
-            connect: [...collectedTweets],
-          },
-        },
-      })
-      await emailCollection.enqueue({
-        subscriptionId: subscription.id,
-        collectionId: newCollection.id,
-      })
+          })
+          await emailCollection.enqueue({
+            subscriptionId: subscription.id,
+            collectionId: newCollection.id,
+          })
+        }
+      }
     }
   }
 )
