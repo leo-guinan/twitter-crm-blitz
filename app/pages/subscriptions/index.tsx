@@ -3,12 +3,12 @@ import {
   BlitzPage,
   getAntiCSRFToken,
   Head,
+  Link,
   Routes,
   useMutation,
   usePaginatedQuery,
   useQuery,
   useRouter,
-  Link,
 } from "blitz"
 import Layout from "app/pages/feather/layouts/Layout"
 import getSubscriptions from "app/subscriptions/queries/getSubscriptions"
@@ -19,7 +19,6 @@ import updateSubscription from "app/subscriptions/mutations/updateSubscription"
 import isSubscribedToUser from "app/subscriptions/queries/isSubscribedToUser"
 import getNumberOfActivePersonalSubscriptions from "../../subscriptions/queries/getNumberOfActivePersonalSubscriptions"
 import { useCurrentOrganization } from "../../core/hooks/useCurrentOrganization"
-import UpgradePlan from "../../core/components/UpgradePlan"
 import AddEmailModal from "../../core/components/AddEmailModal"
 import updateUserEmail from "../../users/mutations/updateUserEmail"
 import { useCurrentUser } from "../../core/hooks/useCurrentUser"
@@ -447,7 +446,6 @@ export const SubscriptionsList = () => {
                   </div>
                 </div>
               </div>
-              <UpgradePlan open={openPlanModal} setOpen={setOpenPlanModal} />
               <AddEmailModal
                 email={email}
                 setEmail={setEmail}
