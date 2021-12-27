@@ -1,7 +1,7 @@
 interface AuthorItem {
-  twitterName: string
-  twitterUsername: string
-  twitterProfilePictureUrl: string
+  twitterName: string | null
+  twitterUsername: string | null
+  twitterProfilePictureUrl: string | null
 }
 
 interface TweetItem {
@@ -33,11 +33,14 @@ const Tweet = ({ tweet }: TweetProps) => {
               href="#"
               className="flex flex-row items-center focus:outline-none focus:shadow-outline rounded-lg"
             >
-              <img
-                className="rounded-full h-8 w-8 object-cover"
-                src={tweet.authorAccount ? tweet.authorAccount.twitterProfilePictureUrl : ""}
-                alt=""
-              />
+              {tweet.authorAccount && tweet.authorAccount.twitterProfilePictureUrl && (
+                <img
+                  className="rounded-full h-8 w-8 object-cover"
+                  src={tweet.authorAccount ? tweet.authorAccount.twitterProfilePictureUrl : ""}
+                  alt=""
+                />
+              )}
+
               <p className="ml-2 text-base font-medium">
                 {tweet.authorAccount ? tweet.authorAccount.twitterName : ""}
               </p>

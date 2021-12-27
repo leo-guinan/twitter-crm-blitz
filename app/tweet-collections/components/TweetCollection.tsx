@@ -1,9 +1,9 @@
 import Tweet from "./Tweet"
 
 interface AuthorItem {
-  twitterName: string
-  twitterProfilePictureUrl: string
-  twitterUsername: string
+  twitterName: string | null
+  twitterProfilePictureUrl: string | null
+  twitterUsername: string | null
 }
 
 interface TweetItem {
