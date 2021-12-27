@@ -1,16 +1,16 @@
 import Tweet from "./Tweet"
 
 interface AuthorItem {
-  name: string
-  profilePictureUrl: string
-  username: string
+  twitterName: string
+  twitterProfilePictureUrl: string
+  twitterUsername: string
 }
 
 interface TweetItem {
   tweetId: string
   message: string
   tweetCreatedAt: any
-  author: AuthorItem | null
+  authorAccount: AuthorItem | null
 }
 
 interface TweetCollectionProps {

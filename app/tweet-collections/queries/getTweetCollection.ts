@@ -32,12 +32,12 @@ export default resolver.pipe(
             tweetId: true,
             tweetCreatedAt: true,
             message: true,
-            author: {
+            authorAccount: {
               select: {
                 twitterId: true,
-                name: true,
-                profilePictureUrl: true,
-                username: true,
+                twitterName: true,
+                twitterProfilePictureUrl: true,
+                twitterUsername: true,
               },
             },
           },
@@ -47,8 +47,7 @@ export default resolver.pipe(
 
     if (!tweetCollection) throw new NotFoundError()
 
-    if (tweetCollection?.subscription?.owner?.id === ctx.session.orgId)
-      return tweetCollection.tweets
+    if (tweetCollection?.subscription?.owner?.id === orgId) return tweetCollection.tweets
 
     return []
   }

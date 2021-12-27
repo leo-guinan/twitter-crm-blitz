@@ -80,6 +80,7 @@ export default Queue(
       })
   },
   {
+    exclusive: true,
     retry: ["5min", "10min", "20min"],
   }
 )

@@ -70,14 +70,14 @@ export default Queue(
                   tweetId: tweet.id,
                   message: tweet.text,
                   tweetCreatedAt: tweet.created_at,
-                  author: {
+                  authorAccount: {
                     connect: {
                       twitterId: tweet.author_id,
                     },
                   },
                 },
                 update: {
-                  author: {
+                  authorAccount: {
                     connect: {
                       twitterId: tweet.author_id,
                     },

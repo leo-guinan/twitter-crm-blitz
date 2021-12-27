@@ -1,14 +1,14 @@
 interface AuthorItem {
-  name: string
-  username: string
-  profilePictureUrl: string
+  twitterName: string
+  twitterUsername: string
+  twitterProfilePictureUrl: string
 }
 
 interface TweetItem {
   tweetId: string
   message: string
   tweetCreatedAt: Date
-  author: AuthorItem | null
+  authorAccount: AuthorItem | null
 }
 
 interface TweetProps {
@@ -19,7 +19,9 @@ const Tweet = ({ tweet }: TweetProps) => {
   return (
     <a
       href={
-        tweet.author ? `https://twitter.com/${tweet.author.username}/status/${tweet.tweetId}` : ""
+        tweet.authorAccount
+          ? `https://twitter.com/${tweet.authorAccount.twitterUsername}/status/${tweet.tweetId}`
+          : ""
       }
       target="_blank"
       rel="noreferrer"
@@ -33,10 +35,12 @@ const Tweet = ({ tweet }: TweetProps) => {
             >
               <img
                 className="rounded-full h-8 w-8 object-cover"
-                src={tweet.author ? tweet.author.profilePictureUrl : ""}
+                src={tweet.authorAccount ? tweet.authorAccount.twitterProfilePictureUrl : ""}
                 alt=""
               />
-              <p className="ml-2 text-base font-medium">{tweet.author ? tweet.author.name : ""}</p>
+              <p className="ml-2 text-base font-medium">
+                {tweet.authorAccount ? tweet.authorAccount.twitterName : ""}
+              </p>
             </a>
           </div>
           <div className="flex flex-row items-center">
