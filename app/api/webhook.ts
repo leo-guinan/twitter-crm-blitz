@@ -41,7 +41,6 @@ export default async function webhook(req: BlitzApiRequest, res: BlitzApiRespons
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription
 
-      console.log(`${JSON.stringify(subscription)}`)
       const plan = await db.plan.findFirst({
         where: {
           OR: [

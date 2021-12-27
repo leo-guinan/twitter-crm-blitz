@@ -64,8 +64,6 @@ const Pricing = () => {
 
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
     const planToSubscribeTo = plans.find((plan) => plan.id == event.target.dataset.plan)
-    console.log(JSON.stringify(planToSubscribeTo))
-    // console.log("plan: " + prices[event.target.dataset.plan])
     if (!planToSubscribeTo!.stripeMonthlyPlanId || !planToSubscribeTo!.stripeAnnualPlanId) return
     let lineItem = {
       priceId:

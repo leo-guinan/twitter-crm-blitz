@@ -65,6 +65,7 @@ export default async function createCheckoutSession(
     line_items: [lineItem],
     success_url: `${env.DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${env.DOMAIN}/cancelled`,
+    allow_promotion_codes: true,
   })
 
   return {

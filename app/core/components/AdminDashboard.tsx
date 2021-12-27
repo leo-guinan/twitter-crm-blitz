@@ -152,7 +152,6 @@ const AdminDashboard = () => {
         <section>
           <Button onClick={handleRunTweetCollection} label="Run Tweet Collection" color="red" />
         </section>
-        <h1>Stripe Publishable Key: {process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}</h1>
       </section>
     </>
   )
