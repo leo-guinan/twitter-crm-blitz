@@ -3,10 +3,12 @@ import {
   BlitzPage,
   getAntiCSRFToken,
   Head,
+  Routes,
   useMutation,
   usePaginatedQuery,
   useQuery,
   useRouter,
+  Link,
 } from "blitz"
 import Layout from "app/pages/feather/layouts/Layout"
 import getSubscriptions from "app/subscriptions/queries/getSubscriptions"
@@ -236,25 +238,20 @@ export const SubscriptionsList = () => {
                   {maxSubscriptionsExceeded && (
                     <span className={`inline-block p-4 m-1 text-red-700`}>
                       You are over your subscription limit. Please deactivate some subscriptions or
-                      <a
-                        className="cursor-pointer underline"
-                        onClick={() => setOpenPlanModal(true)}
-                      >
-                        {" "}
-                        upgrade your plan.
-                      </a>
+                      <Link href={Routes.UpgradeProfilePage()}>
+                        <a className="cursor-pointer underline"> upgrade your plan.</a>
+                      </Link>
                     </span>
                   )}
 
                   {maxSubscriptionsReached && (
                     <span>
                       Maximum subscriptions reached.
-                      <a
-                        className="cursor-pointer underline"
-                        onClick={() => setOpenPlanModal(true)}
-                      >
-                        Please upgrade your plan for more.
-                      </a>
+                      <Link href={Routes.UpgradeProfilePage()}>
+                        <a className="cursor-pointer underline">
+                          Please upgrade your plan for more.
+                        </a>
+                      </Link>
                     </span>
                   )}
 
@@ -262,10 +259,9 @@ export const SubscriptionsList = () => {
                     <span>
                       {numberOfActivePersonalSubscriptions} /{" "}
                       {organization?.plan?.personalSubscriptionQuota} subscriptions used
-                      <a className="cursor-pointer underline" onClick={handleOpenPlanModal}>
-                        {" "}
-                        (Upgrade your Plan).
-                      </a>
+                      <Link href={Routes.UpgradeProfilePage()}>
+                        <a className="cursor-pointer underline"> (Upgrade your Plan).</a>
+                      </Link>
                     </span>
                   )}
                 </span>
