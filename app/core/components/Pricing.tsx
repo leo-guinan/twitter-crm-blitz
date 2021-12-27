@@ -61,9 +61,7 @@ const Pricing = () => {
     if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       throw new Error("Stripe publishable key missing")
     }
-    if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
-      throw new Error("Stripe publishable key missing")
-    }
+
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
     const planToSubscribeTo = plans.find((plan) => plan.id == event.target.dataset.plan)
     console.log(JSON.stringify(planToSubscribeTo))
