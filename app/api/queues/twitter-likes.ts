@@ -70,7 +70,7 @@ export default Queue(
           },
           data: {
             tweetLookupStatus: TweetLookupStatus.ERROR,
-            error: e.message,
+            errorMessage: e.message,
           },
         })
         if ("errors" in e) {
