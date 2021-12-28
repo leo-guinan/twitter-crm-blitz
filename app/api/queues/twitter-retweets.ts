@@ -65,10 +65,10 @@ export default Queue(
       .catch(async (e) => {
         await db.tweetLookupReport.update({
           where: {
-            reportId: job.reportId,
+            id: job.reportId,
           },
           data: {
-            status: TweetLookupStatus.Error,
+            tweetLookupStatus: TweetLookupStatus.ERROR,
             error: e.message,
           },
         })
