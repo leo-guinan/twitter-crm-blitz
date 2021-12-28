@@ -2,11 +2,20 @@ import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
 import twitterLikes from "./twitter-likes"
 import twitterRetweets from "./twitter-retweets"
-import db from "db"
+import db, { TwitterAccountRefreshReportStatus, TweetLookupStatus } from "db"
 
 export default Queue(
   "api/queues/twitter-engagement", // 👈 the route it's reachable on
-  async (job: { twitterAccountTwitterId }) => {
+  async (job: { twitterAccountTwitterId; reportId }) => {
+    await db.twitterAccountRefreshReport.update({
+      where: {
+        id: job.reportId,
+      },
+      data: {
+        status: TwitterAccountRefreshReportStatus.PROCESSING,
+      },
+    })
+
     let client
     const authenticatedUser = await db.twitterAccount.findFirst({
       where: {
@@ -42,7 +51,6 @@ export default Queue(
     client
       .get("tweets/search/recent", params)
       .then(async (results) => {
-        console.log(JSON.stringify(results))
         if (results && results.data) {
           results.data.map(async (tweet) => {
             const savedTweet = await db.tweet.upsert({
@@ -77,18 +85,35 @@ export default Queue(
                 },
               },
             })
+            const savedTweetReport = await db.tweetLookupReport.create({
+              data: {
+                tweetLookupStatus: TweetLookupStatus.PROCESSING,
+                containingTwitterAccountRefreshReport: {
+                  connect: {
+                    id: job.reportId,
+                  },
+                },
+                tweetLookedUp: {
+                  connect: {
+                    tweetId: savedTweet.tweetId,
+                  },
+                },
+              },
+            })
             const public_metrics = tweet.public_metrics
             if (public_metrics.like_count > 0) {
               //send tweet id to queue - look up liking users
               await twitterLikes.enqueue({
                 tweetId: tweet.id,
                 twitterAccountTwitterId: job.twitterAccountTwitterId,
+                reportId: savedTweetReport.id,
               })
             }
             if (public_metrics.retweet_count > 0) {
               await twitterRetweets.enqueue({
                 tweetId: tweet.id,
                 twitterAccountTwitterId: job.twitterAccountTwitterId,
+                reportId: savedTweetReport.id,
               })
             }
             if (public_metrics.quote_count > 0) {
@@ -104,11 +129,36 @@ export default Queue(
                 }
               }
             }
-            const text = tweet.text
+
+            await db.tweetLookupReport.update({
+              where: {
+                id: savedTweetReport.id,
+              },
+              data: {
+                tweetLookupStatus: TweetLookupStatus.COMPLETE,
+              },
+            })
+          })
+          await db.twitterAccountRefreshReport.update({
+            where: {
+              id: job.reportId,
+            },
+            data: {
+              status: TwitterAccountRefreshReportStatus.COMPLETE,
+            },
           })
         }
       })
-      .catch((e) => {
+      .catch(async (e) => {
+        await db.twitterAccountRefreshReport.update({
+          where: {
+            id: job.reportId,
+          },
+          data: {
+            status: TwitterAccountRefreshReportStatus.ERROR,
+            errorMessage: e.message,
+          },
+        })
         if ("errors" in e) {
           // Twitter API error
           if (e.errors[0].code === 88) {

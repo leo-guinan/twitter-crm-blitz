@@ -1,10 +1,10 @@
 import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
-import db from "../../../db"
+import db, { TweetLookupStatus } from "../../../db"
 
 export default Queue(
   "api/queues/twitter-retweets", // 👈 the route it's reachable on
-  async (job: { tweetId; twitterAccountTwitterId }) => {
+  async (job: { tweetId; twitterAccountTwitterId; reportId }) => {
     let client
     const authenticatedUser = await db.twitterAccount.findFirst({
       where: {
@@ -62,7 +62,16 @@ export default Queue(
           })
         }
       })
-      .catch((e) => {
+      .catch(async (e) => {
+        await db.tweetLookupReport.update({
+          where: {
+            reportId: job.reportId,
+          },
+          data: {
+            status: TweetLookupStatus.Error,
+            error: e.message,
+          },
+        })
         if ("errors" in e) {
           // Twitter API error
           if (e.errors[0].code === 88) {

@@ -46,6 +46,7 @@ model TwitterAccount {
   likes                    Tweet[]                          @relation("likes")
   retweets                 Tweet[]                          @relation("retweets")
   tweets                   Tweet[]                          @relation("tweets")
+  accountReports           TwitterAccountRefreshReport[]
 }
 
 enum ConsentStatus {
@@ -174,23 +175,24 @@ model TwitterAccountsInSubscriptions {
 }
 
 model Tweet {
-  tweetId         String            @id
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  tweetId         String              @id
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
   tweetCreatedAt  DateTime
   message         String
-  likedBy         TwitterUser[]     @relation("liked")
-  retweetedBy     TwitterUser[]     @relation("retweeted")
-  likes           TwitterAccount[]  @relation("likes")
-  retweets        TwitterAccount[]  @relation("retweets")
-  inResponseTo    Tweet?            @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
+  likedBy         TwitterUser[]       @relation("liked")
+  retweetedBy     TwitterUser[]       @relation("retweeted")
+  likes           TwitterAccount[]    @relation("likes")
+  retweets        TwitterAccount[]    @relation("retweets")
+  inResponseTo    Tweet?              @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
   inResponseToId  String?
-  responses       Tweet[]           @relation(name: "responses")
-  author          TwitterUser?      @relation(name: "wrote", fields: [authorId], references: [twitterId])
+  responses       Tweet[]             @relation(name: "responses")
+  author          TwitterUser?        @relation(name: "wrote", fields: [authorId], references: [twitterId])
   authorId        String?
-  authorAccount   TwitterAccount?   @relation(name: "tweets", fields: [authorAccountId], references: [id])
+  authorAccount   TwitterAccount?     @relation(name: "tweets", fields: [authorAccountId], references: [id])
   authorAccountId Int?
   collections     TweetCollection[]
+  tweetReports    TweetLookupReport[]
 }
 
 enum SubscriptionCadence {
@@ -275,4 +277,50 @@ enum EmailStatus {
   PROCESSING
   SENT
   ERROR
+}
+
+enum TwitterAccountRefreshReportStatus {
+  QUEUED
+  PROCESSING
+  COMPLETE
+  ERROR
+}
+
+enum TweetLookupStatus {
+  PROCESSING
+  COMPLETE
+  ERROR
+}
+
+model DailyRefreshReport {
+  id                     Int                           @id @default(autoincrement())
+  createdAt              DateTime                      @default(now())
+  updatedAt              DateTime                      @updatedAt
+  twitterAccountsUpdated TwitterAccountRefreshReport[]
+
+}
+
+model TwitterAccountRefreshReport {
+  id                      Int                               @id @default(autoincrement())
+  createdAt               DateTime                          @default(now())
+  updatedAt               DateTime                          @updatedAt
+  twitterAccount          TwitterAccount?                   @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId        Int
+  status                  TwitterAccountRefreshReportStatus
+  containingDailyReport   DailyRefreshReport?               @relation(fields: [containingDailyReportId], references: [id])
+  containingDailyReportId Int?
+  tweetsLookedUp          TweetLookupReport[]
+  errorMessage            String?
+}
+
+model TweetLookupReport {
+  id                                      Int                          @id @default(autoincrement())
+  createdAt                               DateTime                     @default(now())
+  updatedAt                               DateTime                     @updatedAt
+  tweetLookedUp                           Tweet                        @relation(fields: [tweetLookedUpId], references: [tweetId], onDelete: SetNull)
+  tweetLookedUpId                         String
+  tweetLookupStatus                       TweetLookupStatus
+  containingTwitterAccountRefreshReport   TwitterAccountRefreshReport? @relation(fields: [containingTwitterAccountRefreshReportId], references: [id])
+  containingTwitterAccountRefreshReportId Int?
+  errorMessage                            String?
 }
