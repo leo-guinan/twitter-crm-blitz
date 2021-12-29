@@ -15,6 +15,8 @@ export default CronJob(
       },
     })
 
+    console.log(`Refreshing ${accountsToRefresh.length} accounts`)
+
     const report = await db.dailyRefreshReport.create({
       data: {},
     })

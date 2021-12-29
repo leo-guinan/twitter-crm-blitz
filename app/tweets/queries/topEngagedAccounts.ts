@@ -39,14 +39,12 @@ export default resolver.pipe(
       if (tweet.likes.length === 0 && tweet.retweets.length === 0) {
         //pass
       } else {
-        console.log(JSON.stringify(tweet))
         const stats = {}
         for (const like of tweet.likes) {
           if (!twitterAccounts[like.id]) {
             twitterAccounts[like.id] = like
           }
           //save like to twitter account key
-          console.log(JSON.stringify(like))
           if (!stats[like.id]) {
             stats[like.id] = {
               likes: 1,

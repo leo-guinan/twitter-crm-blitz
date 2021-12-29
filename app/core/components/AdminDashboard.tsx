@@ -99,6 +99,16 @@ const AdminDashboard = () => {
     })
   }
 
+  const handleFixErrors = async () => {
+    await window.fetch("/api/admin/fix-errors", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
   return (
     <>
       <section>
@@ -151,6 +161,9 @@ const AdminDashboard = () => {
         </section>
         <section>
           <Button onClick={handleRunTweetCollection} label="Run Tweet Collection" color="red" />
+        </section>
+        <section>
+          <Button onClick={handleFixErrors} label="fix errors" color="blue" />
         </section>
       </section>
     </>

@@ -30,10 +30,6 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     await twitterRefreshUser.enqueue({
       twitterId: account.twitterId,
     })
-    await twitterEngagement.enqueue({
-      twitterAccountTwitterId: account.twitterId,
-      reportId: twitterAccountRefreshReport.id,
-    })
   }
   res.statusCode = 200
   res.setHeader("Content-Type", "application/json")

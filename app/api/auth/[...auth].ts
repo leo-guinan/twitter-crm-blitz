@@ -2,7 +2,8 @@
 import { passportAuth } from "blitz"
 
 import TwitterStrategy from "passport-twitter"
-import db, { MembershipRole } from "db"
+import db, { MembershipRole, TwitterAccountRefreshReportStatus } from "db"
+import twitterEngagement from "../queues/twitter-engagement"
 
 export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/feather",
@@ -37,6 +38,8 @@ export default passportAuth(({ ctx, req, res }) => ({
               twitterUsername: profile.username,
             },
             select: {
+              createdAt: true,
+              updatedAt: true,
               twitterToken: true,
               twitterSecretToken: true,
               twitterUsername: true,
@@ -109,19 +112,37 @@ export default passportAuth(({ ctx, req, res }) => ({
               roles.push(organization.memberships[0].role)
               orgId = organization.id
             }
+            const report = await db.dailyRefreshReport.create({
+              data: {},
+            })
+            const twitterAccountRefreshReport = await db.twitterAccountRefreshReport.create({
+              data: {
+                status: TwitterAccountRefreshReportStatus.QUEUED,
+                containingDailyReport: {
+                  connect: {
+                    id: report.id,
+                  },
+                },
+                twitterAccount: {
+                  connect: {
+                    twitterId: profile.id,
+                  },
+                },
+              },
+            })
+            await twitterEngagement.enqueue({
+              twitterAccountTwitterId: profile.id,
+              reportId: twitterAccountRefreshReport.id,
+            })
           } else {
             roles.push(twitterAccountLoggingIn?.organization?.memberships[0]?.user.role)
             roles.push(twitterAccountLoggingIn?.organization?.memberships[0]?.role)
             orgId = twitterAccountLoggingIn.organization.id
           }
 
-          console.log(`Twitter User: ${profile.username}`)
-
           const user = organization
             ? organization.memberships[0].user
             : twitterAccountLoggingIn?.organization?.memberships[0]?.user
-
-          console.log(`User: ${JSON.stringify(user)}`)
 
           if (user) {
             await ctx.session.$create({

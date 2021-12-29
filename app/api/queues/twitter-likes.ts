@@ -21,6 +21,7 @@ export default Queue(
         access_token_key: authenticatedUser.twitterToken as string, // from your User (oauth_token)
         access_token_secret: authenticatedUser.twitterSecretToken as string, // from your User (oauth_token_secret)
       })
+      console.log("Using authenticated user")
     } else {
       client = new Twitter({
         subdomain: "api", // "api" is the default (change for other subdomains)
@@ -30,6 +31,7 @@ export default Queue(
         consumer_secret: process.env.TWITTER_CONSUMER_SECRET as string, // from Twitter.
         bearer_token: process.env.TWITTER_BEARER_TOKEN as string,
       })
+      console.log("Using bearer token instead")
     }
 
     const params = {
@@ -74,6 +76,7 @@ export default Queue(
           },
         })
         if ("errors" in e) {
+          console.log("This should be where the rate error ends up")
           // Twitter API error
           if (e.errors[0].code === 88) {
             // rate limit exceeded
@@ -91,6 +94,5 @@ export default Queue(
   },
   {
     exclusive: true,
-    retry: ["5min", "10min", "20min"],
   }
 )
