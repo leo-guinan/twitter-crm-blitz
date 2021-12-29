@@ -73,7 +73,7 @@ export default resolver.pipe(
     })
 
     const stats: undefined | { [key: string]: { likes: number; retweets: number } } = calced
-      ?.filter((item) => !!item)
+      ?.filter((item) => !!item && item)
       ?.reduce(
         (
           acc: { [key: string]: { likes: number; retweets: number } },
@@ -119,7 +119,7 @@ export default resolver.pipe(
           }
         )
 
-      const entries = totals.slice(0, 10)
+      const entries = totals.filter((item) => item.id !== `${twitterAccount.id}`).slice(0, 10)
       return entries.map((value: { id: string; likes: number; retweets: number }) => {
         return twitterAccounts[value.id]
       })
