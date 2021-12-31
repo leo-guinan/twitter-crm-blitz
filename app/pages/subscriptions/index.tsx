@@ -139,11 +139,12 @@ export const SubscriptionsList = () => {
     const newSubscription = {
       twitterUsers: [twitterAccountToSubscribeTo],
       name: `New Subscription`,
-      id: "temp",
+      id: twitterAccountToSubscribeTo.twitterId,
       type: "PERSONAL",
       status: "ACTIVE",
       cadence: "WEEKLY",
     }
+    console.log(`adding new subscription: ${JSON.stringify(newSubscription)}`)
     setQueryData(
       { subscriptions: [newSubscription, ...subscriptions], hasMore },
       { refetch: false }
@@ -211,7 +212,7 @@ export const SubscriptionsList = () => {
                 className="grid-cols-1"
               />
               <p className="mt-2 text-sm text-gray-500" id="email-description">
-                Enter the username to lookup..
+                Enter the Twitter username to lookup, without the &apos;@&apos; at the beginning.
               </p>
             </div>
           </div>
@@ -223,6 +224,17 @@ export const SubscriptionsList = () => {
               actionHandler={handleSubscribeToUser}
               actionCTA="Subscribe"
               actionPerformed={isSubscribedToTwitterUser}
+              view="standard"
+            />
+          </section>
+        )}
+        {!twitterUserToSubscribeTo.twitterId && twitterUserToSubscribeTo.twitterName && (
+          <section className="border-2 mx-4 p-6">
+            <TwitterUserList
+              twitterUsers={[twitterUserToSubscribeTo]}
+              actionHandler={handleSubscribeToUser}
+              actionCTA="Please try a different user name."
+              actionPerformed={() => true}
               view="standard"
             />
           </section>

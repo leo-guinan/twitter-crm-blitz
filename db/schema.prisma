@@ -47,6 +47,7 @@ model TwitterAccount {
   retweets                 Tweet[]                          @relation("retweets")
   tweets                   Tweet[]                          @relation("tweets")
   accountReports           TwitterAccountRefreshReport[]
+  rateLimited              Boolean                          @default(false)
 }
 
 enum ConsentStatus {

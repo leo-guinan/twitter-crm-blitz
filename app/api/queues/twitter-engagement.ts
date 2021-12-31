@@ -44,7 +44,7 @@ export default Queue(
     }
     const params = {
       query: `from:${job.twitterAccountTwitterId}`,
-      max_results: 75,
+      max_results: 100,
       "tweet.fields": "public_metrics,entities,created_at,author_id",
       "user.fields": "entities",
     }

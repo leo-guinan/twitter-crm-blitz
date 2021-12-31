@@ -49,28 +49,40 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
         }
 
         await client.get(`users/by/username/${twitterUsername}`, params).then(async (results) => {
-          console.log(JSON.stringify(results.data))
-          const lookedupUser = await db.twitterAccount.upsert({
-            where: {
-              twitterId: results.data.id,
-            },
-            create: {
-              twitterId: results.data.id,
-              twitterUsername: results.data.username,
-              twitterName: results.data.name,
-              twitterBio: results.data.description,
-              twitterProfilePictureUrl: results.data.profile_image_url,
-            },
-            update: {
-              twitterUsername: results.data.username,
-              twitterName: results.data.name,
-              twitterBio: results.data.description,
-              twitterProfilePictureUrl: results.data.profile_image_url,
-            },
-          })
-          res.statusCode = 200
-          res.setHeader("Content-Type", "application/json")
-          res.end(JSON.stringify({ ...lookedupUser }))
+          if (results.data) {
+            const lookedupUser = await db.twitterAccount.upsert({
+              where: {
+                twitterId: results.data.id,
+              },
+              create: {
+                twitterId: results.data.id,
+                twitterUsername: results.data.username,
+                twitterName: results.data.name,
+                twitterBio: results.data.description,
+                twitterProfilePictureUrl: results.data.profile_image_url,
+              },
+              update: {
+                twitterUsername: results.data.username,
+                twitterName: results.data.name,
+                twitterBio: results.data.description,
+                twitterProfilePictureUrl: results.data.profile_image_url,
+              },
+            })
+            res.statusCode = 200
+            res.setHeader("Content-Type", "application/json")
+            res.end(JSON.stringify({ ...lookedupUser }))
+          } else {
+            res.statusCode = 200
+            res.setHeader("Content-Type", "application/json")
+            res.end(
+              JSON.stringify({
+                twitterId: "",
+                twitterName: `No user found with the name: ${twitterUsername}`,
+                twitterUsername: "",
+                twitterProfilePictureUrl: "",
+              })
+            )
+          }
         })
       }
     } catch (e) {

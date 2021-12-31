@@ -1,6 +1,7 @@
 import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
 import db, { TweetLookupStatus } from "db"
+import rescheduler from "./rescheduler"
 
 export default Queue(
   "api/queues/twitter-likes", // 👈 the route it's reachable on
@@ -11,6 +12,9 @@ export default Queue(
         twitterId: job.twitterAccountTwitterId,
       },
     })
+    if (authenticatedUser && authenticatedUser.rateLimited) {
+      await rescheduler.enqueue({ type: "likes", payload: job })
+    }
     if (authenticatedUser && authenticatedUser.twitterToken) {
       client = new Twitter({
         subdomain: "api", // "api" is the default (change for other subdomains)
@@ -66,6 +70,14 @@ export default Queue(
         }
       })
       .catch(async (e) => {
+        await db.twitterAccount.update({
+          where: {
+            twitterId: job.twitterAccountTwitterId,
+          },
+          data: {
+            rateLimited: true,
+          },
+        })
         await db.tweetLookupReport.update({
           where: {
             id: job.reportId,
@@ -73,6 +85,12 @@ export default Queue(
           data: {
             tweetLookupStatus: TweetLookupStatus.ERROR,
             errorMessage: e.message,
+          },
+        })
+        await rescheduler.enqueue({
+          type: "rateLimited",
+          payload: {
+            twitterAccountTwitterId: job.twitterAccountTwitterId,
           },
         })
         if ("errors" in e) {
