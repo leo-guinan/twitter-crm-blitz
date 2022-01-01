@@ -1,9 +1,9 @@
 interface ITwitterUser {
-  twitterId: string
-  twitterUsername: string
-  twitterName: string
-  twitterBio: string
-  twitterProfilePictureUrl: string
+  twitterId: string | null
+  twitterUsername: string | null
+  twitterName: string | null
+  twitterBio: string | null
+  twitterProfilePictureUrl: string | null
 }
 
 interface ITwitterUserProps {
@@ -25,7 +25,13 @@ const TwitterUser = ({
     <>
       <div className="flex items-center space-x-4">
         <div className="flex-shrink-0">
-          <img className="h-8 w-8 rounded-full" src={twitterUser.twitterProfilePictureUrl} alt="" />
+          {twitterUser.twitterProfilePictureUrl && (
+            <img
+              className="h-8 w-8 rounded-full"
+              src={twitterUser.twitterProfilePictureUrl}
+              alt=""
+            />
+          )}
         </div>
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-900">{twitterUser.twitterName}</p>

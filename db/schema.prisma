@@ -48,6 +48,7 @@ model TwitterAccount {
   tweets                   Tweet[]                          @relation("tweets")
   accountReports           TwitterAccountRefreshReport[]
   rateLimited              Boolean                          @default(false)
+  communityMemberships     CommunityMembership[]
 }
 
 enum ConsentStatus {
@@ -324,4 +325,31 @@ model TweetLookupReport {
   containingTwitterAccountRefreshReport   TwitterAccountRefreshReport? @relation(fields: [containingTwitterAccountRefreshReportId], references: [id])
   containingTwitterAccountRefreshReportId Int?
   errorMessage                            String?
+}
+
+model Community {
+  id               Int                   @id @default(autoincrement())
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  name             String                @default("Community")
+  description      String
+  communityMembers CommunityMembership[]
+
+}
+
+model CommunityMembership {
+  id          Int                     @id @default(autoincrement())
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  community   Community               @relation(fields: [communityId], references: [id])
+  communityId Int
+  account     TwitterAccount          @relation(fields: [accountId], references: [id])
+  accountId   Int
+  role        CommunityMembershipRole @default(MEMBER)
+}
+
+enum CommunityMembershipRole {
+  MEMBER
+  ADMIN
+  OWNER
 }

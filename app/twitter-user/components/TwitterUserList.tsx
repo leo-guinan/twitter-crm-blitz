@@ -1,11 +1,11 @@
 import TwitterUser from "./TwitterUser"
 
 interface ITwitterUser {
-  twitterId: string
-  twitterUsername: string
-  twitterName: string
-  twitterBio: string
-  twitterProfilePictureUrl: string
+  twitterId: string | null
+  twitterUsername: string | null
+  twitterName: string | null
+  twitterBio: string | null
+  twitterProfilePictureUrl: string | null
 }
 
 interface ITwitterUserListProps {
