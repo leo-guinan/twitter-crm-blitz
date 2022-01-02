@@ -47,8 +47,7 @@ model TwitterAccount {
   retweets                 Tweet[]                          @relation("retweets")
   tweets                   Tweet[]                          @relation("tweets")
   accountReports           TwitterAccountRefreshReport[]
-  rateLimited              Boolean                    console.log(JSON.stringify(collectedTweets))
-  @default(false)
+  rateLimited              Boolean                          @default(false)
   communityMemberships     CommunityMembership[]
 }
 
