@@ -45,7 +45,6 @@ export default CronJob(
             }
           })
         )
-        console.log(JSON.stringify(collectedTweets))
         if (collectedTweets.length > 0) {
           const newCollection = await db.tweetCollection.create({
             data: {

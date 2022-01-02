@@ -19,9 +19,8 @@ export default CronJob(
       },
     })
 
-    const collectedTweets: any[] = []
-
     for (const subscription of subscriptions) {
+      const collectedTweets: any[] = []
       for (const twitterAccount of subscription.twitterAccounts) {
         const latestTweets = await db.tweet.findMany({
           where: {
