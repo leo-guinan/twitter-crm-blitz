@@ -40,6 +40,7 @@
     "convertkit-node": "2.0.0",
     "date-fns": "2.23.0",
     "envsafe": "2.0.3",
+    "fathom-client": "3.2.0",
     "final-form": "4.20.2",
     "passport-twitter": "1.0.4",
     "quirrel": "1.7.1",

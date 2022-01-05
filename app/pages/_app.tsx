@@ -6,13 +6,33 @@ import {
   ErrorComponent,
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
+  useRouter,
 } from "blitz"
+import * as Fathom from "fathom-client"
+
 import LoginForm from "app/auth/components/LoginForm"
 import "@stripe/stripe-js"
 import "app/core/styles/index.css"
+import { useEffect } from "react"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
+  const router = useRouter()
+  useEffect(() => {
+    Fathom.load(process.env.NEXT_PUBLIC_FATHOM_SITE_ID!, {
+      includedDomains: ["feathercrm.io", "www.feathercrm.io"],
+    })
+
+    function onRouteChangeComplete() {
+      Fathom.trackPageview()
+    }
+    //record page view on route change
+    router.events.on("routeChangeComplete", onRouteChangeComplete)
+
+    return () => {
+      router.events.off("routeChangeComplete", onRouteChangeComplete)
+    }
+  }, [])
 
   return (
     <ErrorBoundary
