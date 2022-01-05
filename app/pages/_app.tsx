@@ -21,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     Fathom.load(process.env.NEXT_PUBLIC_FATHOM_SITE_ID!, {
       includedDomains: ["feathercrm.io", "www.feathercrm.io"],
+      url: "https://successful-gorgeous.feathercrm.io/script.js",
     })
 
     function onRouteChangeComplete() {
