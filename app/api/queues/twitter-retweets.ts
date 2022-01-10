@@ -43,26 +43,50 @@ export default Queue(
       .then(async (results) => {
         if (results && results.data) {
           results.data.map(async (user) => {
-            await db.tweet.update({
-              where: {
-                tweetId: job.tweetId,
-              },
-              data: {
-                retweets: {
-                  connectOrCreate: {
-                    where: {
-                      twitterId: user.id,
-                    },
-                    create: {
-                      twitterId: user.id,
-                      twitterName: user.name,
-                      twitterUsername: user.username,
-                      twitterProfilePictureUrl: user.profile_image_url,
+            try {
+              await db.tweet.update({
+                where: {
+                  tweetId: job.tweetId,
+                },
+                data: {
+                  retweets: {
+                    connectOrCreate: {
+                      where: {
+                        twitterId: user.id,
+                      },
+                      create: {
+                        twitterId: user.id,
+                        twitterName: user.name,
+                        twitterUsername: user.username,
+                        twitterProfilePictureUrl: user.profile_image_url,
+                      },
                     },
                   },
                 },
-              },
-            })
+              })
+            } catch (e) {
+              console.log("Error saving retweet. Trying again due to probable race condition.")
+              await db.tweet.update({
+                where: {
+                  tweetId: job.tweetId,
+                },
+                data: {
+                  retweets: {
+                    connectOrCreate: {
+                      where: {
+                        twitterId: user.id,
+                      },
+                      create: {
+                        twitterId: user.id,
+                        twitterName: user.name,
+                        twitterUsername: user.username,
+                        twitterProfilePictureUrl: user.profile_image_url,
+                      },
+                    },
+                  },
+                },
+              })
+            }
           })
         }
       })

@@ -1,10 +1,12 @@
 import { useCurrentUser } from "../hooks/useCurrentUser"
 import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import { useState } from "react"
-import { Routes, useMutation, useRouter } from "blitz"
+import { getAntiCSRFToken, Routes, useMutation, useRouter } from "blitz"
 import updateUserEmail from "../../users/mutations/updateUserEmail"
 
 const Welcome = () => {
+  const antiCSRFToken = getAntiCSRFToken()
+
   const router = useRouter()
   const currentUser = useCurrentUser()
   const [emailError, setEmailError] = useState("")
@@ -17,9 +19,18 @@ const Welcome = () => {
 
   const handleSaveEmail = async () => {
     if (email) {
-      await updateUserEmailMutation({ email })
+      await window.fetch("/api/welcome/welcome", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "anti-csrf": antiCSRFToken,
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      })
+      router.push(Routes.SubscriptionsPage())
     }
-    router.push(Routes.SubscriptionsPage())
   }
 
   return (
@@ -42,7 +53,7 @@ const Welcome = () => {
               </li>
               <li>
                 Community Feed - a feed of accounts within a community. Good way to quickly figure
-                out what communities are up to.
+                out what communities are up to. (coming soon)
               </li>
             </ul>
             <p>
