@@ -37,7 +37,8 @@ export default Queue(
       const startTime =
         subscription.cadence === SubscriptionCadence.WEEKLY
           ? subDays(new Date(), 7)
-          : subscription.cadence === SubscriptionCadence.DAILY
+          : subscription.cadence === SubscriptionCadence.DAILY ||
+            subscription.cadence === SubscriptionCadence.ONCE
           ? subDays(new Date(), 1)
           : ""
       console.log(startTime)

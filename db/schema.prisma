@@ -49,6 +49,8 @@ model TwitterAccount {
   accountReports           TwitterAccountRefreshReport[]
   rateLimited              Boolean                          @default(false)
   communityMemberships     CommunityMembership[]
+  primaryEngagments        DailyEngagementRecord[]          @relation("primary")
+  engagmentRecords         DailyEngagementRecord[]          @relation("engaging")
 }
 
 enum ConsentStatus {
@@ -149,23 +151,6 @@ enum GlobalRole {
   CUSTOMER
 }
 
-model TwitterUser {
-  twitterId         String         @id
-  username          String         @default("")
-  name              String
-  bio               String
-  profilePictureUrl String
-  friends           Int            @default(0)
-  followers         Int            @default(0)
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  likes             Tweet[]        @relation("liked")
-  retweets          Tweet[]        @relation("retweeted")
-  tweets            Tweet[]        @relation("wrote")
-  subscriptions     Subscription[]
-
-}
-
 model TwitterAccountsInSubscriptions {
   twitterAccount   TwitterAccount   @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int
@@ -182,15 +167,11 @@ model Tweet {
   updatedAt       DateTime            @updatedAt
   tweetCreatedAt  DateTime
   message         String
-  likedBy         TwitterUser[]       @relation("liked")
-  retweetedBy     TwitterUser[]       @relation("retweeted")
   likes           TwitterAccount[]    @relation("likes")
   retweets        TwitterAccount[]    @relation("retweets")
   inResponseTo    Tweet?              @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
   inResponseToId  String?
   responses       Tweet[]             @relation(name: "responses")
-  author          TwitterUser?        @relation(name: "wrote", fields: [authorId], references: [twitterId])
-  authorId        String?
   authorAccount   TwitterAccount?     @relation(name: "tweets", fields: [authorAccountId], references: [id])
   authorAccountId Int?
   collections     TweetCollection[]
@@ -201,6 +182,7 @@ enum SubscriptionCadence {
   DAILY
   WEEKLY
   MONTHLY
+  ONCE
 }
 
 enum SubscriptionType {
@@ -240,7 +222,6 @@ model Subscription {
   ownerId                Int
   collections            TweetCollection[]
   cadence                SubscriptionCadence              @default(WEEKLY)
-  twitterUsers           TwitterUser[]
   twitterAccounts        TwitterAccountsInSubscriptions[]
   name                   String                           @default("Subscription")
   type                   SubscriptionType                 @default(PERSONAL)
@@ -334,7 +315,8 @@ model Community {
   name             String                @default("Community")
   description      String
   communityMembers CommunityMembership[]
-
+  slug             String?               @unique
+  followers        CommunityFollower[]
 }
 
 model CommunityMembership {
@@ -348,8 +330,34 @@ model CommunityMembership {
   role        CommunityMembershipRole @default(MEMBER)
 }
 
+model CommunityFollower {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  community   Community @relation(fields: [communityId], references: [id])
+  communityId Int
+  email       String
+  firstName   String?
+
+  @@unique([email, communityId])
+}
+
 enum CommunityMembershipRole {
   MEMBER
   ADMIN
   OWNER
+}
+
+model DailyEngagementRecord {
+  id                       Int            @id @default(autoincrement())
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
+  engagementScore          Int            @default(0)
+  weightedEngagementScore  Int            @default(0)
+  primaryTwitterAccount    TwitterAccount @relation(name: "primary", fields: [primaryTwitterAccountId], references: [id])
+  primaryTwitterAccountId  Int
+  engagingTwitterAccount   TwitterAccount @relation(name: "engaging", fields: [engagingTwitterAccountId], references: [id])
+  engagingTwitterAccountId Int
+  reportRun                String
+
 }

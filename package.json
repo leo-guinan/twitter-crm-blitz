@@ -49,6 +49,7 @@
     "react-final-form": "6.5.3",
     "stripe": "8.169.0",
     "twitter-lite": "1.1.0",
+    "uuid": "8.3.2",
     "zod": "3.6.1"
   },
   "devDependencies": {

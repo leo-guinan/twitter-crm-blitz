@@ -19,8 +19,6 @@ import updateSubscription from "app/subscriptions/mutations/updateSubscription"
 import isSubscribedToUser from "app/subscriptions/queries/isSubscribedToUser"
 import getNumberOfActivePersonalSubscriptions from "../../subscriptions/queries/getNumberOfActivePersonalSubscriptions"
 import { useCurrentOrganization } from "../../core/hooks/useCurrentOrganization"
-import AddEmailModal from "../../core/components/AddEmailModal"
-import updateUserEmail from "../../users/mutations/updateUserEmail"
 import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 import topEngagedAccounts from "../../tweets/queries/topEngagedAccounts"
 import isSubscribedToUsers from "../../subscriptions/queries/isSubscribedToUsers"
@@ -46,19 +44,7 @@ export const SubscriptionsList = () => {
     twitterProfilePictureUrl: "",
   })
 
-  const [email, setEmail] = useState("")
-  const [emailNeeded, setEmailNeeded] = useState(!currentUser?.email)
-
-  const [updateUserEmailMutation] = useMutation(updateUserEmail)
-
   const [recommendedAccounts] = useQuery(topEngagedAccounts, {})
-
-  const saveEmail = async () => {
-    if (email) {
-      await updateUserEmailMutation({ email })
-      setEmailNeeded(false)
-    }
-  }
 
   const [
     numberOfActivePersonalSubscriptions,
@@ -458,13 +444,6 @@ export const SubscriptionsList = () => {
                   </div>
                 </div>
               </div>
-              <AddEmailModal
-                email={email}
-                setEmail={setEmail}
-                open={emailNeeded}
-                setOpen={setEmailNeeded}
-                saveEmail={saveEmail}
-              />
             </div>
           </div>
         </div>

@@ -1,15 +1,6 @@
 import { Suspense } from "react"
-import { Link, BlitzPage, useMutation, Routes } from "blitz"
-import { loadStripe } from "@stripe/stripe-js"
+import { BlitzPage } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import logout from "app/auth/mutations/logout"
-import createCheckoutSession from "app/users/mutations/createCheckoutSession"
-import customerPortal from "app/users/mutations/customerPortal"
-import { getAntiCSRFToken } from "blitz"
-import Button from "app/core/components/Button"
-import CTA from "app/core/components/CTA"
-import Welcome from "app/core/components/Welcome"
 import LandingPage from "app/core/components/LandingPage"
 
 /*
@@ -18,8 +9,6 @@ import LandingPage from "app/core/components/LandingPage"
  */
 
 const UserInfo = () => {
-  const currentUser = useCurrentUser()
-
   return (
     <>
       <LandingPage />

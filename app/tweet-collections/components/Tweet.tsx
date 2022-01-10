@@ -54,7 +54,9 @@ const Tweet = ({ tweet }: TweetProps) => {
         </div>
         <div className="mt-2"></div>
         <div className="py-2">
-          <p className="leading-snug">{tweet.message}</p>
+          <p className="leading-snug ">
+            <pre className="whitespace-pre-wrap">{tweet.message}</pre>
+          </p>
         </div>
       </div>
     </a>

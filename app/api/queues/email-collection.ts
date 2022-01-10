@@ -12,6 +12,7 @@ export default Queue(
         id: job.subscriptionId,
       },
       select: {
+        name: true,
         collections: {
           where: {
             id: job.collectionId,
@@ -48,9 +49,18 @@ export default Queue(
     })
     const nameOfUserSubscribedTo = subscription?.twitterAccounts[0]?.twitterAccount?.twitterName
     if (subscription) {
-      const emailHeader = `Here's a link to your latest collection for ${nameOfUserSubscribedTo}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
+      const emailHeader = subscription.name
+        ? `${subscription.name}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
+        : `Here's a link to your latest collection for ${nameOfUserSubscribedTo}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
 
-      const emailHtmlHeader = `
+      const emailHtmlHeader = subscription.name
+        ? `<header>
+
+          <a href="${process.env.QUIRREL_BASE_URL}/tweet-collections/${job.collectionId}">
+            ${subscription.name}
+          </a>
+        </header>`
+        : `
         <header>
           Here's a link to your latest collection for ${nameOfUserSubscribedTo}:
           <a href="${process.env.QUIRREL_BASE_URL}/tweet-collections/${job.collectionId}">
@@ -65,7 +75,9 @@ export default Queue(
           data: {
             to: emailAddress,
             from: "leo@feathercrm.io",
-            subject: `Tweets from ${nameOfUserSubscribedTo}`,
+            subject: subscription.name
+              ? subscription.name
+              : `Tweets from ${nameOfUserSubscribedTo}`,
             body: `
         ${emailHeader}
         `,
