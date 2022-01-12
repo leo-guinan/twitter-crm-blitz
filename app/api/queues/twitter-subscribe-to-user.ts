@@ -11,8 +11,6 @@ export default Queue(
       },
     })
 
-    console.log(JSON.stringify(twitterAccountToSubscribeTo))
-
     //first, make sure subscription doesn't already exist
     const existingSubscription = await db.twitterAccount.findFirst({
       where: {
@@ -38,11 +36,10 @@ export default Queue(
       },
     })
 
-    console.log(JSON.stringify(existingSubscription))
-
     if (!existingSubscription && twitterAccountToSubscribeTo) {
       const subscription = await db.subscription.create({
         data: {
+          name: `Subscription to ${twitterAccountToSubscribeTo.twitterName}`,
           cadence: SubscriptionCadence.WEEKLY,
           owner: {
             connect: {
