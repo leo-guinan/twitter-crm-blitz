@@ -39,7 +39,6 @@ export default Queue(
         .then(async (results) => {
           if (results && results.events) {
             for (const event of results.events) {
-              console.log(JSON.stringify(event))
               const messageText = event.message_create.message_data.text
               const senderId = event.message_create.sender_id
               const recipientId = event.message_create.target.recipient_id

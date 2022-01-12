@@ -15,6 +15,7 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
         select: {
           organization: {
             select: {
+              stripeCustomerId: true,
               subscriptionStatus: true,
               twitterAccounts: {
                 select: {
