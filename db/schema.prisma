@@ -51,6 +51,8 @@ model TwitterAccount {
   communityMemberships     CommunityMembership[]
   primaryEngagments        DailyEngagementRecord[]          @relation("primary")
   engagmentRecords         DailyEngagementRecord[]          @relation("engaging")
+  directMessagesSent       DirectMessageEvent[]             @relation("sendingAccount")
+  directMessagesReceived   DirectMessageEvent[]             @relation("receivingAccount")
 }
 
 enum ConsentStatus {
@@ -359,5 +361,18 @@ model DailyEngagementRecord {
   engagingTwitterAccount   TwitterAccount @relation(name: "engaging", fields: [engagingTwitterAccountId], references: [id])
   engagingTwitterAccountId Int
   reportRun                String
+
+}
+
+model DirectMessageEvent {
+  twitterDMId        String         @id
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  sendingAccount     TwitterAccount @relation(name: "sendingAccount", fields: [sendingAccountId], references: [id])
+  sendingAccountId   Int
+  receivingAccount   TwitterAccount @relation(name: "receivingAccount", fields: [receivingAccountId], references: [id])
+  receivingAccountId Int
+  messageTimestamp   DateTime
+
 
 }

@@ -109,6 +109,16 @@ const AdminDashboard = () => {
     })
   }
 
+  const handleRouteDMs = async () => {
+    await window.fetch("/api/admin/check-for-user-dms", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "anti-csrf": antiCSRFToken,
+      },
+    })
+  }
+
   return (
     <>
       <section>
@@ -164,6 +174,9 @@ const AdminDashboard = () => {
         </section>
         <section>
           <Button onClick={handleFixErrors} label="fix errors" color="blue" />
+        </section>
+        <section>
+          <Button onClick={handleRouteDMs} label="Route DMs" color="blue" />
         </section>
       </section>
     </>
