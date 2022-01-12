@@ -1,47 +1,17 @@
-import { getAntiCSRFToken, Link, Routes, useMutation } from "blitz"
+import { Link, Routes, useMutation } from "blitz"
 import React, { Fragment } from "react"
 import { useCurrentUser } from "../hooks/useCurrentUser"
 import createCheckoutSession from "app/users/mutations/createCheckoutSession"
 import customerPortal from "app/users/mutations/customerPortal"
 import { loadStripe } from "@stripe/stripe-js"
-import Button from "./Button"
 import { GlobalRole } from "db"
 import logout from "app/auth/mutations/logout"
-import SubscriptionsPage from "../../pages/subscriptions"
-import CommunitiesPage from "../../pages/communities"
 
 const Sidebar = () => {
   const currentUser = useCurrentUser()
 
   const [logoutMutation] = useMutation(logout)
-  const [createCheckoutSessionMutation] = useMutation(createCheckoutSession)
   const [customerPortalMutation] = useMutation(customerPortal)
-  const prices = {
-    basic: process.env.STRIPE_PRICE_ID_BASIC,
-  }
-
-  const handleClick = async (event) => {
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      throw new Error("Stripe publishable key missing")
-    }
-    if (!process.env.NEXT_PUBLIC_STRIPE_PRICE_ID) {
-      throw new Error("Stripe publishable key missing")
-    }
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-    console.log("plan: " + process.env.STRIPE_PRICE_ID_BASIC)
-    const { sessionId } = await createCheckoutSessionMutation({
-      priceId: "price_1JTCKbDZsCqGNMsUTgXgaYyP",
-    })
-    if (!stripe) {
-      throw new Error("Stripe could not be loaded")
-    }
-    const result = await stripe.redirectToCheckout({
-      sessionId,
-    })
-    if (result.error) {
-      console.error(result.error.message)
-    }
-  }
 
   return (
     <div className="relative bg-white dark:bg-gray-800">
