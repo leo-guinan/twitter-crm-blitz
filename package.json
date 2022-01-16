@@ -13,7 +13,7 @@
     "ngrok": "ngrok http 3000"
   },
   "prisma": {
-    "schema": "db/schema.prisma"
+    "schema": "./db/schema.prisma"
   },
   "prettier": {
     "semi": false,
