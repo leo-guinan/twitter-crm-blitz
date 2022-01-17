@@ -9,8 +9,8 @@
       },
       "services": [
         {
-          "id": "my-webapp",
-          "name": "my-webapp",
+          "id": "feather",
+          "name": "feathercrm",
           "type": "fargate",
           "cpu": 0.5,
           "memory": 1024,
@@ -21,11 +21,60 @@
           "startCommand": "npm run start",
           "envVariables": {
             "APP_ENV": "production",
+            "CONVERTKIT_API_KEY": {
+              "fromParameterStore": "production.convertkit-api-key"
+            },
+            "CONVERTKIT_API_SECRET": {
+              "fromParameterStore": "production.convertkit-api-secret"
+            },
             "DATABASE_URL": {
               "fromParameterStore": "production.database-url"
             },
+            "DOMAIN": {
+              "fromParameterStore": "production.domain"
+            },
+            "NEXT_PUBLIC_FATHOM_SITE_ID": {
+              "fromParameterStore": "production.fathom-site-id"
+            },
+            "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": {
+              "fromParameterStore": "production.stripe-publishable-key"
+            },
+            "QUIRREL_BASE_URL": {
+              "fromParameterStore": "production.quirrel-base-url"
+            },
+            "QUIRREL_ENCRYPTION_SECRET": {
+              "fromParameterStore": "production.quirrel-encryption-secret"
+            },
+            "QUIRREL_TOKEN": {
+              "fromParameterStore": "production.quirrel-token"
+            },
+
+            "SENDGRID_API_KEY": {
+              "fromParameterStore": "production.sendgrid-api-key"
+            },
             "SESSION_SECRET_KEY": {
               "fromParameterStore": "production.session-secret-key"
+            },
+            "SHADOW_DATABASE_URL": {
+              "fromParameterStore": "production.shadow-database-url"
+            },
+            "STRIPE_WEBHOOK_SECRET": {
+              "fromParameterStore": "production.stripe-webhook-secret"
+            },
+            "STRIPE_SECRET_KEY": {
+              "fromParameterStore": "production.stripe-secret-key"
+            },
+            "TWITTER_BEARER_TOKEN": {
+              "fromParameterStore": "production.twitter-bearer-token"
+            },
+            "TWITTER_CALLBACK_URL": {
+              "fromParameterStore": "production.twitter-callback-url"
+            },
+            "TWITTER_CONSUMER_KEY": {
+              "fromParameterStore": "production.twitter-consumer-key"
+            },
+            "TWITTER_CONSUMER_SECRET": {
+              "fromParameterStore": "production.twitter-consumer-secret"
             }
           }
         }
