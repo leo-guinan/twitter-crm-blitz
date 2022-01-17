@@ -1,5 +1,5 @@
 import { Ctx, paginate, resolver } from "blitz"
-import db, { Prisma } from "db"
+import db, { Prisma, SubscriptionCadence } from "db"
 
 interface GetSubscriptionsInput
   extends Pick<Prisma.SubscriptionFindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
@@ -23,6 +23,9 @@ export default resolver.pipe(
           where: {
             ...where,
             ownerId: orgId,
+            cadence: {
+              not: SubscriptionCadence.ONCE,
+            },
           },
           orderBy,
           select: {
