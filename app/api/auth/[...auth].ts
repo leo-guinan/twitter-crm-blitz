@@ -8,6 +8,7 @@ import twitterEngagement from "../queues/twitter-engagement"
 export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/feather",
   errorRedirectUrl: "/",
+  secureProxy: true,
   strategies: [
     {
       strategy: new TwitterStrategy(
