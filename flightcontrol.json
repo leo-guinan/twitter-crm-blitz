@@ -14,7 +14,7 @@
           "type": "fargate",
           "cpu": 0.5,
           "memory": 1024,
-          "domain": "beta.feathercrm.io",
+          "domain": "www.feathercrm.io",
           "minInstances": 1,
           "maxInstances": 1,
           "buildCommand": "npm run build",
