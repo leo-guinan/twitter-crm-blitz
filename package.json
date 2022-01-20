@@ -36,7 +36,7 @@
     "@sendgrid/mail": "7.6.0",
     "@sentry/nextjs": "6.16.1",
     "@stripe/stripe-js": "1.17.0",
-    "blitz": "0.45.2-danger.c8bb361b5.1",
+    "blitz": "0.45.2",
     "concurrently": "6.2.0",
     "convertkit-node": "2.0.0",
     "date-fns": "2.23.0",
