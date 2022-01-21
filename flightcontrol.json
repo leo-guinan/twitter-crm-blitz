@@ -21,8 +21,8 @@
           "startCommand": "npm run start",
           "envVariables": {
             "APP_ENV": "production",
-            "VERCEL": true,
-            "CI": true,
+            "VERCEL": "true",
+            "CI": "true",
             "CONVERTKIT_API_KEY": {
               "fromParameterStore": "production.convertkit-api-key"
             },
