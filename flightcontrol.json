@@ -17,7 +17,7 @@
           "domain": "www.feathercrm.io",
           "minInstances": 1,
           "maxInstances": 1,
-          "buildCommand": "npm run build",
+          "buildCommand": "npm run build:flightcontrol",
           "startCommand": "npm run start",
           "envVariables": {
             "APP_ENV": "production",

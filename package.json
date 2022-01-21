@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "concurrently --raw \"blitz dev\" 'quirrel'",
     "build": "blitz build",
-    "build:flightcontrol": "blitz prisma migrate dev",
+    "build:flightcontrol": "blitz build && blitz prisma migrate dev && quirrel ci",
     "start": "blitz start",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
