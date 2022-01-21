@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "concurrently --raw \"blitz dev\" 'quirrel'",
     "build": "blitz build",
-    "build:flightcontrol": "blitz build && blitz prisma migrate dev",
-    "start": "quirrel ci && blitz start",
+    "build:flightcontrol": "blitz build && quirrel ci && blitz prisma migrate dev ",
+    "start": "blitz start",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
