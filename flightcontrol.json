@@ -21,6 +21,7 @@
           "startCommand": "npm run start",
           "envVariables": {
             "APP_ENV": "production",
+            "NODE_ENV": "production",
             "CONVERTKIT_API_KEY": {
               "fromParameterStore": "production.convertkit-api-key"
             },
