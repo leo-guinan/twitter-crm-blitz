@@ -4,6 +4,14 @@ import { User, GlobalRole, MembershipRole, Organization } from "db"
 // Note: You should switch to Postgres and then use a DB enum for role type
 export type Role = MembershipRole | GlobalRole
 
+export type ITwitterUser = {
+  twitterId: string | null
+  twitterUsername: string | null
+  twitterName: string | null
+  twitterBio: string | null
+  twitterProfilePictureUrl: string | null
+}
+
 declare module "blitz" {
   export interface Ctx extends DefaultCtx {
     session: SessionContext

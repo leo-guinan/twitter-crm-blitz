@@ -1,10 +1,4 @@
-interface ITwitterUser {
-  twitterId: string | null
-  twitterUsername: string | null
-  twitterName: string | null
-  twitterBio: string | null
-  twitterProfilePictureUrl: string | null
-}
+import { ITwitterUser } from "../../../types"
 
 interface ITwitterUserProps {
   twitterUser: ITwitterUser

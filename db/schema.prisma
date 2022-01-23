@@ -53,6 +53,10 @@ model TwitterAccount {
   engagmentRecords         DailyEngagementRecord[]          @relation("engaging")
   directMessagesSent       DirectMessageEvent[]             @relation("sendingAccount")
   directMessagesReceived   DirectMessageEvent[]             @relation("receivingAccount")
+  dataFields               DataField[]
+  dataFieldValues          DataFieldValue[]
+  slug                     String?                          @unique
+  offSiteSubscribers       OffSiteSubscriber[]
 }
 
 enum ConsentStatus {
@@ -82,6 +86,7 @@ enum PlanType {
   PERSONAL
   COMMUNITY
   PROFESSIONAL
+  CREATOR
 }
 
 model Membership {
@@ -178,6 +183,7 @@ model Tweet {
   authorAccountId Int?
   collections     TweetCollection[]
   tweetReports    TweetLookupReport[]
+  dataFieldValues DataFieldValue[]
 }
 
 enum SubscriptionCadence {
@@ -193,6 +199,7 @@ enum SubscriptionType {
   BUSINESS
   FREE
   SELF
+  CREATOR
 }
 
 enum SubscriptionStatus {
@@ -374,5 +381,48 @@ model DirectMessageEvent {
   receivingAccountId Int
   messageTimestamp   DateTime
 
+}
 
+model DataField {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  name             String
+  twitterAccount   TwitterAccount   @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+  values           DataFieldValue[]
+
+
+}
+
+model DataFieldValue {
+  id               Int            @id @default(autoincrement())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  dataField        DataField      @relation(fields: [dataFieldId], references: [id])
+  dataFieldId      Int
+  tweet            Tweet          @relation(fields: [tweetId], references: [tweetId])
+  tweetId          String
+  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+
+}
+
+model OffSiteSubscriber {
+  id                 Int                         @id @default(autoincrement())
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
+  email              String
+  verified           Boolean                     @default(false)
+  twitterAccounts    TwitterAccount[]
+  verificationNeeded OffSiteSubscribersToVerify?
+}
+
+model OffSiteSubscribersToVerify {
+  id                  Int               @id @default(autoincrement())
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  offSiteSubscriber   OffSiteSubscriber @relation(fields: [offSiteSubscriberId], references: [id])
+  offSiteSubscriberId Int
+  verificationString  String            @unique
 }

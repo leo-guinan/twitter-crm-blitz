@@ -1,19 +1,19 @@
 version: "3.8"
 services:
-  app:
-    build:
-      context: .
-      target: dev
-    env_file: .env.local
-    environment:
-      - NODE_ENV=development
-    ports:
-      - 3000:3000
-    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; blitz prisma migrate dev && npm run dev'
-    depends_on:
-      - postgres
-    volumes:
-      - .:/app
+  #  app:
+  #    build:
+  #      context: .
+  #      target: dev
+  #    env_file: .env.local
+  #    environment:
+  #      - NODE_ENV=development
+  #    ports:
+  #      - 3000:3000
+  #    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; blitz prisma migrate dev && npm run dev'
+  #    depends_on:
+  #      - postgres
+  #    volumes:
+  #      - .:/app
 
   postgres:
     image: postgres:12.4
