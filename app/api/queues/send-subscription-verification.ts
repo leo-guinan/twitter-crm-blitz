@@ -21,7 +21,7 @@ export default Queue(
         to: verification.offSiteSubscriber.email,
         from: "leo@feathercrm.io",
         subject: "Feather: Verify Your Email",
-        body: `Please visit this URL to verify your email: https://localhost:3000/profile/verify/${verification.verificationString}`,
+        body: `Please visit this URL to verify your email: ${process.env.QUIRREL_BASE_URL}/profile/verify/${verification.verificationString}`,
         htmlBody: `<a href="${process.env.QUIRREL_BASE_URL}/profile/verify/${verification.verificationString}">Click here to verify your email</a>`,
         status: EmailStatus.QUEUED,
       },
