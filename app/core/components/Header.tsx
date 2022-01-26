@@ -46,7 +46,7 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex items-center justify-between h-16">
             <div className=" flex items-center">
-              <a className="flex-shrink-0" href="/">
+              <a className="flex-shrink-0 m-2" href="/">
                 <img src="/icon.png" alt="FeatherCRM" />
               </a>
               <div className="hidden md:block">

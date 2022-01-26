@@ -19,7 +19,7 @@ interface TweetCollectionProps {
 
 const TweetCollection = (props: TweetCollectionProps) => {
   return (
-    <div className="grid grid-cols-1 gap-6 my-6 px-4 md:px-6 lg:px-8">
+    <div className="grid grid-cols-1 gap-6 mx-auto my-6 px-4 md:px-6 lg:px-8 w-1/2">
       {props.tweets &&
         props.tweets
           .sort((firstEl, secondEl) => firstEl.tweetCreatedAt - secondEl.tweetCreatedAt)

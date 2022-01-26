@@ -21,12 +21,6 @@ export const TweetCollectionWrapper = () => {
 const ShowTweetCollectionPage: BlitzPage = () => {
   return (
     <div>
-      <p>
-        <Link href={Routes.TweetCollectionsPage()}>
-          <a>TweetCollections</a>
-        </Link>
-      </p>
-
       <Suspense fallback={<div>Loading...</div>}>
         <TweetCollectionWrapper />
       </Suspense>
