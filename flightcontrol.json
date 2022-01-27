@@ -16,7 +16,7 @@
           "memory": 1024,
           "domain": "www.feathercrm.io",
           "minInstances": 1,
-          "maxInstances": 1,
+          "maxInstances": 2,
           "buildCommand": "npm run build:flightcontrol",
           "startCommand": "npm run start",
           "envVariables": {
