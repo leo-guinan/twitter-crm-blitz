@@ -75,16 +75,6 @@ const AdminDashboard = () => {
     })
   }
 
-  const handleMigrateUsersToAccounts = async () => {
-    await window.fetch("/api/admin/migrate-subscriptions", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
-  }
-
   const handleRunTweetCollection = async () => {
     const tweetCollectionToRun = 41
     await window.fetch("/api/admin/run-tweet-collection", {
@@ -96,16 +86,6 @@ const AdminDashboard = () => {
       body: JSON.stringify({
         twitterAccountUrl,
       }),
-    })
-  }
-
-  const handleFixErrors = async () => {
-    await window.fetch("/api/admin/fix-errors", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
     })
   }
 
@@ -162,19 +142,11 @@ const AdminDashboard = () => {
         <section>
           <Button onClick={handleRefreshUsers} label="Refresh Accounts" color="red" />
         </section>
-        <section>
-          <Button
-            onClick={handleMigrateUsersToAccounts}
-            label="Migrate Subscriptions"
-            color="red"
-          />
-        </section>
+
         <section>
           <Button onClick={handleRunTweetCollection} label="Run Tweet Collection" color="red" />
         </section>
-        <section>
-          <Button onClick={handleFixErrors} label="fix errors" color="blue" />
-        </section>
+
         <section>
           <Button onClick={handleRouteDMs} label="Route DMs" color="blue" />
         </section>
