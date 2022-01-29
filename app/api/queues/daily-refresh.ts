@@ -15,9 +15,33 @@ export default CronJob(
     })
 
     for (const account of accountsToRefresh) {
-      console.log(JSON.stringify(account))
       await processTwitterAccount.enqueue({
         twitterAccountTwitterId: account.twitterId,
+      })
+    }
+
+    const subscriptionsToRefresh = await db.twitterAccountsInSubscriptions.findMany({
+      include: {
+        twitterAccount: true,
+      },
+      distinct: ["twitterAccountId"],
+    })
+    for (const subscription of subscriptionsToRefresh) {
+      await processTwitterAccount.enqueue({
+        twitterAccountTwitterId: subscription.twitterAccount.twitterId,
+      })
+    }
+
+    const slugsToRefresh = await db.twitterAccount.findMany({
+      where: {
+        slug: {
+          not: null,
+        },
+      },
+    })
+    for (const slug of slugsToRefresh) {
+      await processTwitterAccount.enqueue({
+        twitterAccountTwitterId: slug.twitterId,
       })
     }
   }
