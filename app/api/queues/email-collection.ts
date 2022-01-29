@@ -50,7 +50,7 @@ export default Queue(
     const nameOfUserSubscribedTo = subscription?.twitterAccounts[0]?.twitterAccount?.twitterName
     if (subscription) {
       const emailHeader = subscription.name
-        ? `${subscription.name}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
+        ? `${subscription.name}: ${process.env.QUIRREL_BASE_URL}/tweet-collections/${job.collectionId}`
         : `Here's a link to your latest collection for ${nameOfUserSubscribedTo}: ${process.env.QUIRREL_BASE_URL}/tweet-collection/${job.collectionId}`
 
       const emailHtmlHeader = subscription.name

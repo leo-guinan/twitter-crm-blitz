@@ -41,7 +41,6 @@ export default Queue(
             subscription.cadence === SubscriptionCadence.ONCE
           ? subDays(new Date(), 1)
           : ""
-      console.log(startTime)
       const params = startTime
         ? {
             query: twitterAccountQueryString,
