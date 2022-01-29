@@ -1,8 +1,6 @@
 import { Queue } from "quirrel/next"
 import Twitter from "twitter-lite"
-import db, { Tweet, TweetLookupStatus, TwitterAccountRefreshReportStatus } from "../../../db"
-import twitterLikes from "./twitter-likes"
-import twitterRetweets from "./twitter-retweets"
+import db from "../../../db"
 import { getEngagement } from "../../util/twitter/engagement"
 
 export default Queue(
