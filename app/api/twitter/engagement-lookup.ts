@@ -1,6 +1,6 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
-import twitterEngagement from "app/api/queues/twitter-engagement"
-import db, { TwitterAccountRefreshReportStatus } from "../../../db"
+import processTwitterAccount from "../queues/process-twitter-account"
+import db from "../../../db"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)
@@ -10,24 +10,9 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     const report = await db.dailyRefreshReport.create({
       data: {},
     })
-    const twitterAccountRefreshReport = await db.twitterAccountRefreshReport.create({
-      data: {
-        status: TwitterAccountRefreshReportStatus.QUEUED,
-        containingDailyReport: {
-          connect: {
-            id: report.id,
-          },
-        },
-        twitterAccount: {
-          connect: {
-            id: twitterAccountId,
-          },
-        },
-      },
-    })
-    await twitterEngagement.enqueue({
-      twitterAccountTwitterId: twitterAccountId,
-      reportId: twitterAccountRefreshReport.id,
+
+    await processTwitterAccount.enqueue({
+      twitterId: twitterAccountId,
     })
   }
   res.statusCode = 200

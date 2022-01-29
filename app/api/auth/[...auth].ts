@@ -3,7 +3,7 @@ import { passportAuth } from "blitz"
 
 import TwitterStrategy from "passport-twitter"
 import db, { MembershipRole, TwitterAccountRefreshReportStatus } from "db"
-import twitterEngagement from "../queues/twitter-engagement"
+import processTwitterAccount from "../queues/process-twitter-account"
 
 export default passportAuth(({ ctx, req, res }) => ({
   successRedirectUrl: "/feather",
@@ -130,9 +130,8 @@ export default passportAuth(({ ctx, req, res }) => ({
                 },
               },
             })
-            await twitterEngagement.enqueue({
-              twitterAccountTwitterId: profile.id,
-              reportId: twitterAccountRefreshReport.id,
+            await processTwitterAccount.enqueue({
+              twitterId: profile.id,
             })
           } else {
             roles.push(twitterAccountLoggingIn?.organization?.memberships[0]?.user.role)

@@ -1,7 +1,6 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import db, { TwitterAccountRefreshReportStatus } from "db"
-import twitterRefreshUser from "app/api/queues/twitter-refresh-user"
-import twitterEngagement from "../queues/twitter-engagement"
+import processTwitterAccount from "../queues/process-twitter-account"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)
@@ -27,7 +26,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
         },
       },
     })
-    await twitterRefreshUser.enqueue({
+    await processTwitterAccount.enqueue({
       twitterId: account.twitterId,
     })
   }
