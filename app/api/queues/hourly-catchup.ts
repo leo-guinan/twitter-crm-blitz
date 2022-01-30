@@ -15,7 +15,7 @@ export default CronJob(
     })
 
     for (const tweet of tweetsToProcess) {
-      const client = getClientForAccount(tweet.twitterAccount)
+      const client = await getClientForAccount(tweet.twitterAccount)
       switch (tweet.action) {
         case TweetAction.RETWEET:
           await getRetweets(client, tweet.twitterAccount.twitterId, tweet.tweetId)
