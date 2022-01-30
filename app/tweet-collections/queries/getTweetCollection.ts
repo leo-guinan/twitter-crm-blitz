@@ -47,8 +47,6 @@ export default resolver.pipe(
 
     if (!tweetCollection) throw new NotFoundError()
 
-    if (tweetCollection?.subscription?.owner?.id === orgId) return tweetCollection.tweets
-
-    return []
+    return tweetCollection.tweets
   }
 )

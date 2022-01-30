@@ -1,5 +1,4 @@
-import db from "../../../db"
-import rescheduler from "../../api/queues/rescheduler"
+import db, { TweetAction } from "../../../db"
 
 export const getRetweets = async (client, twitterId, tweetId) => {
   console.log("Getting retweets for Tweet:", tweetId)
@@ -68,11 +67,19 @@ export const getRetweets = async (client, twitterId, tweetId) => {
           rateLimited: true,
         },
       })
-      await rescheduler.enqueue({
-        type: "rateLimitedRetweet",
-        payload: {
-          twitterId,
-          tweetId,
+      await db.tweetsToProcess.create({
+        data: {
+          twitterAccount: {
+            connect: {
+              twitterId,
+            },
+          },
+          tweet: {
+            connect: {
+              tweetId,
+            },
+          },
+          action: TweetAction.RETWEET,
         },
       })
       if ("errors" in e) {

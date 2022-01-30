@@ -57,6 +57,8 @@ model TwitterAccount {
   dataFieldValues          DataFieldValue[]
   slug                     String?                          @unique
   offSiteSubscribers       OffSiteSubscriber[]
+  tweetsToProcess          TweetsToProcess[]
+  twitterAccountsToProcess TwitterAccountToProcess[]
 }
 
 enum ConsentStatus {
@@ -184,6 +186,7 @@ model Tweet {
   collections     TweetCollection[]
   tweetReports    TweetLookupReport[]
   dataFieldValues DataFieldValue[]
+  tweetsToProcess TweetsToProcess[]
 }
 
 enum SubscriptionCadence {
@@ -425,4 +428,30 @@ model OffSiteSubscribersToVerify {
   offSiteSubscriber   OffSiteSubscriber @relation(fields: [offSiteSubscriberId], references: [id])
   offSiteSubscriberId Int
   verificationString  String            @unique
+}
+
+enum TweetAction {
+  LIKE
+  RETWEET
+  COMMENT
+  QUOTE
+}
+
+model TweetsToProcess {
+  id               Int            @id @default(autoincrement())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  tweet            Tweet          @relation(fields: [tweetId], references: [tweetId])
+  tweetId          String
+  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
+  action           TweetAction
+}
+
+model TwitterAccountToProcess {
+  id               Int            @id @default(autoincrement())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id])
+  twitterAccountId Int
 }
