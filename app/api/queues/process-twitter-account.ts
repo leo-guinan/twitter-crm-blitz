@@ -5,7 +5,7 @@ import { getClientForAccount } from "../../util/twitter/client"
 export default Queue(
   "api/queues/process-twitter-account",
   async ({ twitterAccountTwitterId }) => {
-    const client = getClientForAccount(twitterAccountTwitterId)
+    const client = await getClientForAccount(twitterAccountTwitterId)
     await getEngagement(client, twitterAccountTwitterId)
   },
   {
