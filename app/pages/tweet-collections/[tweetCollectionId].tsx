@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes } from "blitz"
-import Layout from "../feather/layouts/Layout"
+import Layout from "../../core/layouts/Layout"
 import getTweetCollection from "app/tweet-collections/queries/getTweetCollection"
 import deleteTweetCollection from "app/tweet-collections/mutations/deleteTweetCollection"
 import TweetCollection from "../../tweet-collections/components/TweetCollection"
@@ -28,7 +28,7 @@ const ShowTweetCollectionPage: BlitzPage = () => {
   )
 }
 
-ShowTweetCollectionPage.authenticate = true
+ShowTweetCollectionPage.authenticate = false
 ShowTweetCollectionPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowTweetCollectionPage
