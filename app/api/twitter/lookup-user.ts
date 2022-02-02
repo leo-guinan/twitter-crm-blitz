@@ -76,6 +76,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
             res.setHeader("Content-Type", "application/json")
             res.end(
               JSON.stringify({
+                id: "",
                 twitterId: "",
                 twitterName: `No user found with the name: ${twitterUsername}`,
                 twitterUsername: "",

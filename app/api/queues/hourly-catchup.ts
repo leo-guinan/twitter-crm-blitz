@@ -12,7 +12,10 @@ export default CronJob(
       include: {
         twitterAccount: true,
       },
+      take: 1000,
     })
+
+    console.log("🔥 hourly-catchup", tweetsToProcess.length)
 
     for (const tweet of tweetsToProcess) {
       const client = await getClientForAccount(tweet.twitterAccount)

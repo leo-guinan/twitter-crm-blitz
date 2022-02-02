@@ -1,155 +1,106 @@
 import React, { useState } from "react"
 import Button from "./Button"
 import { getAntiCSRFToken } from "blitz"
+import LookupTwitterAccount from "../../twitter-accounts/components/LookupTwitterAccount"
 
 const AdminDashboard = () => {
   const antiCSRFToken = getAntiCSRFToken()
-  const [twitterAccountUrl, setTwitterAccountUrl] = useState("")
-  const [selectedUserToFetch, setSelectedUserToFetch] = useState("")
+  const [twitterUserToLookup, setTwitterUserToLookup] = useState({
+    id: "",
+    twitterId: "",
+    twitterUsername: "",
+    twitterName: "",
+    twitterBio: "",
+    twitterProfilePictureUrl: "",
+  })
+  const [triggeredEngagement, setTriggeredEngagement] = useState(false)
+  // const [tweetCollections] = useQuery()
+  // const {}
+  const [engagementCollection, setEngagementCollection] = useState(0)
 
-  const handleLookupEngagement = async () => {
-    await window.fetch("/api/twitter/engagement-lookup", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        twitterAccountId: selectedUserToFetch,
-      }),
-    })
+  const getEngagementFeed = async () => {
+    setTriggeredEngagement(true)
+    await window
+      .fetch("/api/twitter/process-user", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "anti-csrf": antiCSRFToken,
+        },
+        body: JSON.stringify({
+          twitterAccountId: twitterUserToLookup.id,
+        }),
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
-  const handleSelectUserToFetch = (event) => {
-    console.log(`selected User to fetch: ${selectedUserToFetch}`)
-    setSelectedUserToFetch(event.target.value)
+  const populateFeed = async () => {
+    setTriggeredEngagement(true)
+    await window
+      .fetch("/api/twitter/refresh-user", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "anti-csrf": antiCSRFToken,
+        },
+        body: JSON.stringify({
+          twitterAccountId: twitterUserToLookup.id,
+        }),
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
-  const handleTwitterAccountUrlChange = (event) => {
-    setTwitterAccountUrl(event.target.value)
-  }
-
-  const handleSendEmail = async () => {
-    await window.fetch("/api/email/send", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
-  }
-
-  const handleFetchWeeklyDigest = async () => {
-    await window.fetch("/api/twitter/weekly-digest", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        twitterAccountId: "1325102346792218629",
-      }),
-    })
-  }
-
-  const handleSubscribeToUser = async () => {
-    await window.fetch("/api/twitter/subscribe-to-user", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        twitterAccountUrl,
-      }),
-    })
-  }
-
-  const handleRefreshUsers = async () => {
-    await window.fetch("/api/admin/update-twitter-accounts", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
-  }
-
-  const handleRunTweetCollection = async () => {
-    const tweetCollectionToRun = 41
-    await window.fetch("/api/admin/run-tweet-collection", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        twitterAccountUrl,
-      }),
-    })
-  }
-
-  const handleRouteDMs = async () => {
-    await window.fetch("/api/admin/check-for-user-dms", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-    })
+  const runEngagement = async () => {
+    setTriggeredEngagement(true)
+    await window
+      .fetch("/api/twitter/engagement-lookup", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "anti-csrf": antiCSRFToken,
+        },
+        body: JSON.stringify({
+          twitterId: twitterUserToLookup.twitterId,
+        }),
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
     <>
       <section>
-        {/*<section className="engagement-lookup">*/}
-        {/*  <select name="users"*/}
-        {/*          onChange={handleSelectUserToFetch}*/}
-        {/*  >*/}
-        {/*    {users.map((user) => (*/}
-        {/*      user.memberships[0].organization.twitterAccounts[0] && (*/}
-        {/*        <option*/}
-        {/*          key={user.memberships[0].organization.twitterAccounts[0].twitterId}*/}
-        {/*          value={user.memberships[0].organization.twitterAccounts[0] ? user.memberships[0].organization.twitterAccounts[0].twitterId : ""}*/}
+        <section id="lookupUser">
+          <LookupTwitterAccount setTwitterAccount={setTwitterUserToLookup} />
+        </section>
+        <section id="engaged-feed">
+          {twitterUserToLookup.twitterId && (
+            <>
+              <Button label="Refresh User" onClick={populateFeed} />
+              <Button label="Trigger Engagement" onClick={runEngagement} />
 
-        {/*        >*/}
-        {/*          {user.memberships[0].organization.twitterAccounts[0].twitterUsername}*/}
-        {/*        </option>*/}
-        {/*      )*/}
-
-        {/*    ))}*/}
-        {/*  </select>*/}
-        {/*  <Button onClick={handleLookupEngagement} label="engagement" color="blue" />*/}
-        {/*</section>*/}
-        <section>
-          <Button onClick={handleSendEmail} label="Send Email" color="red" />
+              <Button label="Get Engagement Feed" onClick={getEngagementFeed} />
+            </>
+          )}
         </section>
-        <section>
-          <Button
-            onClick={handleFetchWeeklyDigest}
-            label="Fetch Weekly Digest for User"
-            color="red"
-          />
-        </section>
-        <section>
-          <input type="url" onChange={handleTwitterAccountUrlChange} value={twitterAccountUrl} />
-          <Button
-            onClick={handleSubscribeToUser}
-            label="Fetch Weekly Digest for User"
-            color="red"
-          />
-        </section>
-        <section>
-          <Button onClick={handleRefreshUsers} label="Refresh Accounts" color="red" />
-        </section>
-
-        <section>
-          <Button onClick={handleRunTweetCollection} label="Run Tweet Collection" color="red" />
-        </section>
-
-        <section>
-          <Button onClick={handleRouteDMs} label="Route DMs" color="blue" />
-        </section>
+        <section id="engagement-leaders"></section>
       </section>
     </>
   )

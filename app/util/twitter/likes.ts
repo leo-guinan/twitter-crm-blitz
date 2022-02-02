@@ -1,7 +1,6 @@
 import db, { TweetAction } from "../../../db"
 
 export const getLikes = async (client, twitterId, tweetId) => {
-  console.log("Getting likes for Tweet:", tweetId)
   const likeParams = {
     "user.fields": "id,name,username,profile_image_url",
   }
@@ -66,8 +65,15 @@ export const getLikes = async (client, twitterId, tweetId) => {
           rateLimited: true,
         },
       })
-      await db.tweetsToProcess.create({
-        data: {
+      await db.tweetsToProcess.upsert({
+        where: {
+          twitterAccountTwitterId_tweetId_action: {
+            twitterAccountTwitterId: twitterId,
+            tweetId,
+            action: TweetAction.LIKE,
+          },
+        },
+        create: {
           twitterAccount: {
             connect: {
               twitterId,
@@ -80,6 +86,7 @@ export const getLikes = async (client, twitterId, tweetId) => {
           },
           action: TweetAction.LIKE,
         },
+        update: {},
       })
       if ("errors" in e) {
         console.log("This should be where the rate error ends up")

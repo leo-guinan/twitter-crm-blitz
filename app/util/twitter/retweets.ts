@@ -1,8 +1,6 @@
 import db, { TweetAction } from "../../../db"
 
 export const getRetweets = async (client, twitterId, tweetId) => {
-  console.log("Getting retweets for Tweet:", tweetId)
-
   const params = {
     "user.fields": "id,name,username,profile_image_url",
   }
@@ -67,8 +65,15 @@ export const getRetweets = async (client, twitterId, tweetId) => {
           rateLimited: true,
         },
       })
-      await db.tweetsToProcess.create({
-        data: {
+      await db.tweetsToProcess.upsert({
+        where: {
+          twitterAccountTwitterId_tweetId_action: {
+            twitterAccountTwitterId: twitterId,
+            tweetId,
+            action: TweetAction.RETWEET,
+          },
+        },
+        create: {
           twitterAccount: {
             connect: {
               twitterId,
@@ -81,6 +86,7 @@ export const getRetweets = async (client, twitterId, tweetId) => {
           },
           action: TweetAction.RETWEET,
         },
+        update: {},
       })
       if ("errors" in e) {
         // Twitter API error

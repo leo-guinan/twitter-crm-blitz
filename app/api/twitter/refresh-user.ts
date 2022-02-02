@@ -1,6 +1,9 @@
 import Twitter from "twitter-lite"
+import db, { Tweet } from "../../../db"
+import { formatISO, subDays } from "date-fns"
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import { getEngagement } from "../../util/twitter/engagement"
+import { refreshUser } from "../../util/twitter/populate-user"
 
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)
@@ -8,7 +11,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const orgId = session.orgId
 
   if (req.body) {
-    const { twitterId } = JSON.parse(req.body)
+    const { twitterAccountId } = JSON.parse(req.body)
 
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
@@ -19,11 +22,11 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
       bearer_token: process.env.TWITTER_BEARER_TOKEN as string,
     })
 
-    await getEngagement(client, twitterId)
+    const account = await refreshUser(client, twitterAccountId)
 
     res.statusCode = 200
     res.setHeader("Content-Type", "application/json")
-    res.end(JSON.stringify({ success: true }))
+    res.end(JSON.stringify({ ...account }))
   }
 }
 

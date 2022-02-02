@@ -438,14 +438,16 @@ enum TweetAction {
 }
 
 model TweetsToProcess {
-  id               Int            @id @default(autoincrement())
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  tweet            Tweet          @relation(fields: [tweetId], references: [tweetId])
-  tweetId          String
-  twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id])
-  twitterAccountId Int
-  action           TweetAction
+  id                      Int            @id @default(autoincrement())
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  tweet                   Tweet          @relation(fields: [tweetId], references: [tweetId])
+  tweetId                 String
+  twitterAccount          TwitterAccount @relation(fields: [twitterAccountTwitterId], references: [twitterId])
+  twitterAccountTwitterId String
+  action                  TweetAction
+
+  @@unique([twitterAccountTwitterId, tweetId, action])
 }
 
 model TwitterAccountToProcess {

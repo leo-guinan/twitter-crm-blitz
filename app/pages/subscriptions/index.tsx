@@ -22,6 +22,7 @@ import { useCurrentOrganization } from "../../core/hooks/useCurrentOrganization"
 import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 import topEngagedAccounts from "../../tweets/queries/topEngagedAccounts"
 import isSubscribedToUsers from "../../subscriptions/queries/isSubscribedToUsers"
+import LookupTwitterAccount from "../../twitter-accounts/components/LookupTwitterAccount"
 
 const ITEMS_PER_PAGE = 100
 
@@ -87,29 +88,7 @@ export const SubscriptionsList = () => {
     return engagedAccountsSubscribed[twitterId]
   }
 
-  const handleLookupUser = async () => {
-    const response = await window
-      .fetch("/api/twitter/lookup-user", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "anti-csrf": antiCSRFToken,
-        },
-        body: JSON.stringify({
-          twitterUsername: twitterUserToLookup,
-        }),
-      })
-      .then((response) => response.json())
-      .then((json) =>
-        setTwitterUserToSubscribeTo({
-          twitterId: json.twitterId,
-          twitterUsername: json.twitterUsername,
-          twitterName: json.twitterName,
-          twitterBio: json.twitterBio,
-          twitterProfilePictureUrl: json.twitterProfilePictureUrl,
-        })
-      )
-  }
+  const handleLookupUser = async () => {}
 
   const handleSubscribeToUser = async (event) => {
     let twitterAccountToSubscribeTo
@@ -183,26 +162,7 @@ export const SubscriptionsList = () => {
     <div>
       <section>
         <section>
-          <div>
-            <div className="border-2  m-4 w-full max-w-xs p-6 mx-auto">
-              <input
-                type="url"
-                onChange={handleTwitterUserToLookupChange}
-                value={twitterUserToLookup}
-                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full block sm:text-sm border-gray-300 rounded-md"
-                placeholder="feathercrm"
-              />
-              <Button
-                onClick={handleLookupUser}
-                label="Lookup Twitter User"
-                color="red"
-                className="grid-cols-1"
-              />
-              <p className="mt-2 text-sm text-gray-500" id="email-description">
-                Enter the Twitter username to lookup, without the &apos;@&apos; at the beginning.
-              </p>
-            </div>
-          </div>
+          <LookupTwitterAccount setTwitterAccount={setTwitterUserToLookup} />
         </section>
         {twitterUserToSubscribeTo.twitterId && (
           <section className="border-2 mx-4 p-6">
