@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import Button from "./Button"
-import { getAntiCSRFToken } from "blitz"
+import { getAntiCSRFToken, Link, Routes } from "blitz"
 import LookupTwitterAccount from "../../twitter-accounts/components/LookupTwitterAccount"
+import ShowTweetCollectionPage from "../../pages/tweet-collections/[tweetCollectionId]"
 
 const AdminDashboard = () => {
   const antiCSRFToken = getAntiCSRFToken()
@@ -16,7 +17,14 @@ const AdminDashboard = () => {
   const [triggeredEngagement, setTriggeredEngagement] = useState(false)
   // const [tweetCollections] = useQuery()
   // const {}
-  const [engagementCollection, setEngagementCollection] = useState(0)
+  const [engagementCollection, setEngagementCollection] = useState({
+    id: "",
+  })
+
+  const engagedUsers = []
+  const [recentTweetCollection, setRecentTweetCollection] = useState({
+    id: "",
+  })
 
   const getEngagementFeed = async () => {
     setTriggeredEngagement(true)
@@ -33,7 +41,7 @@ const AdminDashboard = () => {
       })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json)
+        setEngagementCollection(json)
       })
       .catch((error) => {
         console.error(error)
@@ -84,6 +92,27 @@ const AdminDashboard = () => {
       })
   }
 
+  const getLatestTweetsForAccount = async () => {
+    await window
+      .fetch("/api/twitter/get-latest-tweets-collection", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "anti-csrf": antiCSRFToken,
+        },
+        body: JSON.stringify({
+          twitterAccountId: twitterUserToLookup.id,
+        }),
+      })
+      .then((response) => response.json())
+      .then((json) => {
+        setRecentTweetCollection(json)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
   return (
     <>
       <section>
@@ -97,10 +126,35 @@ const AdminDashboard = () => {
               <Button label="Trigger Engagement" onClick={runEngagement} />
 
               <Button label="Get Engagement Feed" onClick={getEngagementFeed} />
+              <Button label="Get Recent Tweets" onClick={getLatestTweetsForAccount} />
             </>
           )}
         </section>
-        <section id="engagement-leaders"></section>
+        <section id="engagement-leaders">
+          {engagementCollection.id && (
+            <>
+              <Link
+                href={Routes.ShowTweetCollectionPage({
+                  tweetCollectionId: engagementCollection.id,
+                })}
+              >
+                <a className="text-sm leading-5 text-gray-500">Engagement Collection</a>
+              </Link>
+            </>
+          )}
+        </section>
+      </section>
+      <section id="engaged-users">{engagedUsers && <></>}</section>
+      <section id="recent-tweets">
+        {recentTweetCollection.id && (
+          <>
+            <Link
+              href={Routes.ShowTweetCollectionPage({ tweetCollectionId: recentTweetCollection.id })}
+            >
+              <a className="text-sm leading-5 text-gray-500">Recent Tweet Collection</a>
+            </Link>
+          </>
+        )}
       </section>
     </>
   )
