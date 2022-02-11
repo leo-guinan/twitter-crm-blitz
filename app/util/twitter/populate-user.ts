@@ -3,7 +3,7 @@ import db from "../../../db"
 export const refreshUser = async (client, twitterAccountTwitterId) => {
   const twitterUser = await db.twitterAccount.findFirst({
     where: {
-      id: twitterAccountTwitterId,
+      twitterId: twitterAccountTwitterId,
     },
   })
   if (!twitterUser) return
