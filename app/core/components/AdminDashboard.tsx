@@ -58,7 +58,7 @@ const AdminDashboard = () => {
           "anti-csrf": antiCSRFToken,
         },
         body: JSON.stringify({
-          twitterAccountId: twitterUserToLookup.id,
+          twitterAccountId: twitterUserToLookup.twitterId,
         }),
       })
       .then((response) => response.json())
