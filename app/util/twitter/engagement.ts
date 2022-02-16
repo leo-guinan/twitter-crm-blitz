@@ -15,6 +15,7 @@ export const getEngagement = async (client, twitterId) => {
     .get("tweets/search/recent", searchParams)
     .then((results) => {
       if (results && results.data) {
+        console.log(results.data.length)
         results.data.map(async (tweet) => {
           await db.tweet.upsert({
             where: {

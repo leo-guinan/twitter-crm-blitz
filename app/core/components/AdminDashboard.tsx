@@ -36,7 +36,7 @@ const AdminDashboard = () => {
           "anti-csrf": antiCSRFToken,
         },
         body: JSON.stringify({
-          twitterAccountId: twitterUserToLookup.id,
+          twitterAccountId: twitterUserToLookup.twitterId,
         }),
       })
       .then((response) => response.json())
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
           "anti-csrf": antiCSRFToken,
         },
         body: JSON.stringify({
-          twitterAccountId: twitterUserToLookup.twitterId,
+          twitterAccountTwtterId: twitterUserToLookup.twitterId,
         }),
       })
       .then((response) => response.json())
@@ -72,6 +72,7 @@ const AdminDashboard = () => {
 
   const runEngagement = async () => {
     setTriggeredEngagement(true)
+    console.log(JSON.stringify(twitterUserToLookup))
     await window
       .fetch("/api/twitter/engagement-lookup", {
         method: "POST",

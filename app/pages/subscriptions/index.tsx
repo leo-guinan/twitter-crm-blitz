@@ -192,40 +192,6 @@ export const SubscriptionsList = () => {
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                {organization!.plan!.personalSubscriptionQuota !== -1 && (
-                  <span className={``}>
-                    {maxSubscriptionsExceeded && (
-                      <span className={`inline-block p-4 m-1 text-red-700`}>
-                        You are over your subscription limit. Please deactivate some subscriptions
-                        or
-                        <Link href={Routes.UpgradeProfilePage()}>
-                          <a className="cursor-pointer underline"> upgrade your plan.</a>
-                        </Link>
-                      </span>
-                    )}
-
-                    {maxSubscriptionsReached && (
-                      <span>
-                        Maximum subscriptions reached.
-                        <Link href={Routes.UpgradeProfilePage()}>
-                          <a className="cursor-pointer underline">
-                            Please upgrade your plan for more.
-                          </a>
-                        </Link>
-                      </span>
-                    )}
-
-                    {!maxSubscriptionsExceeded && !maxSubscriptionsReached && (
-                      <span>
-                        {numberOfActivePersonalSubscriptions} /{" "}
-                        {organization?.plan?.personalSubscriptionQuota} subscriptions used
-                        <Link href={Routes.UpgradeProfilePage()}>
-                          <a className="cursor-pointer underline"> (Upgrade your Plan).</a>
-                        </Link>
-                      </span>
-                    )}
-                  </span>
-                )}
                 <div className="grid grid-cols-11">
                   <div className="col-span-7 mt-8">
                     <table className="min-w-full divide-y divide-gray-200">

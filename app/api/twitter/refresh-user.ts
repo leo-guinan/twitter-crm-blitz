@@ -11,7 +11,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const orgId = session.orgId
 
   if (req.body) {
-    const { twitterAccountId } = JSON.parse(req.body)
+    const { twitterAccountTwitterId } = JSON.parse(req.body)
 
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
@@ -22,7 +22,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
       bearer_token: process.env.TWITTER_BEARER_TOKEN as string,
     })
 
-    const account = await refreshUser(client, twitterAccountId)
+    const account = await refreshUser(client, twitterAccountTwitterId)
 
     res.statusCode = 200
     res.setHeader("Content-Type", "application/json")
