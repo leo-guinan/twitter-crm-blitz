@@ -10,6 +10,16 @@ export const refreshUser = async (client, twitterAccountTwitterId) => {
   return await populateUser(client, twitterUser.twitterUsername)
 }
 
+export const refreshUserByInternalId = async (client, twitterAccountId) => {
+  const twitterUser = await db.twitterAccount.findFirst({
+    where: {
+      id: twitterAccountId,
+    },
+  })
+  if (!twitterUser) return
+  return await populateUser(client, twitterUser.twitterUsername)
+}
+
 export const populateUser = async (client, twitterUsername) => {
   const params = {
     "user.fields": "id,profile_image_url,name,description",
