@@ -7,6 +7,7 @@ export const refreshUser = async (client, twitterAccountTwitterId) => {
     },
   })
   if (!twitterUser) return
+  console.log(twitterUser.twitterUsername)
   return await populateUser(client, twitterUser.twitterUsername)
 }
 

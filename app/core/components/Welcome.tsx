@@ -3,6 +3,7 @@ import { ExclamationCircleIcon } from "@heroicons/react/solid"
 import { useState } from "react"
 import { getAntiCSRFToken, Routes, useMutation, useRouter } from "blitz"
 import updateUserEmail from "../../users/mutations/updateUserEmail"
+import SubscriptionBuilderPage from "../../pages/tools/subscription-builder"
 
 const Welcome = () => {
   const antiCSRFToken = getAntiCSRFToken()
@@ -29,7 +30,7 @@ const Welcome = () => {
           email,
         }),
       })
-      router.push(Routes.SubscriptionsPage())
+      await router.push(Routes.SubscriptionBuilderPage())
     }
   }
 
@@ -52,8 +53,8 @@ const Welcome = () => {
                 Good for keeping track of current relationships/conversations.
               </li>
               <li>
-                Community Feed - a feed of accounts within a community. Good way to quickly figure
-                out what communities are up to. (coming soon)
+                Custom Feed - a feed of accounts that you pick. You determine what accounts you want
+                to see and how often.
               </li>
             </ul>
             <p>

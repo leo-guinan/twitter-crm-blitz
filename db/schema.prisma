@@ -203,6 +203,7 @@ enum SubscriptionType {
   FREE
   SELF
   CREATOR
+  CUSTOM
 }
 
 enum SubscriptionStatus {

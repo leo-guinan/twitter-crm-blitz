@@ -245,15 +245,7 @@ export const SubscriptionsList = () => {
                                     </div>
                                     <div className="ml-4">
                                       <div className="text-sm font-medium text-gray-900">
-                                        {
-                                          subscription?.twitterAccounts[0]?.twitterAccount
-                                            ?.twitterName
-                                        }
-                                      </div>
-                                      <div className="text-sm text-gray-500">
-                                        {"@" +
-                                          subscription?.twitterAccounts[0]?.twitterAccount
-                                            ?.twitterUsername}
+                                        {subscription?.name}
                                       </div>
                                     </div>
                                   </div>
@@ -299,26 +291,23 @@ export const SubscriptionsList = () => {
                                   <td className="px-4 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
                                       <div className="flex-shrink-0 h-10 w-10">
-                                        <img
-                                          className="h-10 w-10 rounded-full"
-                                          src={
-                                            subscription?.twitterAccounts[0]?.twitterAccount
-                                              ?.twitterProfilePictureUrl
-                                          }
-                                          alt=""
-                                        />
+                                        <div className="flex -space-x-1 overflow-hidden">
+                                          {subscription.twitterAccounts.map((twitterAccount) => (
+                                            <img
+                                              key={`${subscription.id}_${twitterAccount.twitterAccount.id}_image`}
+                                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                              src={
+                                                twitterAccount.twitterAccount
+                                                  .twitterProfilePictureUrl
+                                              }
+                                              alt=""
+                                            />
+                                          ))}
+                                        </div>
                                       </div>
                                       <div className="ml-4">
                                         <div className="text-sm font-medium text-gray-900">
-                                          {
-                                            subscription?.twitterAccounts[0]?.twitterAccount
-                                              ?.twitterName
-                                          }
-                                        </div>
-                                        <div className="text-sm text-gray-500">
-                                          {"@" +
-                                            subscription?.twitterAccounts[0]?.twitterAccount
-                                              ?.twitterUsername}
+                                          {subscription?.name}
                                         </div>
                                       </div>
                                     </div>

@@ -50,6 +50,7 @@ const AdminDashboard = () => {
 
   const populateFeed = async () => {
     setTriggeredEngagement(true)
+    console.log(twitterUserToLookup.twitterId)
     await window
       .fetch("/api/twitter/refresh-user", {
         method: "POST",
@@ -58,7 +59,7 @@ const AdminDashboard = () => {
           "anti-csrf": antiCSRFToken,
         },
         body: JSON.stringify({
-          twitterAccountTwtterId: twitterUserToLookup.twitterId,
+          twitterAccountTwitterId: twitterUserToLookup.twitterId,
         }),
       })
       .then((response) => response.json())

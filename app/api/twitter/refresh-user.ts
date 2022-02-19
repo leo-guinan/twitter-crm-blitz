@@ -12,7 +12,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
 
   if (req.body) {
     const { twitterAccountTwitterId } = JSON.parse(req.body)
-
+    console.log(twitterAccountTwitterId)
     const client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
       version: "2", // version "1.1" is the default (change for other subdomains)
@@ -26,6 +26,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
 
     res.statusCode = 200
     res.setHeader("Content-Type", "application/json")
+    console.log(account)
     res.end(JSON.stringify({ ...account }))
   }
 }
