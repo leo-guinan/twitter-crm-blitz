@@ -1,4 +1,4 @@
-import { TwitterTweetEmbed } from "react-twitter-embed"
+import { Tweet as TweetEmbed } from "react-static-tweets"
 
 interface AuthorItem {
   twitterName: string | null
@@ -28,7 +28,7 @@ const Tweet = ({ tweet }: TweetProps) => {
       target="_blank"
       rel="noreferrer"
     >
-      <TwitterTweetEmbed tweetId={tweet.tweetId} placeholder="Loading..." />
+      <TweetEmbed id={tweet.tweetId} />
     </a>
   )
 }

@@ -14,6 +14,7 @@ import LoginForm from "app/auth/components/LoginForm"
 import "@stripe/stripe-js"
 import "app/core/styles/index.css"
 import { useEffect } from "react"
+import "react-static-tweets/styles.css"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
