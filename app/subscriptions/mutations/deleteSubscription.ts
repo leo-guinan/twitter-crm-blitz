@@ -19,6 +19,10 @@ export default resolver.pipe(
       throw new NotFoundError("Subscription not found.")
     }
 
+    await db.twitterAccountsInSubscriptions.deleteMany({
+      where: { subscriptionId: subscription.id },
+    })
+
     return await db.subscription.deleteMany({ where: { id } })
   }
 )

@@ -3,8 +3,6 @@ import {
   BlitzPage,
   getAntiCSRFToken,
   Head,
-  Link,
-  Routes,
   useMutation,
   usePaginatedQuery,
   useQuery,
@@ -12,7 +10,6 @@ import {
 } from "blitz"
 import Layout from "app/pages/feather/layouts/Layout"
 import getSubscriptions from "app/subscriptions/queries/getSubscriptions"
-import Button from "../../core/components/Button"
 import TwitterUserList from "../../twitter-user/components/TwitterUserList"
 import { SubscriptionCadence } from "db"
 import updateSubscription from "app/subscriptions/mutations/updateSubscription"
@@ -23,6 +20,8 @@ import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 import topEngagedAccounts from "../../tweets/queries/topEngagedAccounts"
 import isSubscribedToUsers from "../../subscriptions/queries/isSubscribedToUsers"
 import LookupTwitterAccount from "../../twitter-accounts/components/LookupTwitterAccount"
+import { TrashIcon } from "@heroicons/react/solid"
+import deleteSubscription from "../../subscriptions/mutations/deleteSubscription"
 
 const ITEMS_PER_PAGE = 100
 
@@ -35,6 +34,7 @@ export const SubscriptionsList = () => {
   const [openPlanModal, setOpenPlanModal] = useState(false)
   const [cadenceToSet, setCadenceToSet] = useState("")
   const [updateSubscriptionMutation] = useMutation(updateSubscription)
+  const [deleteSubscriptionMutation] = useMutation(deleteSubscription)
   const [twitterUserToLookup, setTwitterUserToLookup] = useState("")
   const [currentlyEditingSubscription, setCurrentlyEditingSubscription] = useState("")
   const [twitterUserToSubscribeTo, setTwitterUserToSubscribeTo] = useState({
@@ -44,6 +44,8 @@ export const SubscriptionsList = () => {
     twitterBio: "",
     twitterProfilePictureUrl: "",
   })
+
+  const [newSubscriptionName, setNewSubscriptionName] = useState("")
 
   const [recommendedAccounts] = useQuery(topEngagedAccounts, {})
 
@@ -131,22 +133,41 @@ export const SubscriptionsList = () => {
   const updateSubscriptionWithId = async (subscriptionId) => {
     await updateSubscriptionMutation({
       id: subscriptionId,
-
+      name: newSubscriptionName,
       cadence: SUBSCRIPTION_CADENCES[cadenceToSet],
     })
     setCurrentlyEditingSubscription("")
   }
 
-  const handleSaveSubscription = async (event) => {
-    await updateSubscriptionWithId(parseInt(event.target.dataset.subscriptionId))
+  const handleSaveSubscription = async () => {
+    const sub = subscriptions.find((sub) => sub.id === parseInt(currentlyEditingSubscription))
+
+    const newSubscriptions = [
+      {
+        id: parseInt(currentlyEditingSubscription),
+        name: newSubscriptionName,
+        cadence: SUBSCRIPTION_CADENCES[cadenceToSet],
+        twitterAccounts: sub.twitterAccounts,
+        type: sub.type,
+        status: sub.status,
+      },
+      ...subscriptions.filter((sub) => sub.id !== parseInt(currentlyEditingSubscription)),
+    ]
+    await setQueryData({ subscriptions: newSubscriptions, hasMore }, { refetch: false })
+    await updateSubscriptionWithId(parseInt(currentlyEditingSubscription))
   }
 
   const handleEditSubscription = (event) => {
+    event.preventDefault()
     setCurrentlyEditingSubscription(event.target.dataset.subscriptionId)
+    const editingSubscription = subscriptions.find(
+      (sub) => sub.id === parseInt(event.target.dataset.subscriptionId)
+    )
+    setNewSubscriptionName(editingSubscription.name)
+    setCadenceToSet(editingSubscription.cadence)
   }
 
   const handleSelectCadence = async (event) => {
-    console.log(`setting cadence: ${event.target.value}`)
     setCadenceToSet(event.target.value)
   }
 
@@ -156,6 +177,20 @@ export const SubscriptionsList = () => {
 
   const handleOpenPlanModal = () => {
     setOpenPlanModal(!openPlanModal)
+  }
+
+  const handleUpdateSubscriptionName = (e) => {
+    setNewSubscriptionName(e.target.value)
+  }
+
+  const handleDeleteSubscription = async (event) => {
+    const subscriptionId = parseInt(currentlyEditingSubscription)
+    console.log(subscriptionId)
+    if (subscriptionId) {
+      const newSubscriptions = subscriptions.filter((sub) => sub.id !== subscriptionId)
+      await setQueryData({ subscriptions: newSubscriptions, hasMore }, { refetch: false })
+      await deleteSubscriptionMutation({ id: subscriptionId })
+    }
   }
 
   return (
@@ -245,7 +280,24 @@ export const SubscriptionsList = () => {
                                     </div>
                                     <div className="ml-4">
                                       <div className="text-sm font-medium text-gray-900">
-                                        {subscription?.name}
+                                        <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600">
+                                          <label
+                                            htmlFor={`subscription_name_${subscription.id}`}
+                                            className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900"
+                                          >
+                                            Name
+                                          </label>
+                                          <input
+                                            type="text"
+                                            name={`subscription_name_${subscription.id}`}
+                                            id={`subscription_name_${subscription.id}`}
+                                            className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
+                                            value={newSubscriptionName}
+                                            data-subscription-id={subscription.id}
+                                            onChange={handleUpdateSubscriptionName}
+                                            onBlur={handleSaveSubscription}
+                                          />
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -262,6 +314,7 @@ export const SubscriptionsList = () => {
                                   <select
                                     name={`subscription_${subscription.id}`}
                                     onChange={handleSelectCadence}
+                                    defaultValue={subscription.cadence}
                                   >
                                     {Object.keys(SUBSCRIPTION_CADENCES).map((cadence) => (
                                       <option
@@ -274,10 +327,14 @@ export const SubscriptionsList = () => {
                                   </select>
                                 </td>
                                 <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                  <button onClick={handleDeleteSubscription}>
+                                    <TrashIcon className="h-4 w-4" />
+                                  </button>
+                                </td>
+                                <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                                   <a
                                     href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                    data-subscription-id={subscription.id}
+                                    className="text-indigo-600 hover:text-indigo-900 "
                                     onClick={handleSaveSubscription}
                                   >
                                     Save
@@ -324,14 +381,14 @@ export const SubscriptionsList = () => {
                                     {subscription.cadence}
                                   </td>
                                   <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    {/*<a*/}
-                                    {/*  href="#"*/}
-                                    {/*  className="text-indigo-600 hover:text-indigo-900"*/}
-                                    {/*  data-subscription-id={subscription.id}*/}
-                                    {/*  onClick={handleEditSubscription}*/}
-                                    {/*>*/}
-                                    {/*  Edit*/}
-                                    {/*</a>*/}
+                                    <a
+                                      href="#"
+                                      className="text-indigo-600 hover:text-indigo-900"
+                                      data-subscription-id={subscription.id}
+                                      onClick={handleEditSubscription}
+                                    >
+                                      Edit
+                                    </a>
                                   </td>
                                 </>
                               )}
