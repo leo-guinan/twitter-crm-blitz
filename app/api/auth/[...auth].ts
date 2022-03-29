@@ -6,7 +6,7 @@ import db, { MembershipRole, TwitterAccountRefreshReportStatus } from "db"
 import processTwitterAccount from "../queues/process-twitter-account"
 
 export default passportAuth(({ ctx, req, res }) => ({
-  successRedirectUrl: "/feather",
+  successRedirectUrl: "/",
   errorRedirectUrl: "/",
   secureProxy: true,
   strategies: [

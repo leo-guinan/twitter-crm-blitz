@@ -59,6 +59,8 @@ model TwitterAccount {
   offSiteSubscribers       OffSiteSubscriber[]
   tweetsToProcess          TweetsToProcess[]
   twitterAccountsToProcess TwitterAccountToProcess[]
+  amplfiedBy               Amplifier[]                      @relation("amplfiedBy")
+  amplifying               Amplifier[]                      @relation("amplifying")
 }
 
 enum ConsentStatus {
@@ -457,4 +459,16 @@ model TwitterAccountToProcess {
   updatedAt        DateTime       @updatedAt
   twitterAccount   TwitterAccount @relation(fields: [twitterAccountId], references: [id])
   twitterAccountId Int
+}
+
+model Amplifier {
+  id                 Int            @id @default(autoincrement())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  owner              TwitterAccount @relation(name: "amplfiedBy", fields: [ownerId], references: [id])
+  ownerId            Int
+  amplifiedAccount   TwitterAccount @relation(name: "amplifying", fields: [amplifiedAccountId], references: [id])
+  amplifiedAccountId Int
+
+  @@unique([ownerId, amplifiedAccountId])
 }
