@@ -1,4 +1,6 @@
 import { Tweet as TweetEmbed } from "react-static-tweets"
+import Button from "../../core/components/Button"
+import React from "react"
 
 interface AuthorItem {
   twitterName: string | null
@@ -15,9 +17,11 @@ interface TweetItem {
 
 interface TweetProps {
   tweet: TweetItem
+  showAmplification?: boolean
 }
 
-const Tweet = ({ tweet }: TweetProps) => {
+const Tweet = ({ tweet, showAmplification = false }: TweetProps) => {
+  const requestAmplification = () => {}
   return (
     <a
       href={
@@ -29,6 +33,15 @@ const Tweet = ({ tweet }: TweetProps) => {
       rel="noreferrer"
     >
       <TweetEmbed id={tweet.tweetId} />
+      {showAmplification && (
+        <div className="w-full">
+          <Button
+            label="Request Amplification"
+            className="w-48 mx-auto"
+            onClick={requestAmplification}
+          />
+        </div>
+      )}
     </a>
   )
 }

@@ -15,6 +15,7 @@ interface TweetItem {
 
 interface TweetCollectionProps {
   tweets: TweetItem[]
+  showAmplification?: boolean
 }
 
 const TweetCollection = (props: TweetCollectionProps) => {
@@ -23,7 +24,9 @@ const TweetCollection = (props: TweetCollectionProps) => {
       {props.tweets &&
         props.tweets
           .sort((firstEl, secondEl) => firstEl.tweetCreatedAt - secondEl.tweetCreatedAt)
-          .map((tweet) => <Tweet tweet={tweet} key={tweet.tweetId} />)}
+          .map((tweet) => (
+            <Tweet tweet={tweet} key={tweet.tweetId} showAmplification={props.showAmplification} />
+          ))}
     </div>
   )
 }

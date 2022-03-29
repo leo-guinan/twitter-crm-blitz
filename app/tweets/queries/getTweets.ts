@@ -6,7 +6,28 @@ interface GetTweetsInCollectionInput
 
 export default resolver.pipe(
   resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetTweetsInCollectionInput) => {
+  async ({ where, orderBy, skip = 0, take = 100 }: GetTweetsInCollectionInput, ctx) => {
+    const orgId = ctx.session.orgId
+
+    const organization = await db.organization.findUnique({
+      where: {
+        id: orgId,
+      },
+      include: {
+        twitterAccounts: true,
+      },
+    })
+
+    const loggedInUser = organization!.twitterAccounts[0]
+
+    if (!loggedInUser)
+      return {
+        tweets: [],
+        nextPage: null,
+        hasMore: false,
+        count: 0,
+      }
+
     const {
       items: tweets,
       hasMore,
@@ -16,9 +37,18 @@ export default resolver.pipe(
       skip,
       take,
       count: () => db.tweet.count({ where }),
-      query: (paginateArgs) => db.tweet.findMany({ ...paginateArgs, where, orderBy }),
+      query: (paginateArgs) =>
+        db.tweet.findMany({
+          ...paginateArgs,
+          where: {
+            ...where,
+            authorAccountId: loggedInUser.id,
+          },
+          orderBy,
+        }),
     })
 
+    console.log(tweets.length)
     return {
       tweets,
       nextPage,
