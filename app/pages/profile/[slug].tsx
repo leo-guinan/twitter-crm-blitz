@@ -171,7 +171,7 @@ export const FollowAccount = () => {
                     <h3>
                       <div className="w-1/2 inline-block">For more options:</div>
                       <div className="w-1/2 inline-block">
-                        <LoginForm redirectUrl={`profile/${slug}`} />
+                        <LoginForm onSuccess={() => false} />
                       </div>
                     </h3>
                   </div>
