@@ -20,6 +20,7 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
               twitterAccounts: {
                 select: {
                   twitterId: true,
+                  slug: true,
                 },
               },
             },

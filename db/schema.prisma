@@ -189,6 +189,7 @@ model Tweet {
   tweetReports    TweetLookupReport[]
   dataFieldValues DataFieldValue[]
   tweetsToProcess TweetsToProcess[]
+  boostRequests   BoostRequest[]
 }
 
 enum SubscriptionCadence {
@@ -462,13 +463,34 @@ model TwitterAccountToProcess {
 }
 
 model Amplifier {
-  id                 Int            @id @default(autoincrement())
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  owner              TwitterAccount @relation(name: "amplfiedBy", fields: [ownerId], references: [id])
+  id                 Int                       @id @default(autoincrement())
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  owner              TwitterAccount            @relation(name: "amplfiedBy", fields: [ownerId], references: [id])
   ownerId            Int
-  amplifiedAccount   TwitterAccount @relation(name: "amplifying", fields: [amplifiedAccountId], references: [id])
+  amplifiedAccount   TwitterAccount            @relation(name: "amplifying", fields: [amplifiedAccountId], references: [id])
   amplifiedAccountId Int
+  boostRequests      AmplifierInBoostRequest[]
 
   @@unique([ownerId, amplifiedAccountId])
+}
+
+model BoostRequest {
+  id         Int                       @id @default(autoincrement())
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  tweet      Tweet                     @relation(fields: [tweetId], references: [tweetId])
+  tweetId    String
+  amplifiers AmplifierInBoostRequest[]
+}
+
+model AmplifierInBoostRequest {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  boostRequest   BoostRequest @relation(fields: [boostRequestId], references: [id])
+  boostRequestId Int
+  amplifier      Amplifier    @relation(fields: [amplifierId], references: [id])
+  amplifierId    Int
+
 }

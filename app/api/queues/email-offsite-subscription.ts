@@ -23,7 +23,6 @@ export default Queue(
           </a>
         </header>`
 
-    //{"collections":[{"id":9,"createdAt":"2021-11-26T18:14:17.785Z","updatedAt":"2021-11-26T18:14:17.788Z","subscriptionId":1,"parentCollectionId":null}]}
     const emailAddress = subscriber.email
 
     if (emailAddress) {

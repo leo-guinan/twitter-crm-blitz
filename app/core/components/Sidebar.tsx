@@ -1,11 +1,10 @@
 import { Link, Routes, useMutation } from "blitz"
 import React, { Fragment } from "react"
 import { useCurrentUser } from "../hooks/useCurrentUser"
-import createCheckoutSession from "app/users/mutations/createCheckoutSession"
 import customerPortal from "app/users/mutations/customerPortal"
-import { loadStripe } from "@stripe/stripe-js"
 import { GlobalRole } from "db"
 import logout from "app/auth/mutations/logout"
+import FollowAccountPage from "../../pages/profile/[slug]"
 
 const Sidebar = () => {
   const currentUser = useCurrentUser()
@@ -55,6 +54,7 @@ const Sidebar = () => {
               )}
             {currentUser && (
               <Fragment>
+                <h1>Social</h1>
                 <Link href={Routes.SubscriptionsPage()}>
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -73,6 +73,17 @@ const Sidebar = () => {
                     <span className="flex-grow text-right"></span>
                   </a>
                 </Link>
+                <h1>Media</h1>
+                <Link href={Routes.AmplifiersPage()}>
+                  <a
+                    className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                    href="#"
+                  >
+                    <span className="mx-4 text-lg font-normal">Amplifiers</span>
+                    <span className="flex-grow text-right"></span>
+                  </a>
+                </Link>
+                <h1>My Account</h1>
                 {currentUser?.memberships[0]?.organization?.stripeCustomerId && (
                   <a
                     className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
@@ -85,6 +96,32 @@ const Sidebar = () => {
                     <span className="mx-4 text-lg font-normal">Billing</span>
                     <span className="flex-grow text-right"></span>
                   </a>
+                )}
+                {currentUser?.memberships[0]?.organization?.twitterAccounts[0]?.slug && (
+                  <Link
+                    href={Routes.FollowAccountPage({
+                      slug: currentUser.memberships[0].organization.twitterAccounts[0].slug,
+                    })}
+                  >
+                    <a
+                      className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                      href="#"
+                    >
+                      <span className="mx-4 text-lg font-normal">My Profile</span>
+                      <span className="flex-grow text-right"></span>
+                    </a>
+                  </Link>
+                )}
+                {currentUser?.memberships[0]?.organization?.twitterAccounts[0] && (
+                  <Link href={Routes.RecentTweetsPage()}>
+                    <a
+                      className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                      href="#"
+                    >
+                      <span className="mx-4 text-lg font-normal">Recent Tweets</span>
+                      <span className="flex-grow text-right"></span>
+                    </a>
+                  </Link>
                 )}
 
                 <a

@@ -1,6 +1,7 @@
 import { Tweet as TweetEmbed } from "react-static-tweets"
 import Button from "../../core/components/Button"
 import React from "react"
+import { Routes, useRouter } from "blitz"
 
 interface AuthorItem {
   twitterName: string | null
@@ -21,17 +22,11 @@ interface TweetProps {
 }
 
 const Tweet = ({ tweet, showAmplification = false }: TweetProps) => {
-  const requestAmplification = () => {}
+  const router = useRouter()
+  const requestAmplification = () =>
+    router.push(Routes.AmplifyTweetPage({ tweetId: tweet.tweetId }))
   return (
-    <a
-      href={
-        tweet.authorAccount
-          ? `https://twitter.com/${tweet.authorAccount.twitterUsername}/status/${tweet.tweetId}`
-          : ""
-      }
-      target="_blank"
-      rel="noreferrer"
-    >
+    <>
       <TweetEmbed id={tweet.tweetId} />
       {showAmplification && (
         <div className="w-full">
@@ -42,7 +37,7 @@ const Tweet = ({ tweet, showAmplification = false }: TweetProps) => {
           />
         </div>
       )}
-    </a>
+    </>
   )
 }
 

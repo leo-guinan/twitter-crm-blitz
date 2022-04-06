@@ -1,5 +1,6 @@
 import { BlitzPage, getAntiCSRFToken, useMutation, useParam, useQuery } from "blitz"
 import React, { Suspense, useState } from "react"
+import { Switch } from "@headlessui/react"
 
 import Layout from "app/core/layouts/Layout"
 import getTwitterAccountBySlug from "../../twitter-accounts/queries/getTwitterAccountBySlug"
@@ -8,6 +9,11 @@ import isAmplifyingUser from "../../amplifier/queries/isAmplifyingUser"
 import amplifyUser from "../../amplifier/mutations/amplifyUser"
 import unamplifyUser from "../../amplifier/mutations/unamplifyUser"
 import LoginForm from "../../auth/components/LoginForm"
+import isSubscribedToUser from "../../subscriptions/queries/isSubscribedToUser"
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ")
+}
 
 export const FollowAccount = () => {
   const antiCSRFToken = getAntiCSRFToken()
@@ -25,6 +31,10 @@ export const FollowAccount = () => {
     slug: slug,
   })
 
+  const [featherSubscription] = useQuery(isSubscribedToUser, {
+    twitterId: twitterAccount.twitterId ?? "",
+  })
+
   const [amplified, { setQueryData }] = useQuery(isAmplifyingUser, {
     twitterAccountId: twitterAccount.id,
   })
@@ -40,18 +50,26 @@ export const FollowAccount = () => {
     setBotDetect(event.target.value)
   }
 
+  const handleChangeAmplified = () => {
+    if (amplified) {
+      handleUnamplify()
+    } else {
+      handleAmplify()
+    }
+  }
+
   const handleAmplify = async () => {
     await amplifyMutation({
       twitterAccountId: twitterAccount.id,
     })
-    setQueryData(true)
+    setQueryData(true, { refetch: false })
   }
 
   const handleUnamplify = async () => {
     await unamplifyMutation({
       twitterAccountId: twitterAccount.id,
     })
-    setQueryData(false)
+    setQueryData(false, { refetch: false })
   }
 
   const handleSubmit = async (e) => {
@@ -143,45 +161,73 @@ export const FollowAccount = () => {
                 )}
               </div>
 
-              <div className="">
-                {currentUser && (
-                  <div className="w-1/2">
-                    {!amplified && (
-                      <button
-                        type="submit"
-                        className="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        onClick={handleAmplify}
-                      >
-                        Amplify
-                      </button>
-                    )}
-                    {amplified && (
-                      <button
-                        type="submit"
-                        className="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        onClick={handleUnamplify}
-                      >
-                        Un-amplify
-                      </button>
-                    )}
+              <div className="bg-gray-50 sm:rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Relationship Options
+                  </h3>
+                  <div className="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Here are the ways you can help {twitterAccount.twitterName}</p>
                   </div>
-                )}
-                {!currentUser && (
-                  <div className="my-2 w-full">
-                    <h3>
-                      <div className="w-1/2 inline-block">For more options:</div>
-                      <div className="w-1/2 inline-block">
-                        <LoginForm onSuccess={() => false} />
+                  <div className="mt-5 flex flex-col">
+                    {currentUser && (
+                      <div className="w-1/2">
+                        <div className="mt-5 flex flex-col">
+                          <Switch.Group as="div" className="flex items-center justify-between">
+                            <span className="flex-grow flex flex-col">
+                              <Switch.Label
+                                as="span"
+                                className="text-sm font-medium text-gray-900"
+                                passive
+                              >
+                                Amplify
+                              </Switch.Label>
+                              <Switch.Description as="span" className="text-sm text-gray-500">
+                                Get notified when they have a tweet that needs amplified.
+                              </Switch.Description>
+                            </span>
+                            <Switch
+                              checked={amplified}
+                              onChange={handleChangeAmplified}
+                              className={classNames(
+                                amplified ? "bg-indigo-600" : "bg-gray-200",
+                                "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                              )}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  amplified ? "translate-x-5" : "translate-x-0",
+                                  "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                                )}
+                              />
+                            </Switch>
+                          </Switch.Group>
+                        </div>
+
+                        {subscribed && (
+                          <>
+                            <div className="mt-5">
+                              <p>You are now subscribed to {twitterAccount.twitterName}</p>
+                            </div>
+                          </>
+                        )}
+                        {!subscribed && <></>}
                       </div>
-                    </h3>
+                    )}
+                    {!currentUser && (
+                      <div className="my-2 w-full">
+                        <h3>
+                          <div className="w-1/2 inline-block">For more options:</div>
+                          <div className="w-1/2 inline-block">
+                            <LoginForm onSuccess={() => false} />
+                          </div>
+                        </h3>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              {subscribed && (
-                <div className="mt-5">
-                  <p>You are now subscribed to {twitterAccount.twitterName}</p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
