@@ -112,7 +112,7 @@ export const FollowAccount = () => {
           <div className="bg-white shadow sm:rounded-lg">
             <div className="px-4 py-5 sm:p-6">
               <div className="">
-                {twitterAccount.id === currentTwitterAccount.id && (
+                {currentTwitterAccount && twitterAccount.id === currentTwitterAccount.id && (
                   <>
                     <span className="text-sm font-medium text-gray-900">
                       This is your profile. Share it with others so they can help amplify your
@@ -120,7 +120,7 @@ export const FollowAccount = () => {
                     </span>
                   </>
                 )}
-                {twitterAccount.id !== currentTwitterAccount.id && !currentUser && !subscribed && (
+                {!currentUser && !subscribed && (
                   <div className="flex flex-col w-full">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
                       Don&apos;t miss a tweet from {twitterAccount.twitterName}
@@ -169,7 +169,7 @@ export const FollowAccount = () => {
                   </div>
                 )}
               </div>
-              {twitterAccount.id !== currentTwitterAccount.id && (
+              {currentTwitterAccount && twitterAccount.id !== currentTwitterAccount.id && (
                 <div className="bg-gray-50 sm:rounded-lg">
                   <div className="px-4 py-5 sm:p-6">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">

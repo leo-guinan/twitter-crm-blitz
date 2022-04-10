@@ -8,7 +8,7 @@ export default resolver.pipe(resolver.zod(GetActiveTwitterAccount), async ({}, c
   const orgId = ctx.session.orgId
 
   if (!orgId) {
-    throw new NotFoundError()
+    return null
   }
 
   const twitterAccount = await db.twitterAccount.findFirst({
@@ -16,8 +16,6 @@ export default resolver.pipe(resolver.zod(GetActiveTwitterAccount), async ({}, c
       organizationId: orgId,
     },
   })
-
-  if (!twitterAccount) throw new NotFoundError()
 
   return twitterAccount
 })
