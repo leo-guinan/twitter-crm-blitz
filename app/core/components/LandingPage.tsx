@@ -25,9 +25,9 @@ const LandingPage = () => {
             src="https://www.loom.com/embed/881ca7c254134e12b423c833b5377a0e"
             frameBorder="0"
             // @ts-ignore
-            webkitallowfullscreen=""
-            mozallowfullscreen=""
-            allowFullScreen=""
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowFullScreen
             className="absolute top-0 left-0 w-full h-full"
           />
         </div>
