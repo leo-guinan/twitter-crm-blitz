@@ -156,6 +156,7 @@ export default passportAuth(({ ctx, req, res }) => ({
               orgId,
               source: "twitter",
             }
+            // console.log(req.query)
             done(undefined, { publicData })
           } else {
             done(undefined, {

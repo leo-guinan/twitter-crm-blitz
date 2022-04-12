@@ -5,6 +5,8 @@ import { useMutation, useQuery } from "blitz"
 import { CheckIcon } from "@heroicons/react/solid"
 import { useState } from "react"
 import getPlans from "../../plan/queries/getPlans"
+import getCurrentUser from "../../users/queries/getCurrentUser"
+import { useCurrentUser } from "../hooks/useCurrentUser"
 
 {
   /* {!currentUser?.price && (
@@ -31,7 +33,7 @@ const Pricing = () => {
   const [createCheckoutSessionMutation] = useMutation(createCheckoutSession)
   const [customerPortalMutation] = useMutation(customerPortal)
   const [currentPlanSelected, setCurrentPlanSelected] = useState("Annual")
-
+  const currentUser = useCurrentUser()
   const [plans] = useQuery(getPlans, {})
 
   const activeButtonClasses =
@@ -41,15 +43,19 @@ const Pricing = () => {
 
   const getFeatures = (type) => {
     const features = {
-      FREE: ["Subscribe to your own tweets.", "Add one personal subscription"],
-      PERSONAL: ["Subscribe to up to 15 additional people."],
+      FREE: ["Unlimited Subscriptions", "Unlimited Amplifiers", "Perfect for getting started"],
+      PERSONAL: [
+        "Analytics",
+        "Early Access To New Tools",
+        "Helpful if you're trying to actively grow your account",
+      ],
       COMMUNITY: [
         "Tools to manage and grow community relationships",
-        "Support up to 50 members in the community",
+        "Amplify Community Members and Highlight their Accomplishments",
       ],
       PROFESSIONAL: [
-        "Keep track of all your professional relationships.",
-        "Use community tools to manage a variety of relationship types.",
+        "Custom Tools to help you grow your business",
+        "Consulting Available",
         "Unlimited relationships and communities.",
       ],
     }
@@ -57,6 +63,7 @@ const Pricing = () => {
   }
 
   const handleClick = async (event) => {
+    console.log("clicked")
     event.preventDefault()
     if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       throw new Error("Stripe publishable key missing")
@@ -87,10 +94,12 @@ const Pricing = () => {
 
   return (
     <>
-      <div className="bg-white">
+      <div className="bg-white z-10">
         <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:flex-col sm:align-center">
-            <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center">Pricing Plans</h1>
+            <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center" id="pricing">
+              Pricing Plans
+            </h1>
             <p className="mt-5 text-xl text-gray-500 sm:text-center">Start today for free.</p>
             <div className="relative self-center mt-6 bg-gray-100 rounded-lg p-0.5 flex sm:mt-8">
               <button
@@ -113,7 +122,7 @@ const Pricing = () => {
               </button>
             </div>
           </div>
-          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">
+          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
             {plans.map((plan) => (
               <div
                 key={plan.name}
@@ -134,17 +143,24 @@ const Pricing = () => {
                   </p>
 
                   {plan.displayName === "Free" && <>Free</>}
-                  {plan.displayName !== "Free" && (
-                    <>
-                      <a
-                        href=""
-                        className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900"
-                        data-plan={plan.id}
-                        onClick={handleClick}
-                      >
-                        Buy {plan.displayName}
-                      </a>
-                    </>
+                  {currentUser && plan.displayName !== "Free" && (
+                    <a
+                      href=""
+                      className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900 z-10"
+                      data-plan={plan.id}
+                      onClick={handleClick}
+                    >
+                      Buy {plan.displayName}
+                    </a>
+                  )}
+                  {!currentUser && (
+                    <a
+                      href="api/auth/twitter?redirectUrl=/subscriptions"
+                      className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900 z-10"
+                      data-plan={plan.id}
+                    >
+                      Get Started For Free
+                    </a>
                   )}
                 </div>
                 <div className="pt-6 pb-8 px-6">

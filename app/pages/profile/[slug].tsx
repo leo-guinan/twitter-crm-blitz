@@ -1,5 +1,5 @@
-import { BlitzPage, getAntiCSRFToken, useMutation, useParam, useQuery } from "blitz"
-import React, { Suspense, useState } from "react"
+import { BlitzPage, getAntiCSRFToken, Image, useMutation, useParam, useQuery } from "blitz"
+import React, { Fragment, Suspense, useState } from "react"
 import { Switch } from "@headlessui/react"
 
 import Layout from "app/core/layouts/Layout"
@@ -11,6 +11,7 @@ import unamplifyUser from "../../amplifier/mutations/unamplifyUser"
 import LoginForm from "../../auth/components/LoginForm"
 import isSubscribedToUser from "../../subscriptions/queries/isSubscribedToUser"
 import getLoggedInTwitterUser from "../../twitter-accounts/queries/getLoggedInTwitterUser"
+import signInWithTwitter from "../../../public/sign_in_with_twitter.png"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -223,18 +224,23 @@ export const FollowAccount = () => {
                           )}
                         </div>
                       )}
-                      {!currentUser && (
-                        <div className="my-2 w-full">
-                          <h3>
-                            <div className="w-1/2 inline-block">For more options:</div>
-                            <div className="w-1/2 inline-block">
-                              <LoginForm onSuccess={() => false} />
-                            </div>
-                          </h3>
-                        </div>
-                      )}
                     </div>
                   </div>
+                </div>
+              )}
+              {!currentUser && (
+                <div className="my-2 w-full">
+                  <h3>
+                    <div className="w-1/2 inline-block">For more options:</div>
+                    <div className="w-1/2 inline-block">
+                      <a
+                        className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-2 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                        href={`/api/auth/twitter?redirectUrl=/profile/${slug}`}
+                      >
+                        <Image src={signInWithTwitter} />
+                      </a>
+                    </div>
+                  </h3>
                 </div>
               )}
             </div>

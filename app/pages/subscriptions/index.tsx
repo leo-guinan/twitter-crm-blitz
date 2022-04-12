@@ -14,8 +14,6 @@ import { SubscriptionCadence } from "db"
 import updateSubscription from "app/subscriptions/mutations/updateSubscription"
 import isSubscribedToUser from "app/subscriptions/queries/isSubscribedToUser"
 import getNumberOfActivePersonalSubscriptions from "../../subscriptions/queries/getNumberOfActivePersonalSubscriptions"
-import { useCurrentOrganization } from "../../core/hooks/useCurrentOrganization"
-import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 import topEngagedAccounts from "../../tweets/queries/topEngagedAccounts"
 import isSubscribedToUsers from "../../subscriptions/queries/isSubscribedToUsers"
 import { TrashIcon } from "@heroicons/react/solid"
@@ -24,48 +22,15 @@ import deleteSubscription from "../../subscriptions/mutations/deleteSubscription
 const ITEMS_PER_PAGE = 100
 
 export const SubscriptionsList = () => {
-  const antiCSRFToken = getAntiCSRFToken()
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const currentUser = useCurrentUser()
 
-  const [openPlanModal, setOpenPlanModal] = useState(false)
   const [cadenceToSet, setCadenceToSet] = useState("")
   const [updateSubscriptionMutation] = useMutation(updateSubscription)
   const [deleteSubscriptionMutation] = useMutation(deleteSubscription)
-  const [twitterUserToLookup, setTwitterUserToLookup] = useState("")
   const [currentlyEditingSubscription, setCurrentlyEditingSubscription] = useState("")
-  const [twitterUserToSubscribeTo, setTwitterUserToSubscribeTo] = useState({
-    twitterId: "",
-    twitterUsername: "",
-    twitterName: "",
-    twitterBio: "",
-    twitterProfilePictureUrl: "",
-  })
 
   const [newSubscriptionName, setNewSubscriptionName] = useState("")
-
-  const [recommendedAccounts] = useQuery(topEngagedAccounts, {})
-
-  const [
-    numberOfActivePersonalSubscriptions,
-    { setQueryData: setNumberOfActivePersonalSubscriptions },
-  ] = useQuery(getNumberOfActivePersonalSubscriptions, {})
-
-  const [isUserSubscribedToTwitterUserToSubscribeTo, { setQueryData: setSubscribed }] = useQuery(
-    isSubscribedToUser,
-    { twitterId: twitterUserToSubscribeTo.twitterId }
-  )
-
-  const organization = useCurrentOrganization()
-
-  const maxSubscriptionsReached =
-    numberOfActivePersonalSubscriptions === organization!.plan!.personalSubscriptionQuota
-
-  const maxSubscriptionsExceeded =
-    organization!.plan!.personalSubscriptionQuota !== -1 &&
-    numberOfActivePersonalSubscriptions > organization!.plan!.personalSubscriptionQuota
-
   const SUBSCRIPTION_CADENCES = {
     DAILY: SubscriptionCadence.DAILY,
     WEEKLY: SubscriptionCadence.WEEKLY,
@@ -76,57 +41,6 @@ export const SubscriptionsList = () => {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
-
-  const [engagedAccountsSubscribed] = useQuery(isSubscribedToUsers, {
-    twitterIds: recommendedAccounts ? recommendedAccounts.map((account) => account.twitterId) : [],
-  })
-
-  const isSubscribedToTwitterUser = (twitterId) => {
-    if (twitterId === twitterUserToSubscribeTo) {
-      return isUserSubscribedToTwitterUserToSubscribeTo
-    }
-    return engagedAccountsSubscribed[twitterId]
-  }
-
-  const handleLookupUser = async () => {}
-
-  const handleSubscribeToUser = async (event) => {
-    let twitterAccountToSubscribeTo
-    const twitterId = event.target.dataset.twitterId
-    if (twitterId === twitterUserToSubscribeTo.twitterId) {
-      twitterAccountToSubscribeTo = twitterUserToSubscribeTo
-      setSubscribed(true, { refetch: false })
-    } else if (recommendedAccounts) {
-      twitterAccountToSubscribeTo = recommendedAccounts.find(
-        (account) => account.twitterId === twitterId
-      )
-      engagedAccountsSubscribed[twitterId] = true
-    }
-    const newSubscription = {
-      twitterUsers: [twitterAccountToSubscribeTo],
-      name: `New Subscription`,
-      id: twitterAccountToSubscribeTo.twitterId,
-      type: "PERSONAL",
-      status: "ACTIVE",
-      cadence: "WEEKLY",
-    }
-    console.log(`adding new subscription: ${JSON.stringify(newSubscription)}`)
-    setQueryData(
-      { subscriptions: [newSubscription, ...subscriptions], hasMore },
-      { refetch: false }
-    )
-
-    await window.fetch("/api/twitter/subscribe-to-user", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "anti-csrf": antiCSRFToken,
-      },
-      body: JSON.stringify({
-        twitterId,
-      }),
-    })
-  }
 
   const updateSubscriptionWithId = async (subscriptionId) => {
     await updateSubscriptionMutation({
@@ -167,14 +81,6 @@ export const SubscriptionsList = () => {
 
   const handleSelectCadence = async (event) => {
     setCadenceToSet(event.target.value)
-  }
-
-  const handleTwitterUserToLookupChange = (event) => {
-    setTwitterUserToLookup(event.target.value)
-  }
-
-  const handleOpenPlanModal = () => {
-    setOpenPlanModal(!openPlanModal)
   }
 
   const handleUpdateSubscriptionName = (e) => {

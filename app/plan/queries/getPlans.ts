@@ -4,12 +4,11 @@ import { z } from "zod"
 
 const GetPlans = z.object({})
 
-export default resolver.pipe(resolver.zod(GetPlans), resolver.authorize(), async ({}) => {
+export default resolver.pipe(resolver.zod(GetPlans), async ({}) => {
   const plans = await db.plan.findMany({
     orderBy: {
       id: "asc",
     },
   })
-  console.log(JSON.stringify(plans))
   return plans
 })

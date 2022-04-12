@@ -1,7 +1,9 @@
 const Features = () => {
   return (
     <div className="sm:flex flex-wrap justify-center items-center text-center gap-8 py-8">
-      <h2 className="w-full text-5xl">Features</h2>
+      <h2 className="w-full text-5xl" id="features">
+        Features
+      </h2>
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 bg-white mt-6  shadow-lg rounded-lg dark:bg-gray-800">
         <div className="flex-shrink-0">
           <div className="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
@@ -40,10 +42,10 @@ const Features = () => {
           </div>
         </div>
         <h3 className="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
-          Manage the online relationships you care about.
+          Give your audience the tools they need to help promote your content.
         </h3>
         <p className="text-md text-gray-500 dark:text-gray-300 py-4">
-          Don&apos;t let the noise of social media drown out the voices you value.
+          Social Media is a lot easier when you&apos;ve got a team.
         </p>
       </div>
       <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 py-4 bg-white shadow-lg rounded-lg dark:bg-gray-800">
@@ -65,7 +67,8 @@ const Features = () => {
           Forget likes and retweets.
         </h3>
         <p className="text-md  text-gray-500 dark:text-gray-300 py-4">
-          Feather gives you the tools to build strong online relationships.
+          Feather gives you the tools and metrics to build strong online relationships, helping you
+          grow faster.
         </p>
       </div>
     </div>
