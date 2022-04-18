@@ -1,7 +1,7 @@
 import { BlitzApiRequest, BlitzApiResponse, getSession } from "blitz"
 import db, { EmailStatus } from "db"
 import processEmail from "../queues/process-email"
-
+import createBoostRecord from "../queues/create-boost-record"
 const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const session = await getSession(req, res)
 
@@ -12,7 +12,6 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     res.setHeader("Content-Type", "application/json")
     res.end(JSON.stringify("Unauthorized"))
   } else {
-    // currentUser?.memberships[0]?.organization?.twitterAccounts[0]?
     const user = await db.user.findFirst({
       where: { id: session.userId },
       select: {
@@ -56,6 +55,10 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
             },
           },
         })
+        await createBoostRecord.enqueue({
+          tweetId,
+          requestingAccountId: twitterAccountToAmplify.id,
+        })
         const user = orgToAmplify?.memberships[0]?.user
         const nameOfUserToAmplify = orgToAmplify?.twitterAccounts[0]?.twitterName
         const emailHeader = `${nameOfUserToAmplify} needs your help to amplify their tweet: ${process.env.QUIRREL_BASE_URL}/tools/amplify/${tweetId}`
@@ -67,7 +70,6 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
             here.
           </a>
         </header>`
-        //{"collections":[{"id":9,"createdAt":"2021-11-26T18:14:17.785Z","updatedAt":"2021-11-26T18:14:17.788Z","subscriptionId":1,"parentCollectionId":null}]}
         const emailAddress = orgToAmplify?.memberships[0]?.user?.email
 
         if (emailAddress) {

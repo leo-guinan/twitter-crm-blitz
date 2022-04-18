@@ -83,6 +83,7 @@ const Sidebar = () => {
                     <span className="flex-grow text-right"></span>
                   </a>
                 </Link>
+
                 <h1>My Account</h1>
                 {currentUser?.memberships[0]?.organization?.stripeCustomerId && (
                   <a
@@ -112,6 +113,24 @@ const Sidebar = () => {
                     </a>
                   </Link>
                 )}
+                {!currentUser?.memberships[0]?.organization?.twitterAccounts[0]?.slug &&
+                  currentUser?.memberships[0]?.organization?.twitterAccounts[0]
+                    ?.twitterUsername && (
+                    <Link
+                      href={Routes.FollowAccountPage({
+                        slug: currentUser.memberships[0].organization.twitterAccounts[0]
+                          .twitterUsername,
+                      })}
+                    >
+                      <a
+                        className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                        href="#"
+                      >
+                        <span className="mx-4 text-lg font-normal">My Profile</span>
+                        <span className="flex-grow text-right"></span>
+                      </a>
+                    </Link>
+                  )}
                 {currentUser?.memberships[0]?.organization?.twitterAccounts[0] && (
                   <Link href={Routes.RecentTweetsPage()}>
                     <a
@@ -136,6 +155,15 @@ const Sidebar = () => {
                 </a>
                 {currentUser.role === GlobalRole.SUPERADMIN && (
                   <section>
+                    <Link href={Routes.AnalyticsPage()}>
+                      <a
+                        className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                        href="#"
+                      >
+                        <span className="mx-4 text-lg font-normal">Analytics</span>
+                        <span className="flex-grow text-right"></span>
+                      </a>
+                    </Link>
                     <Link href={Routes.CommunitiesPage()}>
                       <a
                         className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "

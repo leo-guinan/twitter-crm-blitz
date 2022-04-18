@@ -103,7 +103,7 @@ export const SubscriptionsList = () => {
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <div className="grid grid-cols-7">
-              <div className="col-span-7 mt-8">
+              <div className="col-span-7">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>

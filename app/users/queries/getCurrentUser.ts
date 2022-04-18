@@ -15,11 +15,13 @@ export default async function getCurrentUser(_ = null, { session }: Ctx) {
         select: {
           organization: {
             select: {
+              planId: true,
               subscriptionStatus: true,
               stripeCustomerId: true,
               twitterAccounts: {
                 select: {
                   twitterId: true,
+                  twitterUsername: true,
                   slug: true,
                 },
               },

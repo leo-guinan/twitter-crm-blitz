@@ -25,7 +25,7 @@ const Layout = ({ title, children }: LayoutProps) => {
             <div className="h-screen hidden lg:block my-4 ml-4 shadow-lg relative w-80">
               <div className="bg-white h-full rounded-2xl dark:bg-gray-700">
                 <div className="flex items-center justify-center pt-6">
-                  <img src="/logo.png" />
+                  <img src="/logo.svg" />
                 </div>
                 <Sidebar />
               </div>

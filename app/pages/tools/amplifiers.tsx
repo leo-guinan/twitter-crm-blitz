@@ -1,12 +1,9 @@
-import React, { useState } from "react"
+import React from "react"
 import Layout from "../feather/layouts/Layout"
 import TwitterUserList from "../../twitter-user/components/TwitterUserList"
-import { SubscriptionCadence } from "db"
-import { getAntiCSRFToken, Routes, useMutation, useQuery, useRouter } from "blitz"
-import createSubscription from "../../subscriptions/mutations/createSubscription"
+import { Routes, useQuery, useRouter } from "blitz"
 import getAmplifiersForUser from "../../amplifier/queries/getAmplifiersForUser"
-import FollowAccountPage from "../profile/[slug]"
-import getLoggedInTwitterUser from "../../twitter-accounts/queries/getLoggedInTwitterUser"
+import getAccountsUserIsAmplifying from "../../amplifier/queries/getAccountsUserIsAmplifying"
 
 interface TwitterAccount {
   id: number
@@ -20,6 +17,7 @@ interface TwitterAccount {
 const AmplifiersPage = () => {
   const router = useRouter()
   const [amplifiers] = useQuery(getAmplifiersForUser, {})
+  const [amplifying] = useQuery(getAccountsUserIsAmplifying, {})
 
   const handleViewUserProfile = async (event) => {
     console.log()
@@ -33,6 +31,17 @@ const AmplifiersPage = () => {
   return (
     <>
       <section className="border-2 mx-4 p-6">
+        <h1>Amplified By</h1>
+        <TwitterUserList
+          twitterUsers={amplifiers.map((amplifier) => amplifier.amplifiedAccount)}
+          actionHandler={handleViewUserProfile}
+          actionCTA="View Profile"
+          actionPerformed={() => false}
+          view="compact"
+        />
+      </section>
+      <section className="border-2 mx-4 p-6">
+        <h1>Amplifying</h1>
         <TwitterUserList
           twitterUsers={amplifiers.map((amplifier) => amplifier.amplifiedAccount)}
           actionHandler={handleViewUserProfile}

@@ -16,7 +16,26 @@ export default resolver.pipe(resolver.zod(GetTwitterAccount), async ({ slug }) =
     where: { slug },
   })
 
-  if (!twitterAccount) throw new NotFoundError()
+  if (!twitterAccount) {
+    const lookup = await db.twitterAccount.findFirst({
+      where: {
+        twitterUsername: {
+          equals: slug,
+          mode: "insensitive",
+        },
+      },
+    })
+    if (!lookup) {
+      throw new NotFoundError()
+    }
+    if (!lookup.slug) {
+      await db.twitterAccount.update({
+        where: { id: lookup.id },
+        data: { slug: lookup.twitterUsername },
+      })
+    }
+    return lookup
+  }
 
   return twitterAccount
 })

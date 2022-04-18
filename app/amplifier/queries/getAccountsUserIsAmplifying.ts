@@ -21,7 +21,7 @@ export default resolver.pipe(
     }
     return await db.amplifier.findMany({
       where: {
-        amplifiedAccountId: twitterAccount.id,
+        ownerId: twitterAccount.id,
       },
       select: {
         owner: true,

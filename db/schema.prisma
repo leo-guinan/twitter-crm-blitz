@@ -31,38 +31,41 @@ model User {
 }
 
 model TwitterAccount {
-  id                       Int                              @id @default(autoincrement())
-  createdAt                DateTime                         @default(now())
-  updatedAt                DateTime                         @updatedAt
-  twitterToken             String?
-  twitterSecretToken       String?
-  twitterBio               String?
-  twitterUsername          String?
-  twitterName              String?
-  twitterProfilePictureUrl String?
-  twitterId                String?                          @unique
-  consentStatus            ConsentStatus                    @default(PROVISIONAL)
-  organization             Organization?                    @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  organizationId           Int?
-  subscriptions            TwitterAccountsInSubscriptions[]
-  likes                    Tweet[]                          @relation("likes")
-  retweets                 Tweet[]                          @relation("retweets")
-  tweets                   Tweet[]                          @relation("tweets")
-  accountReports           TwitterAccountRefreshReport[]
-  rateLimited              Boolean                          @default(false)
-  communityMemberships     CommunityMembership[]
-  primaryEngagments        DailyEngagementRecord[]          @relation("primary")
-  engagmentRecords         DailyEngagementRecord[]          @relation("engaging")
-  directMessagesSent       DirectMessageEvent[]             @relation("sendingAccount")
-  directMessagesReceived   DirectMessageEvent[]             @relation("receivingAccount")
-  dataFields               DataField[]
-  dataFieldValues          DataFieldValue[]
-  slug                     String?                          @unique
-  offSiteSubscribers       OffSiteSubscriber[]
-  tweetsToProcess          TweetsToProcess[]
-  twitterAccountsToProcess TwitterAccountToProcess[]
-  amplfiedBy               Amplifier[]                      @relation("amplfiedBy")
-  amplifying               Amplifier[]                      @relation("amplifying")
+  id                        Int                              @id @default(autoincrement())
+  createdAt                 DateTime                         @default(now())
+  updatedAt                 DateTime                         @updatedAt
+  twitterToken              String?
+  twitterSecretToken        String?
+  twitterBio                String?
+  twitterUsername           String?
+  twitterName               String?
+  twitterProfilePictureUrl  String?
+  twitterId                 String?                          @unique
+  consentStatus             ConsentStatus                    @default(PROVISIONAL)
+  organization              Organization?                    @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organizationId            Int?
+  subscriptions             TwitterAccountsInSubscriptions[]
+  likes                     Tweet[]                          @relation("likes")
+  retweets                  Tweet[]                          @relation("retweets")
+  tweets                    Tweet[]                          @relation("tweets")
+  accountReports            TwitterAccountRefreshReport[]
+  rateLimited               Boolean                          @default(false)
+  communityMemberships      CommunityMembership[]
+  primaryEngagments         DailyEngagementRecord[]          @relation("primary")
+  engagmentRecords          DailyEngagementRecord[]          @relation("engaging")
+  directMessagesSent        DirectMessageEvent[]             @relation("sendingAccount")
+  directMessagesReceived    DirectMessageEvent[]             @relation("receivingAccount")
+  dataFields                DataField[]
+  dataFieldValues           DataFieldValue[]
+  slug                      String?                          @unique
+  offSiteSubscribers        OffSiteSubscriber[]
+  tweetsToProcess           TweetsToProcess[]
+  twitterAccountsToProcess  TwitterAccountToProcess[]
+  amplfiedBy                Amplifier[]                      @relation("amplfiedBy")
+  amplifying                Amplifier[]                      @relation("amplifying")
+  requestedBoosts           BoostRequestRecord[]             @relation("requestingAccount")
+  requestsForAuthoredTweets BoostRequestRecord[]             @relation("boostedAuthor")
+
 }
 
 enum ConsentStatus {
@@ -175,23 +178,25 @@ model TwitterAccountsInSubscriptions {
 }
 
 model Tweet {
-  tweetId         String              @id
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  tweetId         String               @id
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
   tweetCreatedAt  DateTime
   message         String
-  likes           TwitterAccount[]    @relation("likes")
-  retweets        TwitterAccount[]    @relation("retweets")
-  inResponseTo    Tweet?              @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
+  likes           TwitterAccount[]     @relation("likes")
+  retweets        TwitterAccount[]     @relation("retweets")
+  inResponseTo    Tweet?               @relation(name: "responses", fields: [inResponseToId], references: [tweetId])
   inResponseToId  String?
-  responses       Tweet[]             @relation(name: "responses")
-  authorAccount   TwitterAccount?     @relation(name: "tweets", fields: [authorAccountId], references: [id])
+  responses       Tweet[]              @relation(name: "responses")
+  authorAccount   TwitterAccount?      @relation(name: "tweets", fields: [authorAccountId], references: [id])
   authorAccountId Int?
   collections     TweetCollection[]
   tweetReports    TweetLookupReport[]
   dataFieldValues DataFieldValue[]
   tweetsToProcess TweetsToProcess[]
   boostRequests   BoostRequest[]
+  boostRecords    BoostRequestRecord[] @relation("boostedTweet")
+
 }
 
 enum SubscriptionCadence {
@@ -495,4 +500,18 @@ model AmplifierInBoostRequest {
   amplifier      Amplifier    @relation(fields: [amplifierId], references: [id])
   amplifierId    Int
 
+}
+
+model BoostRequestRecord {
+  id                        Int            @id @default(autoincrement())
+  createdAt                 DateTime       @default(now())
+  authorUsername            String
+  tweetMessage              String
+  engagementScore           Int
+  boostedTweet              Tweet          @relation(name: "boostedTweet", fields: [boostedTweetId], references: [tweetId])
+  boostedTweetId            String
+  boostedTweetAuthor        TwitterAccount @relation(name: "boostedAuthor", fields: [boostedTweetAuthorId], references: [id])
+  boostedTweetAuthorId      Int
+  requestorTwitterAccount   TwitterAccount @relation(name: "requestingAccount", fields: [requestorTwitterAccountId], references: [id])
+  requestorTwitterAccountId Int
 }

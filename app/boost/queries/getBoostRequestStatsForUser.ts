@@ -2,10 +2,10 @@ import { Ctx, NotFoundError, resolver } from "blitz"
 import db from "db"
 import { z } from "zod"
 
-const GetAmplifiersForUser = z.object({})
+const GetBoostRequestStatsForUser = z.object({})
 
 export default resolver.pipe(
-  resolver.zod(GetAmplifiersForUser),
+  resolver.zod(GetBoostRequestStatsForUser),
   resolver.authorize(),
   async ({}, ctx: Ctx) => {
     const orgId = ctx.session?.orgId
@@ -19,14 +19,5 @@ export default resolver.pipe(
     if (!twitterAccount) {
       throw new NotFoundError()
     }
-    return await db.amplifier.findMany({
-      where: {
-        amplifiedAccountId: twitterAccount.id,
-      },
-      select: {
-        owner: true,
-        amplifiedAccount: true,
-      },
-    })
   }
 )

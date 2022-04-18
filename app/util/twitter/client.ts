@@ -4,7 +4,7 @@ import Twitter from "twitter-lite"
 export const getClientForAccount = async (twitterAccount) => {
   let client
 
-  if (!twitterAccount.twitterToken) {
+  if (!twitterAccount.twitterToken || !twitterAccount.twitterSecretToken) {
     client = new Twitter({
       subdomain: "api", // "api" is the default (change for other subdomains)
       version: "2", // version "1.1" is the default (change for other subdomains)
