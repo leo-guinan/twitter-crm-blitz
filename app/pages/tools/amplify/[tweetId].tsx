@@ -3,6 +3,7 @@ import { BlitzPage, getAntiCSRFToken, useParam, useQuery, useRouter } from "blit
 import Layout from "../../feather/layouts/Layout"
 import Tweet from "../../../tweet-collections/components/Tweet"
 import getTweet from "../../../tweets/queries/getTweet"
+import hasUserAlreadyAmplifiedTweet from "../../../amplifier/queries/hasUserAlreadyAmplifiedTweet"
 
 export const AmplifyTweetWrapper = () => {
   const router = useRouter()
@@ -11,6 +12,8 @@ export const AmplifyTweetWrapper = () => {
   const tweetId = useParam("tweetId", "string")
 
   const [tweet] = useQuery(getTweet, { tweetId })
+
+  const [alreadyAmplified, { setQueryData }] = useQuery(hasUserAlreadyAmplifiedTweet, { tweetId })
 
   const handleAmplify = async () => {
     await window.fetch("/api/amplify/tweet", {
@@ -23,6 +26,7 @@ export const AmplifyTweetWrapper = () => {
         tweetId,
       }),
     })
+    setQueryData(true, { refetch: false })
   }
 
   return (
@@ -35,13 +39,15 @@ export const AmplifyTweetWrapper = () => {
             <p>Here are the ways you can help amplify this tweet.</p>
           </div>
           <div className="mt-5 flex flex-col">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm my-2"
-              onClick={handleAmplify}
-            >
-              Request Amplification From Your Amplifiers
-            </button>
+            {!alreadyAmplified && (
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm my-2"
+                onClick={handleAmplify}
+              >
+                Request Amplification From Your Amplifiers
+              </button>
+            )}
             <a
               href={
                 tweet.authorAccount

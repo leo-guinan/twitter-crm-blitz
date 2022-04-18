@@ -3,13 +3,16 @@ import db from "db"
 import { z } from "zod"
 
 const HasUserAlreadyAmplifiedTweet = z.object({
-  tweetId: z.string(),
+  tweetId: z.string().optional(),
 })
 
 export default resolver.pipe(
   resolver.zod(HasUserAlreadyAmplifiedTweet),
   resolver.authorize(),
   async ({ tweetId }, ctx: Ctx) => {
+    if (!tweetId) {
+      throw new NotFoundError()
+    }
     const orgId = ctx.session?.orgId
 
     const twitterAccount = await db.twitterAccount.findFirst({
@@ -18,26 +21,16 @@ export default resolver.pipe(
       },
     })
 
-    const requestsForTweet = await db.boostRequest.findMany({
-      where: {
-        tweetId,
-      },
-    })
-
-    // return !requestsForTweet || requestsForTweet.filter()
-
     if (!twitterAccount) {
       throw new NotFoundError()
     }
-    // return await db.amplifier.findMany({
-    //   where: {
-    //     amplifiedAccountId: twitterAccount.id,
-    //   },
-    //   select: {
-    //     owner: true,
-    //     amplifiedAccount: true,
-    //   },
-    // })
-    return false
+
+    const record = await db.boostRequestRecord.findFirst({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        boostedTweetId: tweetId,
+      },
+    })
+    return !!record
   }
 )
