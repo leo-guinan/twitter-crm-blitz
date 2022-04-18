@@ -33,7 +33,7 @@ const AmplifiersPage = () => {
       <section className="border-2 mx-4 p-6">
         <h1>Amplified By</h1>
         <TwitterUserList
-          twitterUsers={amplifiers.map((amplifier) => amplifier.amplifiedAccount)}
+          twitterUsers={amplifiers.map((amplifier) => amplifier.owner)}
           actionHandler={handleViewUserProfile}
           actionCTA="View Profile"
           actionPerformed={() => false}
@@ -43,7 +43,7 @@ const AmplifiersPage = () => {
       <section className="border-2 mx-4 p-6">
         <h1>Amplifying</h1>
         <TwitterUserList
-          twitterUsers={amplifiers.map((amplifier) => amplifier.amplifiedAccount)}
+          twitterUsers={amplifiers.map((amplifier) => amplifier.owner)}
           actionHandler={handleViewUserProfile}
           actionCTA="View Profile"
           actionPerformed={() => false}
