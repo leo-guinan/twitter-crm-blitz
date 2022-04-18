@@ -43,7 +43,7 @@ const AmplifiersPage = () => {
       <section className="border-2 mx-4 p-6">
         <h1>Amplifying</h1>
         <TwitterUserList
-          twitterUsers={amplifiers.map((amplifier) => amplifier.owner)}
+          twitterUsers={amplifying.map((amplifying) => amplifying.amplifiedAccount)}
           actionHandler={handleViewUserProfile}
           actionCTA="View Profile"
           actionPerformed={() => false}
