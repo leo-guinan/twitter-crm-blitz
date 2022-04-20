@@ -46,24 +46,9 @@ export default resolver.pipe(
 
     const requestsDirection = requestsChange > 0 ? "increase" : "decrease"
 
-    const requestsViewed = await db.amplifier.findMany({
-      where: {
-        ownerId: twitterAccount.id,
-        boostRequests: {
-          some: {
-            visited: true,
-          },
-        },
-      },
-      select: {
-        boostRequests: true,
-      },
-    })
+    const requestsViewed = []
 
-    const numberOfRequestsViewed = requestsViewed.reduce(
-      (prev, request) => prev + request.boostRequests.length,
-      0
-    )
+    const numberOfRequestsViewed = 0
 
     const numberOfRequestsAmplified = 1
 
