@@ -33,16 +33,16 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     if (twitterAccountToAmplify) {
       const amplifiers = await db.amplifier.findMany({
         where: {
-          ownerId: twitterAccountToAmplify.id,
+          amplifiedAccountId: twitterAccountToAmplify.id,
         },
       })
 
       for (const amplifier of amplifiers) {
-        const orgToAmplify = await db.organization.findFirst({
+        const amplifyingOrg = await db.organization.findFirst({
           where: {
             twitterAccounts: {
               some: {
-                id: amplifier.amplifiedAccountId,
+                id: amplifier.ownerId,
               },
             },
           },
@@ -58,9 +58,9 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
         await createBoostRecord.enqueue({
           tweetId,
           requestingAccountId: twitterAccountToAmplify.id,
+          requestedAccountId: amplifyingOrg?.twitterAccounts[0]?.id,
         })
-        const user = orgToAmplify?.memberships[0]?.user
-        const nameOfUserToAmplify = orgToAmplify?.twitterAccounts[0]?.twitterName
+        const nameOfUserToAmplify = amplifyingOrg?.twitterAccounts[0]?.twitterName
         const emailHeader = `${nameOfUserToAmplify} needs your help to amplify their tweet: ${process.env.QUIRREL_BASE_URL}/tools/amplify/${tweetId}`
 
         const emailHtmlHeader = `
@@ -70,7 +70,7 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
             here.
           </a>
         </header>`
-        const emailAddress = orgToAmplify?.memberships[0]?.user?.email
+        const emailAddress = amplifyingOrg?.memberships[0]?.user?.email
 
         if (emailAddress) {
           const email = await db.email.create({

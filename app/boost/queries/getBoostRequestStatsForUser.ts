@@ -19,5 +19,80 @@ export default resolver.pipe(
     if (!twitterAccount) {
       throw new NotFoundError()
     }
+
+    const currentMonth = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
+    const previousMonth = new Date(Date.now() - 1000 * 60 * 60 * 24 * 60)
+
+    const numberOfRequestsSent = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: currentMonth,
+        },
+      },
+    })
+
+    const previousRequestsSent = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: previousMonth,
+          lt: currentMonth,
+        },
+      },
+    })
+
+    const requestsChange = numberOfRequestsSent - previousRequestsSent
+
+    const requestsDirection = requestsChange > 0 ? "increase" : "decrease"
+
+    const requestsViewed = await db.amplifier.findMany({
+      where: {
+        ownerId: twitterAccount.id,
+        boostRequests: {
+          some: {
+            visited: true,
+          },
+        },
+      },
+      select: {
+        boostRequests: true,
+      },
+    })
+
+    const numberOfRequestsViewed = requestsViewed.reduce(
+      (prev, request) => prev + request.boostRequests.length,
+      0
+    )
+
+    const numberOfRequestsAmplified = 1
+
+    const stats = [
+      {
+        id: 1,
+        name: "Total Amplifications Sent",
+        stat: `${numberOfRequestsSent}`,
+        change: `${requestsChange}`,
+        changeType: requestsDirection,
+      },
+      {
+        id: 2,
+        name: "Amplifications Viewed",
+        stat: `${numberOfRequestsViewed}`,
+        change: "122",
+        changeType: "increase",
+      },
+      // {
+      //   id: 3,
+      //   name: "Amplifications Amplified",
+      //   stat: `${numberOfRequestsAmplified}`,
+      //   change: "122",
+      //   changeType: "increase"
+      // }
+    ]
+
+    console.log(stats)
+
+    return stats
   }
 )

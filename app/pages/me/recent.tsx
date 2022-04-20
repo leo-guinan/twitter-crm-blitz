@@ -17,7 +17,7 @@ const RecentTweets = () => {
 
   return (
     <div>
-      <TweetCollection tweets={tweets} showAmplification={true} />
+      <TweetCollection tweets={tweets.reverse()} showAmplification={true} />
     </div>
   )
 }

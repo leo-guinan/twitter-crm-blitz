@@ -5,7 +5,7 @@ import { scoreTweet } from "../../util/twitter/scoreTweet"
 
 export default Queue(
   "api/queues/create-boost-record",
-  async ({ tweetId, requestingAccountId }) => {
+  async ({ tweetId, requestingAccountId, requestedAccountId }) => {
     const client = await getClientForAccount(requestingAccountId)
     const score = await scoreTweet(client, requestingAccountId, tweetId)
 
@@ -43,6 +43,11 @@ export default Queue(
         requestorTwitterAccount: {
           connect: {
             id: requestingAccountId,
+          },
+        },
+        requestedTwitterAccount: {
+          connect: {
+            id: requestedAccountId,
           },
         },
       },

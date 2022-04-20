@@ -65,6 +65,7 @@ model TwitterAccount {
   amplifying                Amplifier[]                      @relation("amplifying")
   requestedBoosts           BoostRequestRecord[]             @relation("requestingAccount")
   requestsForAuthoredTweets BoostRequestRecord[]             @relation("boostedAuthor")
+  boostsRequested           BoostRequestRecord[]             @relation("requestedAccount")
 
 }
 
@@ -194,7 +195,6 @@ model Tweet {
   tweetReports    TweetLookupReport[]
   dataFieldValues DataFieldValue[]
   tweetsToProcess TweetsToProcess[]
-  boostRequests   BoostRequest[]
   boostRecords    BoostRequestRecord[] @relation("boostedTweet")
 
 }
@@ -470,41 +470,21 @@ model TwitterAccountToProcess {
 }
 
 model Amplifier {
-  id                 Int                       @id @default(autoincrement())
-  createdAt          DateTime                  @default(now())
-  updatedAt          DateTime                  @updatedAt
-  owner              TwitterAccount            @relation(name: "amplfiedBy", fields: [ownerId], references: [id])
+  id                 Int            @id @default(autoincrement())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  owner              TwitterAccount @relation(name: "amplfiedBy", fields: [ownerId], references: [id])
   ownerId            Int
-  amplifiedAccount   TwitterAccount            @relation(name: "amplifying", fields: [amplifiedAccountId], references: [id])
+  amplifiedAccount   TwitterAccount @relation(name: "amplifying", fields: [amplifiedAccountId], references: [id])
   amplifiedAccountId Int
-  boostRequests      AmplifierInBoostRequest[]
 
   @@unique([ownerId, amplifiedAccountId])
-}
-
-model BoostRequest {
-  id         Int                       @id @default(autoincrement())
-  createdAt  DateTime                  @default(now())
-  updatedAt  DateTime                  @updatedAt
-  tweet      Tweet                     @relation(fields: [tweetId], references: [tweetId])
-  tweetId    String
-  amplifiers AmplifierInBoostRequest[]
-}
-
-model AmplifierInBoostRequest {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  boostRequest   BoostRequest @relation(fields: [boostRequestId], references: [id])
-  boostRequestId Int
-  amplifier      Amplifier    @relation(fields: [amplifierId], references: [id])
-  amplifierId    Int
-
 }
 
 model BoostRequestRecord {
   id                        Int            @id @default(autoincrement())
   createdAt                 DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
   authorUsername            String
   tweetMessage              String
   engagementScore           Int
@@ -514,4 +494,9 @@ model BoostRequestRecord {
   boostedTweetAuthorId      Int
   requestorTwitterAccount   TwitterAccount @relation(name: "requestingAccount", fields: [requestorTwitterAccountId], references: [id])
   requestorTwitterAccountId Int
+  requestedTwitterAccount   TwitterAccount @relation(name: "requestedAccount", fields: [requestedTwitterAccountId], references: [id])
+  requestedTwitterAccountId Int
+  visited                   Boolean        @default(false)
+
+  @@unique([boostedTweetId, requestorTwitterAccountId, requestedTwitterAccountId])
 }

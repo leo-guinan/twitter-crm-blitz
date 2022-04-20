@@ -1,9 +1,10 @@
-import { Suspense } from "react"
-import { BlitzPage, getAntiCSRFToken, useParam, useQuery, useRouter } from "blitz"
+import { Suspense, useEffect } from "react"
+import { BlitzPage, getAntiCSRFToken, useMutation, useParam, useQuery, useRouter } from "blitz"
 import Layout from "../../feather/layouts/Layout"
 import Tweet from "../../../tweet-collections/components/Tweet"
 import getTweet from "../../../tweets/queries/getTweet"
 import hasUserAlreadyAmplifiedTweet from "../../../amplifier/queries/hasUserAlreadyAmplifiedTweet"
+import setBoostRequestVisited from "../../../boost/mutations/setBoostRequestVisited"
 
 export const AmplifyTweetWrapper = () => {
   const router = useRouter()
@@ -14,6 +15,12 @@ export const AmplifyTweetWrapper = () => {
   const [tweet] = useQuery(getTweet, { tweetId })
 
   const [alreadyAmplified, { setQueryData }] = useQuery(hasUserAlreadyAmplifiedTweet, { tweetId })
+
+  const [setVisitedMutation] = useMutation(setBoostRequestVisited)
+
+  useEffect(() => {
+    setVisitedMutation({ tweetId })
+  }, [])
 
   const handleAmplify = async () => {
     await window.fetch("/api/amplify/tweet", {
