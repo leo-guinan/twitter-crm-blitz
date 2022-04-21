@@ -7,6 +7,7 @@ import { useCurrentUser } from "../../core/hooks/useCurrentUser"
 import Pricing from "../../core/components/Pricing"
 import CumulativeStats from "../../core/components/CumulativeStats"
 import AmplificationStatsTable from "../../core/components/AmplificationStatsTable"
+import getBoostRequestsForUser from "../../boost/queries/getBoostRequestsForUser"
 
 interface TwitterAccount {
   id: number
@@ -18,18 +19,7 @@ interface TwitterAccount {
 }
 
 const AnalyticsPage = () => {
-  const router = useRouter()
   const currentUser = useCurrentUser()
-  const [amplifiers] = useQuery(getAmplifiersForUser, {})
-  const [amplifying] = useQuery(getAccountsUserIsAmplifying, {})
-
-  const handleViewUserProfile = async (event) => {
-    const targetSlug = amplifiers.find(
-      (amplifier) => amplifier.amplifiedAccount.twitterId === event.target.dataset.twitterId
-    )?.amplifiedAccount?.slug
-    if (!targetSlug) return
-    router.push(Routes.FollowAccountPage({ slug: targetSlug }))
-  }
 
   return (
     <>
@@ -50,12 +40,13 @@ const AnalyticsPage = () => {
             </div>
           </section>
         )}
-      {/*{(currentUser?.memberships[0]?.organization?.planId === 1 || currentUser?.memberships[0]?.organization?.subscriptionStatus !== 'active')  && (*/}
-      <>
-        <h1>Sorry, this is not available for free accounts.</h1>
-        <Pricing />
-      </>
-      {/*)}*/}
+      {(currentUser?.memberships[0]?.organization?.planId === 1 ||
+        currentUser?.memberships[0]?.organization?.subscriptionStatus !== "active") && (
+        <>
+          <h1>Sorry, this is not available for free accounts.</h1>
+          <Pricing />
+        </>
+      )}
     </>
   )
 }

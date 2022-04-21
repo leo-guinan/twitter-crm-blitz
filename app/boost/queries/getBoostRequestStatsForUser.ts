@@ -46,13 +46,57 @@ export default resolver.pipe(
 
     const requestsDirection = requestsChange > 0 ? "increase" : "decrease"
 
-    const requestsViewed = []
+    const requestsViewed = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: currentMonth,
+        },
+        visited: true,
+      },
+    })
 
-    const numberOfRequestsViewed = 0
+    const previousRequestsViewed = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: previousMonth,
+          lt: currentMonth,
+        },
+        visited: true,
+      },
+    })
 
-    const numberOfRequestsAmplified = 1
+    const viewedChange = requestsViewed - previousRequestsViewed
 
-    const stats = [
+    const viewedDirection = viewedChange > 0 ? "increase" : "decrease"
+
+    const requestsAmplified = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: currentMonth,
+        },
+        amplified: true,
+      },
+    })
+
+    const previousRequestsAmplified = await db.boostRequestRecord.count({
+      where: {
+        requestorTwitterAccountId: twitterAccount.id,
+        createdAt: {
+          gt: previousMonth,
+          lt: currentMonth,
+        },
+        amplified: true,
+      },
+    })
+
+    const amplifiedChange = requestsAmplified - previousRequestsAmplified
+
+    const amplifiedDirection = amplifiedChange > 0 ? "increase" : "decrease"
+
+    return [
       {
         id: 1,
         name: "Total Amplifications Sent",
@@ -63,21 +107,17 @@ export default resolver.pipe(
       {
         id: 2,
         name: "Amplifications Viewed",
-        stat: `${numberOfRequestsViewed}`,
-        change: "122",
-        changeType: "increase",
+        stat: `${requestsViewed}`,
+        change: `${viewedChange}`,
+        changeType: viewedDirection,
       },
-      // {
-      //   id: 3,
-      //   name: "Amplifications Amplified",
-      //   stat: `${numberOfRequestsAmplified}`,
-      //   change: "122",
-      //   changeType: "increase"
-      // }
+      {
+        id: 3,
+        name: "Amplifications Amplified",
+        stat: `${requestsAmplified}`,
+        change: `${amplifiedChange}`,
+        changeType: amplifiedDirection,
+      },
     ]
-
-    console.log(stats)
-
-    return stats
   }
 )

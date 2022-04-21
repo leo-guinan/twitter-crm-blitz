@@ -7,7 +7,6 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
   const userId = session.userId
   const orgId = session.orgId
   if (req.body) {
-    console.log(req.body)
     const { twitterId } = JSON.parse(req.body)
 
     const organization = await db.organization.findUnique({

@@ -27,15 +27,11 @@ const TweetCollection = (props: TweetCollectionProps) => {
     <div className="grid grid-cols-1 gap-6 mx-auto my-6 px-4 md:px-6 lg:px-8 md:w-1/2">
       {props.tweets &&
         props.tweets
-          .sort((firstEl, secondEl) => firstEl.tweetCreatedAt - secondEl.tweetCreatedAt)
+          .sort((firstEl, secondEl) => secondEl.tweetCreatedAt - firstEl.tweetCreatedAt)
           .map((tweet) => (
-            <>
-              <Tweet
-                tweet={tweet}
-                key={tweet.tweetId}
-                showAmplification={props.showAmplification}
-              />
-            </>
+            <div key={tweet.tweetId}>
+              <Tweet tweet={tweet} showAmplification={props.showAmplification} />
+            </div>
           ))}
     </div>
   )

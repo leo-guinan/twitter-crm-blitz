@@ -48,7 +48,7 @@ export default resolver.pipe(
         }),
     })
 
-    console.log(tweets.length)
+    console.log(tweets.slice(0, 10))
     return {
       tweets,
       nextPage,

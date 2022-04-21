@@ -28,12 +28,21 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     })
 
     const twitterAccountToAmplify = user?.memberships[0]?.organization?.twitterAccounts[0]
-    console.log(twitterAccountToAmplify)
 
     if (twitterAccountToAmplify) {
       const amplifiers = await db.amplifier.findMany({
         where: {
           amplifiedAccountId: twitterAccountToAmplify.id,
+        },
+      })
+
+      await db.boostRequestRecord.updateMany({
+        where: {
+          requestedTwitterAccountId: twitterAccountToAmplify.id,
+          boostedTweetId: tweetId,
+        },
+        data: {
+          amplified: true,
         },
       })
 

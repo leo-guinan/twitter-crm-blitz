@@ -497,6 +497,7 @@ model BoostRequestRecord {
   requestedTwitterAccount   TwitterAccount @relation(name: "requestedAccount", fields: [requestedTwitterAccountId], references: [id])
   requestedTwitterAccountId Int
   visited                   Boolean        @default(false)
+  amplified                 Boolean        @default(false)
 
   @@unique([boostedTweetId, requestorTwitterAccountId, requestedTwitterAccountId])
 }
