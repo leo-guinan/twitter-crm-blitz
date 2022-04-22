@@ -17,6 +17,15 @@ const LandingPage = () => {
             Feather helps you build stronger relationships on Twitter. And gives your audience the
             tools to help you grow.
           </p>
+          <div className="py-4 mx-auto w-48">
+            <a
+              href="api/auth/twitter"
+              className="mt-8 block w-full bg-gray-800 border border-gray-800 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900 z-10"
+            >
+              Get Started For Free
+            </a>
+          </div>
+
           <div className="py-8">
             <ProductHuntBadge />
           </div>
