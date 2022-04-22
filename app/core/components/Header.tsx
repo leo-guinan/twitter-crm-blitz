@@ -7,8 +7,8 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline"
 
 const Header = () => {
   const navigation = [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "Features", href: "/#features" },
+    { name: "Pricing", href: "/#pricing" },
     { name: "Blog", href: "https://blog.feathercrm.io" },
     // { name: "Contact", href: "#" }
   ]

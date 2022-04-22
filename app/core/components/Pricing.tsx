@@ -48,6 +48,7 @@ const Pricing = () => {
         "Analytics",
         "Early Access To New Tools",
         "Helpful if you're trying to actively grow your account",
+        "Premium Access to How To Scale Yourself",
       ],
       COMMUNITY: [
         "Tools to manage and grow community relationships",

@@ -1,6 +1,7 @@
 import React from "react"
 import Features from "./Features"
 import Pricing from "./Pricing"
+import { ProductHuntBadge } from "./ProductHuntBadge"
 
 const LandingPage = () => {
   // @ts-ignore
@@ -16,6 +17,9 @@ const LandingPage = () => {
             Feather helps you build stronger relationships on Twitter. And gives your audience the
             tools to help you grow.
           </p>
+          <div className="py-8">
+            <ProductHuntBadge />
+          </div>
         </div>
       </div>
 
