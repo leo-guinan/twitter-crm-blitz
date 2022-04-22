@@ -25,6 +25,9 @@ export default resolver.pipe(resolver.zod(IsSubscribedToUser), async ({ twitterI
     },
   })
   if (subscription) {
+    await db.twitterAccountsInSubscriptions.deleteMany({
+      where: { subscriptionId: subscription.id },
+    })
     await db.subscription.delete({
       where: { id: subscription.id },
     })
