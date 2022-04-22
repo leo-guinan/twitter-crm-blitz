@@ -40,21 +40,15 @@ const Welcome = () => {
         {currentUser && !currentUser.email ? (
           <>
             <h2>
-              Feather sends you emails with links to custom twitter feeds. We currently support 3
-              types of feeds.
+              Feather sends you emails with links to custom twitter feeds based on your
+              subscriptions.
             </h2>
             <ul role="list">
+              <li>Subscribe to individuals or groups of people to get custom twitter feeds.</li>
+              <li>Share your profile - let people subscribe to you or amplify you.</li>
               <li>
-                Personal Feeds - a feed of an individual account. Good for building strong
-                relationships.
-              </li>
-              <li>
-                Engagement Feed - a feed of the accounts that have interacted with you the most.
-                Good for keeping track of current relationships/conversations.
-              </li>
-              <li>
-                Custom Feed - a feed of accounts that you pick. You determine what accounts you want
-                to see and how often.
+                Give the people in your network the tools to amplify the messages you believe are
+                important.
               </li>
             </ul>
             <p>

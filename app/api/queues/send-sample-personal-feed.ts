@@ -9,7 +9,7 @@ export default Queue(
 
     const subscription = await db.subscription.create({
       data: {
-        name: "Daily Engagement Feed",
+        name: "Sample Feather Subscription",
         cadence: SubscriptionCadence.ONCE,
         ownerId: job.orgId,
         twitterAccounts: {
