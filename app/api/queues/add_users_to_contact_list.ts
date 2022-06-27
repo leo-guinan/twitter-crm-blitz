@@ -48,8 +48,8 @@ export default CronJob(
           },
           {
             headers: {
-              Authorization: `Api-Key ${process.env.BACKEND_API_KEY}`,
               "Content-Type": "application/json",
+              charset: "utf-8",
             },
           }
         )
