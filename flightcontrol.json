@@ -26,6 +26,9 @@
             "CONVERTKIT_API_KEY": {
               "fromParameterStore": "production.convertkit-api-key"
             },
+            "CONVERTKIT_FORM_ID": {
+              "fromParameterStore": "production.convertkit-form-id"
+            },
             "CONVERTKIT_API_SECRET": {
               "fromParameterStore": "production.convertkit-api-secret"
             },
