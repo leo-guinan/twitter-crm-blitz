@@ -44,6 +44,9 @@
             "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": {
               "fromParameterStore": "production.stripe-publishable-key"
             },
+            "QUIRREL_API_URL": {
+              "fromParameterStore": "production.quirrel_api_url"
+            },
             "QUIRREL_BASE_URL": {
               "fromParameterStore": "production.quirrel-base-url"
             },
